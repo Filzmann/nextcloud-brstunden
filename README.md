@@ -25,5 +25,7 @@ https://nextcloud-dev.ddev.site/apps/brstunden/
 ```bash
 cd ~/projects/br-nextcloud-apps/nextcloud-dev
 ddev exec -d /var/www/html/html php occ app:enable brstunden
-ddev exec -d /var/www/html/html php occ migrations:migrate brstunden
+ddev exec -d /var/www/html/html php occ status
 ```
+
+Diese lokale Nextcloud-Version hat keinen occ migrations:migrate-Befehl. Die Migration wird beim Aktivieren der App ausgefuehrt; occ status sollte danach needsDbUpgrade: false melden.
