@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+    <id>brstunden</id>
+    <name>BR-Stunden</name>
+    <summary>Monatliche Erfassung und Jahresuebersicht von BR-Stunden.</summary>
+    <description>Erfasst BR-Stunden je BR-Mitglied und Monat, erzeugt Jahresuebersichten und erinnert am Monatsende an fehlende Eintraege.</description>
+    <version>0.1.0</version>
+    <licence>agpl</licence>
+    <author>Simon / ChatGPT-Prototyp</author>
+    <namespace>BrStunden</namespace>
+    <category>organization</category>
+    <bugs>https://example.invalid</bugs>
+    <dependencies>
+        <nextcloud min-version="29" max-version="35"/>
+    </dependencies>
+    <background-jobs>
+        <job>OCA\BrStunden\BackgroundJob\MonthlyReminderJob</job>
+    </background-jobs>
+    <navigations>
+        <navigation>
+            <name>BR-Stunden</name>
+            <route>brstunden.page.index</route>
+            <icon>app.svg</icon>
+            <order>82</order>
+        </navigation>
+    </navigations>
+</info>
