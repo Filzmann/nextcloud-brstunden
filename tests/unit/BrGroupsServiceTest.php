@@ -7,18 +7,14 @@ namespace {
         eval('namespace OCP; interface IGroupManager { public function groupExists($gid); public function createGroup($gid); }');
     }
 
+    require __DIR__ . '/helpers.php';
     require __DIR__ . '/../../../localbase/lib/Service/GroupProvisioningService.php';
     require __DIR__ . '/../../lib/Service/BrGroupsService.php';
 
     use OCA\BrStunden\Service\BrGroupsService;
     use OCA\LocalBase\Service\GroupProvisioningService;
     use OCP\IGroupManager;
-
-    function assertBrGroupsSame(array $expected, array $actual, string $message): void {
-        if ($expected !== $actual) {
-            throw new RuntimeException($message . ' Expected ' . var_export($expected, true) . ', got ' . var_export($actual, true));
-        }
-    }
+    use function OCA\BrStunden\Tests\assertSameValue;
 
     $groupManager = new class(['Betriebsrat']) implements IGroupManager {
         public array $groups = [];
@@ -42,12 +38,12 @@ namespace {
 
     $service = new BrGroupsService(new GroupProvisioningService($groupManager));
 
-    assertBrGroupsSame(
+    assertSameValue(
         ['Betriebsrat-Vorsitzende', 'Betriebsrat-Stellvertreter'],
         $service->ensureRequiredGroups(),
         'Only missing BR groups should be created.'
     );
-    assertBrGroupsSame(
+    assertSameValue(
         [],
         $service->ensureRequiredGroups(),
         'BR group creation should be idempotent.'
