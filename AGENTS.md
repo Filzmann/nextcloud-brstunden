@@ -78,7 +78,19 @@ In Codex-Sessions koennen DDEV-Befehle im normalen Sandbox-Kontext nicht zuverla
 
 ## Tests
 
+Vor groesseren Refactorings zuerst Charakterisierungstests fuer das bestehende gewuenschte Verhalten schreiben oder aktualisieren.
+
+- Schnelle PHP-Suite: `php tests/run.php`
+- Schnelle JavaScript-Suite: `node tests/run-js.mjs`
+- Nach LocalBase-Aenderungen mindestens die betroffenen BRStunden-Smoke-/Contract-Tests laufen lassen.
+- Bei Controller-, DI-, Migrations-, Background-Job- oder Nextcloud-Container-Aenderungen zusaetzlich gezielte DDEV-/`occ`-Checks ausfuehren.
+
 Wichtige lokale Pruefungen:
+
+    php tests/run.php
+    node tests/run-js.mjs
+
+Einzelne Checks, die durch die Testlaeufer gebuendelt werden:
 
     find js -name '*.js' -print0 | xargs -0 -n1 node --check
     node tests/js/model-smoke.js
