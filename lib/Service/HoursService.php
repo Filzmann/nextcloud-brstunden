@@ -107,7 +107,7 @@ class HoursService {
                 if ($entry instanceof HourEntry) {
                     $totalMinutes += $entry->minutes;
                     $fobiTotalMinutes += $entry->fobiMinutes;
-                    $months[$month] = $entry->toApiArray();
+                    $months[$month] = $entry->toArray();
                 } else {
                     $months[$month] = null;
                 }

@@ -73,7 +73,7 @@ $entry = HourEntry::get([
     'createdAt' => '2026-07-03',
     'updatedAt' => '2026-07-03',
 ]);
-$entries = HourEntry::get_all([$entry->toApiArray()]);
+$entries = HourEntry::get_all([$entry->toArray()]);
 assertSameValue(true, $entry instanceof HourEntry, 'HourEntry::get should hydrate API data.');
 assertSameValue(1, count($entries), 'HourEntry::get_all should hydrate API lists.');
 assertSameValue(120, $entry->toArray()['totalMinutes'], 'HourEntry::toArray should keep the API payload shape.');

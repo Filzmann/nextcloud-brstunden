@@ -42,7 +42,7 @@ class HourEntry {
         return self::fromArray($row);
     }
 
-    public function toApiArray(): array {
+    public function toArray(): array {
         return [
             'id' => $this->id,
             'userId' => $this->userId,
