@@ -5,23 +5,19 @@ declare(strict_types=1);
 namespace OCA\BrStunden\Service;
 
 use OCA\BrStunden\AppInfo\Application;
-use Psr\Log\LoggerInterface;
+use OCA\LocalBase\Service\AppLogger;
 
 class BrStundenLogger {
     public function __construct(
-        private LoggerInterface $logger
+        private AppLogger $logger
     ) {
     }
 
     public function error(string $action, \Throwable $e, array $context = []): void {
-        $context['app'] = Application::APP_ID;
-        $context['action'] = $action;
-        $context['exception'] = $e;
-        $this->logger->error($e->getMessage(), $context);
+        $this->logger->error(Application::APP_ID, 'BRStunden', $action, $e, $context);
     }
 
     public function info(string $message, array $context = []): void {
-        $context['app'] = Application::APP_ID;
-        $this->logger->info($message, $context);
+        $this->logger->info(Application::APP_ID, $message, $context);
     }
 }
