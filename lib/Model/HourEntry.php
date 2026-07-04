@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace OCA\BrStunden\Model;
 
 class HourEntry {
+    use ModelApiTrait;
+
     public function __construct(
         public readonly int $id,
         public readonly string $userId,
@@ -19,19 +21,25 @@ class HourEntry {
     ) {
     }
 
-    public static function fromRow(array $row): self {
+    public static function fromArray(array $data): self {
         return new self(
-            (int)$row['id'],
-            (string)$row['user_id'],
-            (int)$row['entry_year'],
-            (int)$row['entry_month'],
-            (int)$row['minutes'],
-            (int)($row['fobi_minutes'] ?? 0),
-            (string)($row['note'] ?? ''),
-            isset($row['updated_by_uid']) ? (string)$row['updated_by_uid'] : null,
-            self::dateToString($row['created_at'] ?? ''),
-            self::dateToString($row['updated_at'] ?? '')
+            (int)($data['id'] ?? 0),
+            (string)($data['userId'] ?? $data['user_id'] ?? ''),
+            (int)($data['year'] ?? $data['entry_year'] ?? 0),
+            (int)($data['month'] ?? $data['entry_month'] ?? 0),
+            (int)($data['brMinutes'] ?? $data['minutes'] ?? 0),
+            (int)($data['fobiMinutes'] ?? $data['fobi_minutes'] ?? 0),
+            (string)($data['note'] ?? ''),
+            isset($data['updatedByUid']) || isset($data['updated_by_uid'])
+                ? (string)($data['updatedByUid'] ?? $data['updated_by_uid'])
+                : null,
+            self::dateToString($data['createdAt'] ?? $data['created_at'] ?? ''),
+            self::dateToString($data['updatedAt'] ?? $data['updated_at'] ?? '')
         );
+    }
+
+    public static function fromRow(array $row): self {
+        return self::fromArray($row);
     }
 
     public function toApiArray(): array {

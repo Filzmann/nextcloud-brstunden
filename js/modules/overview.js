@@ -1,8 +1,9 @@
 (function() {
     const format = window.BRStunden.format;
+    const { HourEntry } = window.BRStunden.models;
 
     function entryFor(row, monthNumber) {
-        return row.months[String(monthNumber)] || row.months[monthNumber] || null;
+        return HourEntry.get(row.months[String(monthNumber)] || row.months[monthNumber] || null);
     }
 
     function isMissing(overview, monthNumber, entry) {

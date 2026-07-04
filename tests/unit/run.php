@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../../lib/Service/CalendarService.php';
 require_once __DIR__ . '/../../lib/Model/HourAmount.php';
+require_once __DIR__ . '/../../lib/Model/ModelApiTrait.php';
 require_once __DIR__ . '/../../lib/Model/HourEntry.php';
 require_once __DIR__ . '/../../lib/Service/BrMemberService.php';
 require_once __DIR__ . '/../../lib/Store/HourEntryStore.php';
@@ -59,6 +60,23 @@ assertThrows(static fn(): HourAmount => HourAmount::fromInput(''), 'Empty hours 
 assertThrows(static fn(): HourAmount => HourAmount::fromInput('1.256'), 'More than two decimal places should be rejected.');
 assertThrows(static fn(): HourAmount => HourAmount::fromInput('745'), 'Implausibly high hours should be rejected.');
 assertThrows(static fn(): HourAmount => HourAmount::fromOptionalInput('x'), 'Invalid optional hours should be rejected.');
+
+$entry = HourEntry::get([
+    'id' => 9,
+    'userId' => 'simon',
+    'year' => 2026,
+    'month' => 7,
+    'brMinutes' => 90,
+    'fobiMinutes' => 30,
+    'note' => 'Test',
+    'updatedByUid' => 'simon',
+    'createdAt' => '2026-07-03',
+    'updatedAt' => '2026-07-03',
+]);
+$entries = HourEntry::get_all([$entry->toApiArray()]);
+assertSameValue(true, $entry instanceof HourEntry, 'HourEntry::get should hydrate API data.');
+assertSameValue(1, count($entries), 'HourEntry::get_all should hydrate API lists.');
+assertSameValue(120, $entry->toArray()['totalMinutes'], 'HourEntry::toArray should keep the API payload shape.');
 
 $members = new class extends BrMemberService {
     public function __construct() {

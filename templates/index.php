@@ -1,5 +1,7 @@
 <?php
 script('brstunden', 'modules/api');
+script('brstunden', 'models/model');
+script('brstunden', 'models/hour-entry');
 script('brstunden', 'modules/format');
 script('brstunden', 'modules/overview');
 script('brstunden', 'main');
