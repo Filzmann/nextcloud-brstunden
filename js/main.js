@@ -2,7 +2,7 @@
     const format = window.BRStunden.format;
     const overviewRenderer = window.BRStunden.overview;
     const { HourRepository } = window.BRStunden.repositories;
-    const { Notice, byId } = window.LocalBase.ui;
+    const { Notice, byId, errorMessage } = window.LocalBase.ui;
     const repository = new HourRepository(window.BRStunden.api);
     const noticeBox = new Notice('brs-notice', {
         baseClass: 'brs-notice',
@@ -22,6 +22,10 @@
         noticeBox.show(message, type);
     }
 
+    function errorNotice(error, fallback) {
+        notice(errorMessage(error, fallback), 'error');
+    }
+
     async function init() {
         try {
             const data = await repository.state();
@@ -35,7 +39,7 @@
             bindEvents();
             await loadYear();
         } catch (e) {
-            notice(e.message || 'BR-Stunden konnten nicht geladen werden.', 'error');
+            errorNotice(e, 'BR-Stunden konnten nicht geladen werden.');
         }
     }
 
@@ -101,7 +105,7 @@
             state.overview = await repository.yearOverview(year);
             renderOverview();
         } catch (e) {
-            notice(e.message || 'Jahresuebersicht konnte nicht geladen werden.', 'error');
+            errorNotice(e, 'Jahresuebersicht konnte nicht geladen werden.');
         }
     }
 
@@ -127,7 +131,7 @@
             setSelectedEntry({ year: payload.year, month: payload.month, exists: true });
             renderOverview();
         } catch (e) {
-            notice(e.message || 'Eintrag konnte nicht gespeichert werden.', 'error');
+            errorNotice(e, 'Eintrag konnte nicht gespeichert werden.');
         }
     }
 
@@ -148,7 +152,7 @@
             setSelectedEntry({ year, month, exists: false });
             renderOverview();
         } catch (e) {
-            notice(e.message || 'Eintrag konnte nicht geloescht werden.', 'error');
+            errorNotice(e, 'Eintrag konnte nicht geloescht werden.');
         }
     }
 
@@ -202,7 +206,7 @@
             const preview = await repository.reminderPreview();
             renderReminderPreview(preview);
         } catch (e) {
-            notice(e.message || 'Reminder-Vorschau konnte nicht geladen werden.', 'error');
+            errorNotice(e, 'Reminder-Vorschau konnte nicht geladen werden.');
         }
     }
 
