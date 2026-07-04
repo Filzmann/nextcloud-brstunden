@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+require_once __DIR__ . '/helpers.php';
 require_once __DIR__ . '/../../lib/Service/CalendarService.php';
 require_once __DIR__ . '/../../lib/Service/BrMemberService.php';
 require_once __DIR__ . '/../../lib/Model/HourAmount.php';
@@ -15,22 +16,8 @@ use OCA\BrStunden\Service\BrMemberService;
 use OCA\BrStunden\Service\CalendarService;
 use OCA\BrStunden\Service\HoursService;
 use OCA\BrStunden\Store\HourEntryStore;
-
-function assertHoursSame(mixed $expected, mixed $actual, string $message): void {
-    if ($expected !== $actual) {
-        throw new RuntimeException($message . ' Expected ' . var_export($expected, true) . ', got ' . var_export($actual, true));
-    }
-}
-
-function assertHoursThrows(callable $callback, string $message): void {
-    try {
-        $callback();
-    } catch (InvalidArgumentException) {
-        return;
-    }
-
-    throw new RuntimeException($message);
-}
+use function OCA\BrStunden\Tests\assertSameValue;
+use function OCA\BrStunden\Tests\assertThrows;
 
 $calendar = new class extends CalendarService {
     public function today(): DateTimeImmutable {
@@ -93,20 +80,20 @@ $entries = new class extends HourEntryStore {
 $service = new HoursService($members, $entries, $calendar);
 
 $missing = $service->missingMonthsForUser('simon', 2026, 3);
-assertHoursSame([2], array_column($missing, 'month'), 'Zero-hour entries should count as filled months.');
-assertHoursSame(['Februar'], array_column($missing, 'label'), 'Missing months should expose German labels.');
+assertSameValue([2], array_column($missing, 'month'), 'Zero-hour entries should count as filled months.');
+assertSameValue(['Februar'], array_column($missing, 'label'), 'Missing months should expose German labels.');
 
 $overview = $service->yearOverview(2026);
 $simonRow = $overview['rows'][0];
-assertHoursSame('simon', $simonRow['member']['uid'], 'Year overview should keep member rows.');
-assertHoursSame(0, $simonRow['months'][1]['totalMinutes'], 'Year overview should keep explicit zero-hour entries.');
-assertHoursSame(null, $simonRow['months'][2], 'Year overview should mark missing months as null.');
-assertHoursSame(120, $simonRow['brTotalMinutes'], 'Year overview should sum BR minutes.');
-assertHoursSame(30, $simonRow['fobiTotalMinutes'], 'Year overview should sum FoBi minutes.');
-assertHoursSame(150, $simonRow['totalMinutes'], 'Year overview should sum all minutes.');
+assertSameValue('simon', $simonRow['member']['uid'], 'Year overview should keep member rows.');
+assertSameValue(0, $simonRow['months'][1]['totalMinutes'], 'Year overview should keep explicit zero-hour entries.');
+assertSameValue(null, $simonRow['months'][2], 'Year overview should mark missing months as null.');
+assertSameValue(120, $simonRow['brTotalMinutes'], 'Year overview should sum BR minutes.');
+assertSameValue(30, $simonRow['fobiTotalMinutes'], 'Year overview should sum FoBi minutes.');
+assertSameValue(150, $simonRow['totalMinutes'], 'Year overview should sum all minutes.');
 
 $service->saveEntry(2026, 7, '1,5', '0,5', '  Mit Vorbereitung  ');
-assertHoursSame([
+assertSameValue([
     'userId' => 'simon',
     'year' => 2026,
     'month' => 7,
@@ -116,16 +103,16 @@ assertHoursSame([
     'updatedByUid' => 'simon',
 ], $entries->saved[0], 'Saved entries should parse hours, trim notes and use the current user.');
 
-assertHoursThrows(
+assertThrows(
     static fn(): array => $service->saveEntry(2026, 8, '1', null, ''),
     'Future months should be rejected.'
 );
-assertHoursThrows(
+assertThrows(
     static fn(): array => $service->saveEntry(2026, 7, '744', '0,25', ''),
     'Combined BR and FoBi hours should stay plausible.'
 );
 
 $service->deleteEntry(2026, 7);
-assertHoursSame(['userId' => 'simon', 'year' => 2026, 'month' => 7], $entries->deleted[0], 'Deletes should use the current user.');
+assertSameValue(['userId' => 'simon', 'year' => 2026, 'month' => 7], $entries->deleted[0], 'Deletes should use the current user.');
 
 echo 'HoursService tests passed' . PHP_EOL;

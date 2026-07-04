@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+require_once __DIR__ . '/helpers.php';
 require_once __DIR__ . '/../../lib/Service/CalendarService.php';
 require_once __DIR__ . '/../../lib/Model/HourAmount.php';
 require_once __DIR__ . '/../../../localbase/lib/Model/ModelApiTrait.php';
@@ -16,22 +17,8 @@ use OCA\BrStunden\Service\BrMemberService;
 use OCA\BrStunden\Service\CalendarService;
 use OCA\BrStunden\Service\PayrollPdfService;
 use OCA\BrStunden\Store\HourEntryStore;
-
-function assertSameValue(mixed $expected, mixed $actual, string $message): void {
-    if ($expected !== $actual) {
-        throw new RuntimeException($message . ' Expected ' . var_export($expected, true) . ', got ' . var_export($actual, true));
-    }
-}
-
-function assertThrows(callable $callback, string $message): void {
-    try {
-        $callback();
-    } catch (InvalidArgumentException) {
-        return;
-    }
-
-    throw new RuntimeException($message);
-}
+use function OCA\BrStunden\Tests\assertSameValue;
+use function OCA\BrStunden\Tests\assertThrows;
 
 $calendar = new class extends CalendarService {
     public function today(): DateTimeImmutable {
