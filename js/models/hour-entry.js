@@ -1,5 +1,5 @@
 (function() {
-    const { Model } = window.BRStunden.models;
+    const { Model } = window.LocalBase.models;
 
     class HourEntry extends Model {
         constructor(data = {}) {

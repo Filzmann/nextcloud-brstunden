@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace OCA\BrStunden\Model;
 
+use OCA\LocalBase\Model\ModelApiTrait;
+
 class HourEntry {
     use ModelApiTrait;
 

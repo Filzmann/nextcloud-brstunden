@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../../lib/Service/CalendarService.php';
 require_once __DIR__ . '/../../lib/Model/HourAmount.php';
-require_once __DIR__ . '/../../lib/Model/ModelApiTrait.php';
+require_once __DIR__ . '/../../../localbase/lib/Model/ModelApiTrait.php';
 require_once __DIR__ . '/../../lib/Model/HourEntry.php';
 require_once __DIR__ . '/../../lib/Service/BrMemberService.php';
 require_once __DIR__ . '/../../lib/Store/HourEntryStore.php';
