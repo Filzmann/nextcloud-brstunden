@@ -17,16 +17,13 @@ class HourEntryStore {
      * @return HourEntry[]
      */
     public function forUsersInYear(array $userIds, int $year): array {
-        return array_map(
-            static fn(array $row): HourEntry => HourEntry::fromRow($row),
-            $this->repository->findForUsersInYear($userIds, $year)
-        );
+        return HourEntry::get_all($this->repository->findForUsersInYear($userIds, $year));
     }
 
     public function findForUserMonth(string $userId, int $year, int $month): ?HourEntry {
         $row = $this->repository->findForUserMonth($userId, $year, $month);
 
-        return $row === null ? null : HourEntry::fromRow($row);
+        return HourEntry::get($row);
     }
 
     public function save(string $userId, int $year, int $month, int $minutes, int $fobiMinutes, string $note, string $updatedByUid): void {

@@ -23,7 +23,7 @@ class HourEntry {
     ) {
     }
 
-    public static function fromArray(array $data): self {
+    protected static function fromArray(array $data): self {
         return new self(
             (int)($data['id'] ?? 0),
             (string)($data['userId'] ?? $data['user_id'] ?? ''),
@@ -38,10 +38,6 @@ class HourEntry {
             self::dateToString($data['createdAt'] ?? $data['created_at'] ?? ''),
             self::dateToString($data['updatedAt'] ?? $data['updated_at'] ?? '')
         );
-    }
-
-    public static function fromRow(array $row): self {
-        return self::fromArray($row);
     }
 
     public function toArray(): array {
