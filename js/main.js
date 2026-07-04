@@ -2,7 +2,11 @@
     const api = window.BRStunden.api;
     const format = window.BRStunden.format;
     const overviewRenderer = window.BRStunden.overview;
-    const { byId } = window.LocalBase.ui;
+    const { Notice, byId } = window.LocalBase.ui;
+    const noticeBox = new Notice('brs-notice', {
+        baseClass: 'brs-notice',
+        typeClassPrefix: 'brs-notice-'
+    });
     const state = {
         currentUser: null,
         months: [],
@@ -14,10 +18,7 @@
     };
 
     function notice(message, type = 'info') {
-        const box = byId('brs-notice');
-        box.textContent = message;
-        box.className = 'brs-notice brs-notice-' + type;
-        box.hidden = !message;
+        noticeBox.show(message, type);
     }
 
     async function init() {
