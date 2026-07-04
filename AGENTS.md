@@ -63,6 +63,9 @@ In Codex-Sessions koennen DDEV-Befehle im normalen Sandbox-Kontext nicht zuverla
 - Neue Modellarbeit fuehrt keine neuen `fromApi`-/`toApi`-Kompatibilitaetsaliase ein. Bestehende PHP-`toApiArray()`-Call-sites duerfen schrittweise auf `toArray()` migriert werden, wenn die betroffene Schicht ohnehin angefasst wird.
 - Datenzugriffe laufen ueber Repository-, Store- oder Service-Klassen.
 - Services arbeiten bevorzugt mit Modellen/DTOs statt rohen Arrays.
+- JavaScript wird gut gekapselt, wiederverwendbar und weitgehend objektorientiert strukturiert. API-Zugriffe gehoeren in Repositories/API-Adapter, Daten in Modelle/ViewModels, Workflows in kleine Services/Controller und Rendering/Eventbindung in Komponenten.
+- DRY und KISS gelten gemeinsam: echte Duplizierung wird entfernt, aber einfache Lesbarkeit und klare BRStunden-Fachgrenzen bleiben wichtiger als fruehe generische Abstraktionen.
+- Gemeinsame UI-Helfer oder Komponenten werden erst nach `localbase` verschoben, wenn sie in mindestens zwei Apps dieselbe Semantik, dieselben Zustaende, Events und Accessibility-Regeln haben.
 - Fehler werden zentral protokolliert; Nutzer*innen erhalten sichere, knappe Meldungen ohne interne Details.
 - Keine Architekturabstraktion wird vorsorglich gebaut.
 

@@ -1,4 +1,5 @@
 <?php
+script('localbase', 'api/api-client');
 script('brstunden', 'modules/api');
 script('localbase', 'models/model');
 script('brstunden', 'models/hour-entry');
