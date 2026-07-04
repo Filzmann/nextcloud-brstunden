@@ -74,3 +74,11 @@ In Codex-Sessions koennen DDEV-Befehle im normalen Sandbox-Kontext nicht zuverla
 - App-spezifische Learnings werden in dieser `AGENTS.md` gespeichert.
 - App-uebergreifende Learnings werden im Parent-Workspace dokumentiert und bei Bedarf hier wiederholt.
 - Ergaenzungen erfolgen erst nach ausdruecklicher Freigabe.
+
+## Tests
+
+Wichtige lokale Pruefungen:
+
+    find js -name '*.js' -print0 | xargs -0 -n1 node --check
+    node tests/js/model-smoke.js
+    php tests/unit/run.php
