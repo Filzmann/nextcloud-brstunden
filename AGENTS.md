@@ -82,4 +82,5 @@ Wichtige lokale Pruefungen:
 
     find js -name '*.js' -print0 | xargs -0 -n1 node --check
     node tests/js/model-smoke.js
+    node tests/js/hour-repository-smoke.js
     php tests/unit/run.php

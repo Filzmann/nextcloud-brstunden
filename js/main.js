@@ -1,8 +1,9 @@
 (function() {
-    const api = window.BRStunden.api;
     const format = window.BRStunden.format;
     const overviewRenderer = window.BRStunden.overview;
+    const { HourRepository } = window.BRStunden.repositories;
     const { Notice, byId } = window.LocalBase.ui;
+    const repository = new HourRepository(window.BRStunden.api);
     const noticeBox = new Notice('brs-notice', {
         baseClass: 'brs-notice',
         typeClassPrefix: 'brs-notice-'
@@ -23,7 +24,7 @@
 
     async function init() {
         try {
-            const data = await api.request('/api/state');
+            const data = await repository.state();
             state.currentUser = data.currentUser;
             state.months = data.months || [];
             state.year = data.defaultYear;
@@ -97,7 +98,7 @@
         renderMonthOptions();
         notice('');
         try {
-            state.overview = await api.request('/api/years/' + encodeURIComponent(String(year)));
+            state.overview = await repository.yearOverview(year);
             renderOverview();
         } catch (e) {
             notice(e.message || 'Jahresuebersicht konnte nicht geladen werden.', 'error');
@@ -121,10 +122,7 @@
         };
 
         try {
-            state.overview = await api.request('/api/entries', {
-                method: 'POST',
-                body: JSON.stringify(payload)
-            });
+            state.overview = await repository.saveEntry(payload);
             notice('BR-Stunden gespeichert.', 'success');
             setSelectedEntry({ year: payload.year, month: payload.month, exists: true });
             renderOverview();
@@ -142,9 +140,7 @@
         const month = Number(byId('brs-entry-month').value);
 
         try {
-            state.overview = await api.request('/api/entries/' + encodeURIComponent(String(year)) + '/' + encodeURIComponent(String(month)), {
-                method: 'DELETE'
-            });
+            state.overview = await repository.deleteEntry(year, month);
             notice('Eintrag geloescht.', 'success');
             byId('brs-entry-hours').value = '';
             byId('brs-entry-fobi-hours').value = '0';
@@ -164,9 +160,7 @@
 
         const year = Number(byId('brs-year').value || state.year);
         const month = Number(byId('brs-entry-month').value);
-        window.location.href = OC.generateUrl(
-            '/apps/brstunden/api/entries/' + encodeURIComponent(String(year)) + '/' + encodeURIComponent(String(month)) + '/payroll.pdf'
-        );
+        window.location.href = repository.payrollPdfUrl(year, month);
     }
 
     function fillFormFromTable(event) {
@@ -205,7 +199,7 @@
 
     async function loadReminderPreview() {
         try {
-            const preview = await api.request('/api/reminders/preview');
+            const preview = await repository.reminderPreview();
             renderReminderPreview(preview);
         } catch (e) {
             notice(e.message || 'Reminder-Vorschau konnte nicht geladen werden.', 'error');

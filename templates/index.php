@@ -3,6 +3,7 @@ script('localbase', 'api/api-client');
 script('brstunden', 'modules/api');
 script('localbase', 'models/model');
 script('brstunden', 'models/hour-entry');
+script('brstunden', 'repositories/hour-repository');
 script('localbase', 'ui/ui');
 script('brstunden', 'modules/format');
 script('brstunden', 'modules/overview');
