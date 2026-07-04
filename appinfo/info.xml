@@ -5,7 +5,7 @@
     <name>BR-Stunden</name>
     <summary>Monatliche Erfassung und Jahresuebersicht von BR-Stunden.</summary>
     <description>Erfasst BR-Stunden je BR-Mitglied und Monat, erzeugt Jahresuebersichten und erinnert am Monatsende an fehlende Eintraege.</description>
-    <version>0.1.0</version>
+    <version>0.4.1</version>
     <licence>agpl</licence>
     <author>Simon / ChatGPT-Prototyp</author>
     <namespace>BrStunden</namespace>
@@ -17,6 +17,14 @@
     <background-jobs>
         <job>OCA\BrStunden\BackgroundJob\MonthlyReminderJob</job>
     </background-jobs>
+    <repair-steps>
+        <post-migration>
+            <step>OCA\BrStunden\Migration\EnsureBrGroupsStep</step>
+        </post-migration>
+        <install>
+            <step>OCA\BrStunden\Migration\EnsureBrGroupsStep</step>
+        </install>
+    </repair-steps>
     <navigations>
         <navigation>
             <name>BR-Stunden</name>

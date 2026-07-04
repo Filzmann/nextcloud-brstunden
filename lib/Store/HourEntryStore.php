@@ -29,7 +29,11 @@ class HourEntryStore {
         return $row === null ? null : HourEntry::fromRow($row);
     }
 
-    public function save(string $userId, int $year, int $month, int $minutes, string $note, string $updatedByUid): void {
-        $this->repository->upsert($userId, $year, $month, $minutes, $note, $updatedByUid);
+    public function save(string $userId, int $year, int $month, int $minutes, int $fobiMinutes, string $note, string $updatedByUid): void {
+        $this->repository->upsert($userId, $year, $month, $minutes, $fobiMinutes, $note, $updatedByUid);
+    }
+
+    public function delete(string $userId, int $year, int $month): void {
+        $this->repository->deleteForUserMonth($userId, $year, $month);
     }
 }

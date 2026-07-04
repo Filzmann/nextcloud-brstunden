@@ -1,4 +1,4 @@
-# brstunden 0.1.0
+# brstunden 0.4.0
 
 Nextcloud-App-Prototyp fuer monatliche BR-Stunden und Jahresuebersichten.
 
@@ -9,10 +9,13 @@ Development-Prototyp. Nicht produktiv und nicht rechtssicher.
 Enthalten:
 
 - BR-Mitglieder aus der Nextcloud-Gruppe `Betriebsrat`.
-- Monatliche Stundeneintraege pro BR-Mitglied.
+- Monatliche Stundeneintraege pro BR-Mitglied, getrennt nach BR-Stunden und FoBi-Stunden.
 - Jahresuebersicht mit Monaten als Spalten und BR-Mitgliedern als Zeilen.
 - Fehlende Monate je Mitglied.
 - Background-Job, der am letzten Tag des Monats Erinnerungs-E-Mails an Mitglieder mit fehlenden Monaten vorbereitet und versendet.
+- Reminder-Laeufe werden pro Jahr/Monat markiert, damit Monatsend-Mails nicht mehrfach versendet werden.
+- BR-Mitglieder koennen nur eigene Eintraege bearbeiten oder loeschen.
+- Gespeicherte eigene Eintraege koennen als vorausgefuellte PDF-Abrechnung heruntergeladen werden.
 
 ## Lokale URL
 

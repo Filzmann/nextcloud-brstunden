@@ -14,12 +14,15 @@
 
 .brs-head h1,
 .brs-entry h2,
-.brs-overview h2 {
+.brs-overview h2,
+.brs-reminders h2 {
     margin: 0;
 }
 
 .brs-controls,
-#brs-entry-form {
+#brs-entry-form,
+.brs-section-head,
+.brs-reminder-summary {
     display: flex;
     align-items: end;
     flex-wrap: wrap;
@@ -76,6 +79,7 @@
     border-bottom: 1px solid var(--color-border);
     text-align: right;
     white-space: nowrap;
+    vertical-align: top;
 }
 
 .brs-table th:first-child {
@@ -91,13 +95,91 @@
     color: var(--color-text-lighter);
 }
 
+.brs-table .is-own-missing {
+    color: var(--color-error);
+    font-weight: 700;
+}
+
 .brs-table .is-current-user th,
 .brs-table .is-current-user td {
     background: color-mix(in srgb, var(--color-primary-element) 10%, transparent);
 }
 
+.brs-table td.has-action {
+    padding: 2px;
+}
+
+.brs-cell-button {
+    width: 100%;
+    min-height: 32px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    padding: 6px 8px;
+    text-align: right;
+}
+
+.brs-cell-button:hover,
+.brs-cell-button:focus-visible {
+    background: var(--color-background-hover);
+}
+
+.brs-note-mark {
+    margin-left: 4px;
+    color: var(--color-text-lighter);
+}
+
+.brs-hour-stack {
+    display: grid;
+    gap: 2px;
+}
+
+.brs-cell-button .brs-hour-stack {
+    justify-items: end;
+}
+
+.brs-hours-sub {
+    color: var(--color-text-lighter);
+    font-size: 0.86em;
+}
+
 .brs-total {
     font-weight: 700;
+}
+
+.brs-reminders {
+    padding-top: 16px;
+    border-top: 1px solid var(--color-border);
+    margin-top: 20px;
+}
+
+.brs-section-head {
+    justify-content: space-between;
+}
+
+.brs-reminder-preview {
+    margin-top: 12px;
+}
+
+.brs-reminder-summary {
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.brs-reminder-summary span {
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: var(--color-background-hover);
+}
+
+.brs-reminder-table {
+    min-width: 560px;
+}
+
+.brs-empty {
+    color: var(--color-text-lighter);
 }
 
 @media (max-width: 720px) {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OCA\BrStunden\Service;
 
+use OCP\Accounts\IAccountManager;
 use OCP\IGroupManager;
 use OCP\IUser;
 use OCP\IUserSession;
@@ -13,7 +14,8 @@ class BrMemberService {
 
     public function __construct(
         private IGroupManager $groupManager,
-        private IUserSession $userSession
+        private IUserSession $userSession,
+        private IAccountManager $accountManager
     ) {
     }
 
@@ -24,6 +26,19 @@ class BrMemberService {
         }
 
         return $user->getUID();
+    }
+
+    public function currentUserAddress(): string {
+        $user = $this->userSession->getUser();
+        if (!$user instanceof IUser) {
+            return '';
+        }
+
+        try {
+            return trim($this->accountManager->getAccount($user)->getProperty(IAccountManager::PROPERTY_ADDRESS)->getValue());
+        } catch (\Throwable) {
+            return '';
+        }
     }
 
     public function assertCurrentUserIsMember(): void {

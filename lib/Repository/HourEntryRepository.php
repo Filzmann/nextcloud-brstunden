@@ -46,7 +46,7 @@ class HourEntryRepository {
         return $row === false ? null : $row;
     }
 
-    public function upsert(string $userId, int $year, int $month, int $minutes, string $note, string $updatedByUid): void {
+    public function upsert(string $userId, int $year, int $month, int $minutes, int $fobiMinutes, string $note, string $updatedByUid): void {
         $existing = $this->findForUserMonth($userId, $year, $month);
         $now = new DateTimeImmutable();
 
@@ -58,6 +58,7 @@ class HourEntryRepository {
                     'entry_year' => $qb->createNamedParameter($year, IQueryBuilder::PARAM_INT),
                     'entry_month' => $qb->createNamedParameter($month, IQueryBuilder::PARAM_INT),
                     'minutes' => $qb->createNamedParameter($minutes, IQueryBuilder::PARAM_INT),
+                    'fobi_minutes' => $qb->createNamedParameter($fobiMinutes, IQueryBuilder::PARAM_INT),
                     'note' => $qb->createNamedParameter($note),
                     'created_at' => $qb->createNamedParameter($now, IQueryBuilder::PARAM_DATE),
                     'updated_at' => $qb->createNamedParameter($now, IQueryBuilder::PARAM_DATE),
@@ -71,10 +72,20 @@ class HourEntryRepository {
         $qb = $this->db->getQueryBuilder();
         $qb->update(self::TABLE)
             ->set('minutes', $qb->createNamedParameter($minutes, IQueryBuilder::PARAM_INT))
+            ->set('fobi_minutes', $qb->createNamedParameter($fobiMinutes, IQueryBuilder::PARAM_INT))
             ->set('note', $qb->createNamedParameter($note))
             ->set('updated_at', $qb->createNamedParameter($now, IQueryBuilder::PARAM_DATE))
             ->set('updated_by_uid', $qb->createNamedParameter($updatedByUid))
             ->where($qb->expr()->eq('id', $qb->createNamedParameter((int)$existing['id'], IQueryBuilder::PARAM_INT)));
+        $qb->executeStatement();
+    }
+
+    public function deleteForUserMonth(string $userId, int $year, int $month): void {
+        $qb = $this->db->getQueryBuilder();
+        $qb->delete(self::TABLE)
+            ->where($qb->expr()->eq('user_id', $qb->createNamedParameter($userId)))
+            ->andWhere($qb->expr()->eq('entry_year', $qb->createNamedParameter($year, IQueryBuilder::PARAM_INT)))
+            ->andWhere($qb->expr()->eq('entry_month', $qb->createNamedParameter($month, IQueryBuilder::PARAM_INT)));
         $qb->executeStatement();
     }
 }
