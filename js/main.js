@@ -2,6 +2,7 @@
     const api = window.BRStunden.api;
     const format = window.BRStunden.format;
     const overviewRenderer = window.BRStunden.overview;
+    const { byId } = window.LocalBase.ui;
     const state = {
         currentUser: null,
         months: [],
@@ -11,10 +12,6 @@
         overview: null,
         selectedEntry: null
     };
-
-    function byId(id) {
-        return document.getElementById(id);
-    }
 
     function notice(message, type = 'info') {
         const box = byId('brs-notice');

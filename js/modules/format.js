@@ -1,13 +1,5 @@
 (function() {
-    function esc(value) {
-        return String(value ?? '').replace(/[&<>"']/g, (char) => ({
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            '"': '&quot;',
-            "'": '&#039;'
-        }[char]));
-    }
+    const { esc } = window.LocalBase.ui;
 
     function hours(value) {
         const number = Number(value || 0);
