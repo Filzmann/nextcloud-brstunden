@@ -50,6 +50,7 @@ for (const file of collectJsFiles('js')) {
 for (const file of [
     'tests/js/model-smoke.js',
     'tests/js/hour-repository-smoke.js',
+    'tests/js/main-workflow-smoke.js',
     'tests/js/overview-smoke.js',
 ]) {
     run('node', [file]);
