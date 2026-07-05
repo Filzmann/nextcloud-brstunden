@@ -55,6 +55,7 @@ foreach ($lintFiles as $file) {
 foreach ([
     'tests/Controller/ApiControllerAttributeSmokeTest.php',
     'tests/unit/BrGroupsServiceTest.php',
+    'tests/unit/BrMemberServiceTest.php',
     'tests/unit/HoursServiceTest.php',
     'tests/unit/ReminderServiceTest.php',
     'tests/unit/run.php',
