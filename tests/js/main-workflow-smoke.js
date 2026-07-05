@@ -1,26 +1,8 @@
 const assert = require('assert');
-
-class FakeElement {
-    constructor(id = '') {
-        this.id = id;
-        this.value = '';
-        this.innerHTML = '';
-        this.textContent = '';
-        this.hidden = true;
-        this.disabled = false;
-        this.className = '';
-        this.listeners = {};
-        this.focused = false;
-    }
-
-    addEventListener(type, listener) {
-        this.listeners[type] = listener;
-    }
-
-    focus() {
-        this.focused = true;
-    }
-}
+const {
+    FakeElement,
+    createElementMap,
+} = require('../../../localbase/tests/js/helpers/fake-dom.js');
 
 class FakeCellButton extends FakeElement {
     constructor(dataset) {
@@ -33,22 +15,25 @@ class FakeCellButton extends FakeElement {
     }
 }
 
-const elements = new Map([
-    ['brs-notice', new FakeElement('brs-notice')],
-    ['brs-year', new FakeElement('brs-year')],
-    ['brs-load-year', new FakeElement('brs-load-year')],
-    ['brs-entry-form', new FakeElement('brs-entry-form')],
-    ['brs-entry-month', new FakeElement('brs-entry-month')],
-    ['brs-entry-hours', new FakeElement('brs-entry-hours')],
-    ['brs-entry-fobi-hours', new FakeElement('brs-entry-fobi-hours')],
-    ['brs-entry-note', new FakeElement('brs-entry-note')],
-    ['brs-save-entry', new FakeElement('brs-save-entry')],
-    ['brs-delete-entry', new FakeElement('brs-delete-entry')],
-    ['brs-download-payroll', new FakeElement('brs-download-payroll')],
-    ['brs-overview', new FakeElement('brs-overview')],
-    ['brs-load-reminders', new FakeElement('brs-load-reminders')],
-    ['brs-reminder-preview', new FakeElement('brs-reminder-preview')]
+const elements = createElementMap([
+    'brs-notice',
+    'brs-year',
+    'brs-load-year',
+    'brs-entry-form',
+    'brs-entry-month',
+    'brs-entry-hours',
+    'brs-entry-fobi-hours',
+    'brs-entry-note',
+    'brs-save-entry',
+    'brs-delete-entry',
+    'brs-download-payroll',
+    'brs-overview',
+    'brs-load-reminders',
+    'brs-reminder-preview',
 ]);
+for (const element of elements.values()) {
+    element.hidden = true;
+}
 
 let domReady = null;
 const repositoryCalls = [];
