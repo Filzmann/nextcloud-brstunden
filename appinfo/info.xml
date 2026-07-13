@@ -5,7 +5,7 @@
     <name>BR-Stunden</name>
     <summary>Monatliche Erfassung und Jahresuebersicht von BR-Stunden.</summary>
     <description>Erfasst BR-Stunden je BR-Mitglied und Monat, erzeugt Jahresuebersichten und erinnert am Monatsende an fehlende Eintraege.</description>
-    <version>0.4.1</version>
+    <version>0.4.2</version>
     <licence>agpl</licence>
     <author>Simon / ChatGPT-Prototyp</author>
     <namespace>BrStunden</namespace>
@@ -13,6 +13,7 @@
     <bugs>https://example.invalid</bugs>
     <dependencies>
         <nextcloud min-version="29" max-version="35"/>
+        <app>orgsuite</app>
     </dependencies>
     <background-jobs>
         <job>OCA\BrStunden\BackgroundJob\MonthlyReminderJob</job>
@@ -25,12 +26,4 @@
             <step>OCA\BrStunden\Migration\EnsureBrGroupsStep</step>
         </install>
     </repair-steps>
-    <navigations>
-        <navigation>
-            <name>BR-Stunden</name>
-            <route>brstunden.page.index</route>
-            <icon>app.svg</icon>
-            <order>82</order>
-        </navigation>
-    </navigations>
 </info>

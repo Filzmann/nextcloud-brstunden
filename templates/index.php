@@ -6,13 +6,16 @@ script('brstunden', 'models/hour-entry');
 script('localbase', 'repositories/repository');
 script('brstunden', 'repositories/hour-repository');
 script('localbase', 'ui/ui');
+script('orgsuite', 'suite-navigation');
 script('brstunden', 'modules/format');
 script('brstunden', 'modules/overview');
 script('brstunden', 'main');
 style('brstunden', 'style');
+style('orgsuite', 'suite-navigation');
 ?>
 
 <div id="brstunden-app">
+    <div class="orgsuite-host" data-orgsuite data-suite="br" data-current-app="brstunden"></div>
     <header class="brs-head">
         <h1>BR-Stunden</h1>
         <div class="brs-controls">

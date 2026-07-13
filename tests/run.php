@@ -58,6 +58,7 @@ foreach ([
     'tests/unit/BrMemberServiceTest.php',
     'tests/unit/HoursServiceTest.php',
     'tests/unit/ReminderServiceTest.php',
+    'tests/unit/SuiteNavigationTest.php',
     'tests/unit/run.php',
 ] as $file) {
     run_test_command($root, ['php', $file]);

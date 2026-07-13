@@ -72,6 +72,12 @@ In Codex-Sessions koennen DDEV-Befehle im normalen Sandbox-Kontext nicht zuverla
 
 ## Learnings pflegen
 
+### Gemeinsame Suite-Navigation
+
+- BRStunden besitzt keinen eigenen Nextcloud-Hauptnavigationseintrag. `orgsuite` stellt den gemeinsamen Einstieg `BR` bereit.
+- Das Template bindet das zentrale OrgSuite-Menue mit `data-suite="br"` und `data-current-app="brstunden"` ein.
+- Stunden- und Uebersichtsrechte bleiben ausschliesslich serverseitig in BRStunden; Menuesichtbarkeit ist keine Berechtigung.
+
 - App-spezifische Learnings werden in dieser `AGENTS.md` gespeichert.
 - App-uebergreifende Learnings werden im Parent-Workspace dokumentiert und bei Bedarf hier wiederholt.
 - Ergaenzungen erfolgen erst nach ausdruecklicher Freigabe.
