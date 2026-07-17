@@ -25,14 +25,12 @@ Kernprozess:
 - Am letzten Tag des Monats sollen alle BR-Mitglieder per E-Mail erinnert werden, wenn fuer sie Monate im laufenden Jahr bis einschliesslich des aktuellen Monats fehlen.
 - Eine eingetragene `0` ist ein gueltiger Eintrag und gilt nicht als fehlend.
 
-## Git- und Arbeitsregeln
+## Repository und gemeinsamer Arbeitsablauf
 
 - Dieses Verzeichnis ist ein eigenstaendiges Git-Repository fuer die BR-App `brstunden`.
 - Andere eigene Nextcloud-Apps, zum Beispiel `brtop` oder `adplaner`, leben in eigenen Repositories.
-- Keine Commits, kein Push und kein Deployment ohne ausdrueckliche Freigabe durch Simon.
-- Vor Commits immer `git status --short`, `git diff --stat` und `git diff --name-only` zeigen.
-- Nicht `git add .` verwenden; Dateien gezielt stagen.
-- Aenderungen klein, pruefbar und rueckbaubar halten.
+- Diese Datei und lokal referenzierte Skills bilden bei einem direkten Start in diesem Repository die vollständige Repository-Steuerung.
+- Fuer Git-, Sandbox-, DDEV-/`occ`-Sicherheit, Verifikation und Learning Candidates gilt der lokal mitgefuehrte Skill `work-in-nextcloud-app`; die folgenden BRStunden-Regeln und Pruefungen ergaenzen ihn.
 
 ## DDEV
 
@@ -49,10 +47,6 @@ Wichtige Pruefungen:
     ddev exec -d /var/www/html/html php occ app:list
     ddev exec -d /var/www/html/html php occ app:enable brstunden
     ddev exec -d /var/www/html/html php occ upgrade
-
-Diese lokale Nextcloud-Version hat keinen occ migrations:migrate-Befehl. App-Migrationen laufen beim Aktivieren der App bzw. ueber occ upgrade, wenn Nextcloud einen DB-Upgrade-Bedarf meldet.
-
-In Codex-Sessions koennen DDEV-Befehle im normalen Sandbox-Kontext nicht zuverlaessig auf Docker zugreifen. Wenn `ddev` mit Docker-/Stream-FD-Fehlern scheitert, den gleichen Befehl mit eskaliertem Zugriff erneut ausfuehren.
 
 ## Architekturregeln
 
@@ -78,9 +72,7 @@ In Codex-Sessions koennen DDEV-Befehle im normalen Sandbox-Kontext nicht zuverla
 - Das Template bindet das zentrale OrgSuite-Menue mit `data-suite="br"` und `data-current-app="brstunden"` ein.
 - Stunden- und Uebersichtsrechte bleiben ausschliesslich serverseitig in BRStunden; Menuesichtbarkeit ist keine Berechtigung.
 
-- App-spezifische Learnings werden in dieser `AGENTS.md` gespeichert.
-- App-uebergreifende Learnings werden im Parent-Workspace dokumentiert und bei Bedarf hier wiederholt.
-- Ergaenzungen erfolgen erst nach ausdruecklicher Freigabe.
+- App-spezifische Kandidaten zielen auf diese Datei; app-uebergreifende Kandidaten werden dem Parent nur als unverbindlicher Vorschlag berichtet. Bewertung und Freigabe folgen dem lokalen Skill `work-in-nextcloud-app`.
 
 ## Tests
 
