@@ -1,4 +1,4 @@
-# brstunden 0.4.0
+# BRStunden
 
 Nextcloud-App-Prototyp fuer monatliche BR-Stunden und Jahresuebersichten.
 
@@ -25,8 +25,9 @@ https://nextcloud-dev.ddev.site/apps/brstunden/
 
 ## DDEV
 
+Aus dem dokumentierten `nextcloud-dev`-Root:
+
 ```bash
-cd ~/projects/br-nextcloud-apps/nextcloud-dev
 ddev exec -d /var/www/html/html php occ app:enable brstunden
 ddev exec -d /var/www/html/html php occ status
 ```

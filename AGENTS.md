@@ -34,9 +34,10 @@ Kernprozess:
 
 ## DDEV
 
-Die gemeinsame lokale Nextcloud-DDEV-Umgebung liegt ausserhalb dieses Repos:
-
-    ~/projects/br-nextcloud-apps/nextcloud-dev
+Die gemeinsame Nextcloud-DDEV-Umgebung wird aus dem dokumentierten
+Parent-Unterverzeichnis `nextcloud-dev` gesteuert. Bei einem eigenständigen
+Checkout ist der lokale DDEV-Pfad zuerst anhand der realen Umgebung zu
+ermitteln.
 
 BRStunden nutzt gemeinsame Basisbausteine aus der Hilfsapp `localbase`. In der lokalen Nextcloud muss `localbase` aktiviert sein, bevor BRStunden vollstaendig lauffaehig ist.
 
@@ -50,29 +51,23 @@ Wichtige Pruefungen:
 
 ## Architekturregeln
 
-- Controller bleiben duenn.
-- Fachlogik, Datenzugriff, Darstellung und E-Mail-Versand werden getrennt.
-- Persistente Kernobjekte bekommen Modelle/DTOs oder Value Objects.
-- Modelle/DTOs werden bei Neu- und Weiterentwicklungen in PHP und JavaScript einheitlich angefasst: `get(...)` fuer ein einzelnes Payload/Row/Objekt, `get_all([...])` fuer Listen, `toArray()` fuer Serialisierung und `save()` nur fuer wirklich persistierbare, store-gebundene Modelle. Nicht persistierbare DTOs duerfen `save()` bewusst mit klarer Fehlermeldung blockieren.
-- Modell-Hydration wird von aussen ueber `get(...)` und `get_all([...])` aufgerufen. Hilfsmethoden wie `fromArray` oder `fromRow` bleiben, falls noetig, interne/protected Implementierungsdetails und sind keine oeffentliche Modell-API.
-- Neue Modellarbeit fuehrt keine neuen `fromApi`-/`toApi`-Kompatibilitaetsaliase ein. Bestehende PHP-`toApiArray()`-Call-sites duerfen schrittweise auf `toArray()` migriert werden, wenn die betroffene Schicht ohnehin angefasst wird.
-- Datenzugriffe laufen ueber Repository-, Store- oder Service-Klassen.
-- Services arbeiten bevorzugt mit Modellen/DTOs statt rohen Arrays.
-- JavaScript wird gut gekapselt, wiederverwendbar und weitgehend objektorientiert strukturiert. API-Zugriffe gehoeren in Repositories/API-Adapter, Daten in Modelle/ViewModels, Workflows in kleine Services/Controller und Rendering/Eventbindung in Komponenten.
-- DRY und KISS gelten gemeinsam: echte Duplizierung wird entfernt, aber einfache Lesbarkeit und klare BRStunden-Fachgrenzen bleiben wichtiger als fruehe generische Abstraktionen.
-- Gemeinsame UI-Helfer oder Komponenten werden erst nach `localbase` verschoben, wenn sie in mindestens zwei Apps dieselbe Semantik, dieselben Zustaende, Events und Accessibility-Regeln haben.
-- Fehler werden zentral protokolliert; Nutzer*innen erhalten sichere, knappe Meldungen ohne interne Details.
-- Keine Architekturabstraktion wird vorsorglich gebaut.
+- Der lokale Skill `work-in-nextcloud-app` ist die kanonische Quelle für
+  gemeinsame Schichtungs-, Modell-, Sicherheits-, UI- und Testregeln.
+- Monatserfassung, Jahresübersicht, Ermittlung fehlender Monate,
+  Reminderplanung, PDF-Erzeugung und E-Mail-Versand bleiben getrennte
+  fachliche Verantwortungen.
+- Eine gespeicherte `0` bleibt ein vorhandener Fachdatensatz und darf weder
+  durch Wahrheitswertprüfung noch durch Reminderlogik als fehlend gelten.
+- App-spezifische Fachlogik bleibt in BRStunden; gemeinsame Bausteine wandern
+  erst bei mindestens zwei semantisch gleichen, testbaren Nutzungen nach
+  LocalBase.
 
-## Learnings pflegen
-
-### Gemeinsame Suite-Navigation
+## Verbindliche Suite-Navigation
 
 - BRStunden besitzt keinen eigenen Nextcloud-Hauptnavigationseintrag. `orgsuite` stellt den gemeinsamen Einstieg `BR` bereit.
 - Das Template bindet das zentrale OrgSuite-Menue mit `data-suite="br"` und `data-current-app="brstunden"` ein.
 - Stunden- und Uebersichtsrechte bleiben ausschliesslich serverseitig in BRStunden; Menuesichtbarkeit ist keine Berechtigung.
 
-- App-spezifische Kandidaten zielen auf diese Datei; app-uebergreifende Kandidaten werden dem Parent nur als unverbindlicher Vorschlag berichtet. Bewertung und Freigabe folgen dem lokalen Skill `work-in-nextcloud-app`.
 
 ## Tests
 
