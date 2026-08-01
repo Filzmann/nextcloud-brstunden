@@ -33,3 +33,13 @@ ddev exec -d /var/www/html/html php occ status
 ```
 
 Diese lokale Nextcloud-Version hat keinen occ migrations:migrate-Befehl. Die Migration wird beim Aktivieren der App ausgefuehrt; occ status sollte danach needsDbUpgrade: false melden.
+
+## Abnahme und Roadmap
+
+Für die fachliche, visuelle und datenschutzbezogene Staging-Prüfung steht ein
+ausfüllbares [manuelles Abnahmeformular](docs/manual-acceptance.md) bereit.
+Es bezieht sich ausdrücklich auf den aktuellen Entwicklungsstand und erteilt
+keine Produktiv- oder Rechtssicherheitsfreigabe.
+
+Geplante Erweiterungen und offene Fachentscheidungen stehen in der
+[`ROADMAP.md`](ROADMAP.md).
