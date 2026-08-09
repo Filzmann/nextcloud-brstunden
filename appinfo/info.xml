@@ -5,7 +5,7 @@
     <name>BR-Stunden</name>
     <summary>Monatliche Erfassung und Jahresuebersicht von BR-Stunden.</summary>
     <description>Erfasst BR-Stunden je BR-Mitglied und Monat, erzeugt Jahresuebersichten und erinnert am Monatsende an fehlende Eintraege.</description>
-    <version>0.4.2</version>
+    <version>0.4.3</version>
     <licence>agpl</licence>
     <author>Simon / ChatGPT-Prototyp</author>
     <namespace>BrStunden</namespace>

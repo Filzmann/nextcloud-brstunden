@@ -12,6 +12,10 @@ Nextcloud-App-ID:
 
     brstunden
 
+Die priorisierte Produktplanung und offene Entscheidungen stehen in
+`ROADMAP.md`; verbindliche Fach-, Sicherheits- und Architekturregeln bleiben
+in dieser Datei.
+
 ## Zielsetzung
 
 BRStunden soll BR-Mitgliedern erlauben, fuer vergangene Monate ihre geleisteten BR-Stunden einzutragen.

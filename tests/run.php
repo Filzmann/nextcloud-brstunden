@@ -9,7 +9,7 @@ use OCA\LocalBase\Tests\Support\PhpTestRunner;
 PhpTestRunner::run(
     root: dirname(__DIR__),
     lintDirectories: ['appinfo', 'lib', 'templates', 'tests'],
-    testDirectories: ['tests/Controller', 'tests/unit'],
+    testDirectories: ['tests/Controller', 'tests/Ui', 'tests/unit'],
     testSuffixes: ['Test.php'],
     successMessage: 'BRStunden PHP tests passed',
 );
