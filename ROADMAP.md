@@ -36,9 +36,12 @@ Status: bereit nach fachlicher Trennung fester und editierbarer Inhalte
 - Bestandsdefaults, Berechnungsgleichheit, Adress-/Textvalidierung,
   Platzhalterescaping, historische Reproduktion und Rückfall testen.
 
+## Zukunftsplanung – nicht freigegeben
+
 ### BRS-L10N – BRStunden vollständig lokalisieren
 
-Status: bereit nach Entscheidung über die organisationsweite Dokumentsprache
+Status: später, nicht freigegeben; Dokumentsprache, Pilot-App, Reihenfolge und
+Rohtext-Gate werden vor jeder Umsetzung appübergreifend separat freigegeben
 
 - Monats- und Datumsnamen locale-fähig erzeugen und Oberfläche, Reminder,
   E-Mails sowie Fehlermeldungen auf Nextcloud-l10n umstellen.
