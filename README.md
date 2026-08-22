@@ -8,7 +8,8 @@ Development-Prototyp. Nicht produktiv und nicht rechtssicher.
 
 Enthalten:
 
-- BR-Mitglieder aus der Nextcloud-Gruppe `Betriebsrat`.
+- BR-Mitglieder aus der im gemeinsamen LocalBase-Vertrag konfigurierten
+  Nextcloud-Gruppe; der Default lautet `Betriebsrat`.
 - Monatliche Stundeneintraege pro BR-Mitglied, getrennt nach BR-Stunden und FoBi-Stunden.
 - Jahresuebersicht mit Monaten als Spalten und BR-Mitgliedern als Zeilen.
 - Fehlende Monate je Mitglied.

@@ -32,12 +32,14 @@ Begründung verpflichtend.
 
 | ID | Was wird geprüft? | Auszuführende Schritte | Erwartetes Ergebnis | Ergebnis | Warum/Beleg/Abweichung |
 |---|---|---|---|---|---|
-| A1 | Zugriff als BR-Mitglied | Mit einem neutralen Mitglied der Gruppe `Betriebsrat` BRStunden öffnen. | Erfassung und Jahresübersicht werden geladen. | [ ] erfolgreich [ ] nicht erfolgreich [ ] nicht geprüft | |
+| A1 | Zugriff als BR-Mitglied | Mit einem neutralen Mitglied der im LocalBase-Vertrag konfigurierten BR-Mitgliedergruppe BRStunden öffnen. | Erfassung und Jahresübersicht werden geladen. | [ ] erfolgreich [ ] nicht erfolgreich [ ] nicht geprüft | |
 | A2 | Zugriff ohne Mitgliedschaft | Mit einem angemeldeten Konto ohne BR-Mitgliedschaft App und direkten API-Aufruf versuchen. | Der Zugriff wird serverseitig verweigert; die Menüsichtbarkeit erteilt kein Recht. | [ ] erfolgreich [ ] nicht erfolgreich [ ] nicht geprüft | |
 | A3 | BR-Suite-Navigation | BRStunden über den gemeinsamen BR-Einstieg öffnen und zwischen aktivierten BR-Apps wechseln. | BRStunden ist korrekt markiert und ohne eigenen doppelten Haupteinstieg erreichbar. | [ ] erfolgreich [ ] nicht erfolgreich [ ] nicht geprüft | |
 | A4 | Jahreswechsel | Zwei unterschiedliche Testjahre öffnen, darunter eines ohne Einträge. | Monate und Einträge gehören eindeutig zum gewählten Jahr; ein leeres Jahr wird verständlich dargestellt. | [ ] erfolgreich [ ] nicht erfolgreich [ ] nicht geprüft | |
 | A5 | Übersicht und Notizhinweis | Mehrere Mitglieder mit unterschiedlichen Einträgen anzeigen und einen Eintrag mit Notiz prüfen. | Mitglieder stehen in Zeilen, Monate in Spalten; vorhandene Notizen werden zugänglich, aber nicht unnötig offenbart, gekennzeichnet. | [ ] erfolgreich [ ] nicht erfolgreich [ ] nicht geprüft | |
 | A6 | Tastatur, Fokus und Scrollen | Jahr, Formular, Übersicht, Erinnerungsbereich und PDF-Aktion nur mit Tastatur bedienen; kleines Fenster verwenden. | Alle Aktionen sind erreichbar, Fokus ist sichtbar und breite Tabellen bleiben innerhalb der App scrollbar. | [ ] erfolgreich [ ] nicht erfolgreich [ ] nicht geprüft | |
+| A7 | BR-Rollenhierarchie | Je ein synthetisches Konto ausschließlich der Vorsitz- beziehungsweise Stellvertretungsgruppe zuordnen und danach zusätzlich in die konfigurierte BR-Mitgliedergruppe aufnehmen. | Der widersprüchliche Stand wird serverseitig abgewiesen; erst mit zusätzlicher BR-Mitgliedschaft ist der gemeinsame Vertrag gültig. | [ ] erfolgreich [ ] nicht erfolgreich [ ] nicht geprüft | |
+| A8 | Abweichende Mitgliedergruppe | Einen gültigen, vom Default abweichenden LocalBase-BR-Gruppenvertrag verwenden und Übersicht sowie Reminderempfänger prüfen. | Zugriff, Mitgliederliste, Zustandsausgabe und Reminder verwenden ausschließlich die konfigurierte Mitgliedergruppe. | [ ] erfolgreich [ ] nicht erfolgreich [ ] nicht geprüft | |
 
 ## B. Eigene Monatserfassung
 

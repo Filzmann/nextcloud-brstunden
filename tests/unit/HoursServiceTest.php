@@ -2,14 +2,6 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/helpers.php';
-require_once __DIR__ . '/../../lib/Service/CalendarService.php';
-require_once __DIR__ . '/../../lib/Service/BrMemberService.php';
-require_once __DIR__ . '/../../lib/Model/HourAmount.php';
-require_once __DIR__ . '/../../../localbase/lib/Model/ModelApiTrait.php';
-require_once __DIR__ . '/../../lib/Model/HourEntry.php';
-require_once __DIR__ . '/../../lib/Store/HourEntryStore.php';
-require_once __DIR__ . '/../../lib/Service/HoursService.php';
 
 use OCA\BrStunden\Model\HourEntry;
 use OCA\BrStunden\Service\BrMemberService;
@@ -41,6 +33,10 @@ $members = new class extends BrMemberService {
             ['uid' => 'simon', 'displayName' => 'Simon Test', 'email' => 'simon@example.invalid'],
             ['uid' => 'alex', 'displayName' => 'Alex Test', 'email' => 'alex@example.invalid'],
         ];
+    }
+
+    public function memberGroupName(): string {
+        return 'BR Custom';
     }
 };
 
@@ -78,6 +74,8 @@ $entries = new class extends HourEntryStore {
 };
 
 $service = new HoursService($members, $entries, $calendar);
+
+assertSameValue('BR Custom', $service->state()['groupName'], 'The state must expose the canonical configured BR member group.');
 
 $missing = $service->missingMonthsForUser('simon', 2026, 3);
 assertSameValue([2], array_column($missing, 'month'), 'Zero-hour entries should count as filled months.');

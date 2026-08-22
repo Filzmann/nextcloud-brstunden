@@ -30,7 +30,7 @@ namespace {
 }
 
 namespace OCA\BrStunden\AppInfo {
-    if (!class_exists(Application::class)) {
+    if (!class_exists(Application::class, false)) {
         final class Application {
             public const APP_ID = 'brstunden';
         }
@@ -38,7 +38,6 @@ namespace OCA\BrStunden\AppInfo {
 }
 
 namespace {
-    require __DIR__ . '/../../lib/Controller/ApiController.php';
 
     use OCA\BrStunden\Controller\ApiController;
     use OCP\AppFramework\Http\Attribute\NoAdminRequired;

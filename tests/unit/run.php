@@ -2,14 +2,7 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/helpers.php';
-require_once __DIR__ . '/../../lib/Service/CalendarService.php';
-require_once __DIR__ . '/../../lib/Model/HourAmount.php';
-require_once __DIR__ . '/../../../localbase/lib/Model/ModelApiTrait.php';
-require_once __DIR__ . '/../../lib/Model/HourEntry.php';
-require_once __DIR__ . '/../../lib/Service/BrMemberService.php';
-require_once __DIR__ . '/../../lib/Store/HourEntryStore.php';
-require_once __DIR__ . '/../../lib/Service/PayrollPdfService.php';
+require_once __DIR__ . '/../bootstrap.php';
 
 use OCA\BrStunden\Model\HourAmount;
 use OCA\BrStunden\Model\HourEntry;

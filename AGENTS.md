@@ -22,7 +22,8 @@ BRStunden soll BR-Mitgliedern erlauben, fuer vergangene Monate ihre geleisteten 
 
 Kernprozess:
 
-- Ein BR-Mitglied ist ein Nextcloud-User in der Gruppe `Betriebsrat`.
+- Ein BR-Mitglied ist ein Nextcloud-User in der semantischen
+  Mitgliedergruppe des gemeinsamen LocalBase-BR-Gruppenvertrags.
 - Jedes BR-Mitglied traegt pro Monat die eigenen BR-Stunden ein.
 - Pro Kalenderjahr wird eine tabellarische Uebersicht ueber alle BR-Mitglieder und Monate erzeugt.
 - Fehlende Monate werden pro BR-Mitglied ermittelt.
@@ -44,6 +45,13 @@ Checkout ist der lokale DDEV-Pfad zuerst anhand der realen Umgebung zu
 ermitteln.
 
 BRStunden nutzt gemeinsame Basisbausteine aus der Hilfsapp `localbase`. In der lokalen Nextcloud muss `localbase` aktiviert sein, bevor BRStunden vollstaendig lauffaehig ist.
+
+Der versionierte LocalBase-Vertrag ist die einzige Laufzeitquelle für
+Mitglieder-, Vorsitz- und Stellvertretungsgruppe. Vorsitzende und
+Stellvertretungen müssen zugleich Mitglieder der konfigurierten
+Mitgliedergruppe sein. Fehlende, beschädigte oder widersprüchliche Verträge
+werden serverseitig abgewiesen; BRStunden benennt keine Gruppen um und
+verändert keine Mitgliedschaften.
 
 Wichtige Pruefungen:
 
