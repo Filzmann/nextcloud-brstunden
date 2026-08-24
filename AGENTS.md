@@ -22,7 +22,8 @@ BRStunden soll BR-Mitgliedern erlauben, fuer vergangene Monate ihre geleisteten 
 
 Kernprozess:
 
-- Ein BR-Mitglied ist ein Nextcloud-User in der Gruppe `Betriebsrat`.
+- Ein BR-Mitglied ist ein Nextcloud-User in der semantischen
+  Mitgliedergruppe des gemeinsamen LocalBase-BR-Gruppenvertrags.
 - Jedes BR-Mitglied traegt pro Monat die eigenen BR-Stunden ein.
 - Pro Kalenderjahr wird eine tabellarische Uebersicht ueber alle BR-Mitglieder und Monate erzeugt.
 - Fehlende Monate werden pro BR-Mitglied ermittelt.
@@ -44,6 +45,13 @@ Checkout ist der lokale DDEV-Pfad zuerst anhand der realen Umgebung zu
 ermitteln.
 
 BRStunden nutzt gemeinsame Basisbausteine aus der Hilfsapp `localbase`. In der lokalen Nextcloud muss `localbase` aktiviert sein, bevor BRStunden vollstaendig lauffaehig ist.
+
+Der versionierte LocalBase-Vertrag ist die einzige Laufzeitquelle für
+Mitglieder-, Vorsitz- und Stellvertretungsgruppe. Vorsitzende und
+Stellvertretungen müssen zugleich Mitglieder der konfigurierten
+Mitgliedergruppe sein. Fehlende, beschädigte oder widersprüchliche Verträge
+werden serverseitig abgewiesen; BRStunden benennt keine Gruppen um und
+verändert keine Mitgliedschaften.
 
 Wichtige Pruefungen:
 
@@ -95,3 +103,22 @@ Einzelne Checks, die durch die Testlaeufer gebuendelt werden:
     node tests/js/model-smoke.js
     node tests/js/hour-repository-smoke.js
     php tests/unit/run.php
+
+## Parent-Governance-Vertrag: 1
+
+- Die für dieses Subrepository anwendbaren Regeln des Parent-Workspaces sind
+  verbindlich. Dazu gehören insbesondere app-übergreifende ADRs und
+  öffentliche Verträge, Repositorygrenzen sowie Workspace-, Delivery- und
+  Release-Gates.
+- Diese lokale `AGENTS.md` und die lokalen Skills bleiben die vollständige,
+  ohne Parent-Checkout arbeitsfähige Repository-Steuerung. Die anwendbaren
+  Parent-Regeln werden dafür hier oder in den lokalen Skills mitgeführt.
+- Repository-lokale Regeln dürfen Parent-Verträge konkretisieren und verschärfen,
+  aber nicht abschwächen oder umgehen.
+- Bei einem Widerspruch gilt bis zur Klärung die strengere Regel. Die Arbeit
+  stoppt, bis die kanonische Quelle bestimmt, die Regelprojektionen
+  synchronisiert und eine erforderliche Entscheidung dokumentiert ist.
+- Ist der Parent-Workspace nicht verfügbar, bleibt die lokale Steuerung
+  wirksam. Vor Cross-App-, Release- oder Delivery-Arbeit muss ein vermuteter
+  neuerer Parent-Stand oder eine Regelungslücke zuerst gegen den Parent
+  geprüft werden.

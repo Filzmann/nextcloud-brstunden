@@ -6,20 +6,6 @@ Architekturregeln stehen in `AGENTS.md`.
 
 ## Freigegebene Umsetzungsaufgaben
 
-### BRS-BR-GROUPS – Gemeinsamen BR-Gruppenvertrag konsumieren
-
-Status: bereit nach `LB-BR-GROUPS` und Klärung der
-Mitgliedschaftsinvariante
-
-- Mitgliedsprüfung, Mitgliederliste, Reminder und Administration auf den
-  gemeinsamen semantischen BR-Gruppenvertrag umstellen.
-- Die festen Bestandsgruppennamen additiv übernehmen; keine Gruppe oder
-  Mitgliedschaft automatisch umbenennen, löschen oder verändern.
-- App-spezifische serverseitige Rechteentscheidungen behalten und bei
-  fehlendem oder widersprüchlichem Vertrag sicher verweigern.
-- Fresh Install, Bestandsmigration, Mitglieder, Vorsitz, Stellvertretung,
-  Nichtmitglieder, Admins, Reminderempfänger und direkte API-Denies testen.
-
 ### BRS-DOCUMENT-CONFIG – Abrechnungsstammdaten und Vorlage versionieren
 
 Status: bereit nach fachlicher Trennung fester und editierbarer Inhalte
@@ -36,9 +22,12 @@ Status: bereit nach fachlicher Trennung fester und editierbarer Inhalte
 - Bestandsdefaults, Berechnungsgleichheit, Adress-/Textvalidierung,
   Platzhalterescaping, historische Reproduktion und Rückfall testen.
 
+## Zukunftsplanung – nicht freigegeben
+
 ### BRS-L10N – BRStunden vollständig lokalisieren
 
-Status: bereit nach Entscheidung über die organisationsweite Dokumentsprache
+Status: später, nicht freigegeben; Dokumentsprache, Pilot-App, Reihenfolge und
+Rohtext-Gate werden vor jeder Umsetzung appübergreifend separat freigegeben
 
 - Monats- und Datumsnamen locale-fähig erzeugen und Oberfläche, Reminder,
   E-Mails sowie Fehlermeldungen auf Nextcloud-l10n umstellen.
@@ -51,6 +40,8 @@ Status: bereit nach Entscheidung über die organisationsweite Dokumentsprache
 
 ## Weitere geplante Arbeiten
 
+- Die manuellen Prüfungen werden im ausfüllbaren
+  [`docs/manual-acceptance.md`](docs/manual-acceptance.md) dokumentiert.
 - Reminder, Jahresübersicht und Abrechnung auf einem realitätsnahen Staging
   fachlich und datenschutzbezogen abnehmen.
 - Weitere Funktionen erst nach einem konkreten Fachbedarf und benanntem

@@ -16,10 +16,9 @@ namespace {
         eval('namespace OCP\Accounts; interface IAccountManager { public const PROPERTY_ADDRESS = "address"; public function getAccount($user); }');
     }
 
-    require_once __DIR__ . '/helpers.php';
-    require_once __DIR__ . '/../../lib/Service/BrMemberService.php';
 
     use OCA\BrStunden\Service\BrMemberService;
+    use OCA\BrStunden\Service\BrGroupsService;
     use OCP\Accounts\IAccountManager;
     use OCP\IGroupManager;
     use OCP\IUser;
@@ -83,11 +82,11 @@ namespace {
         }
 
         public function isInGroup($uid, $gid): bool {
-            return $gid === BrMemberService::GROUP_NAME && isset($this->memberships[(string)$uid]);
+            return $gid === 'BR Custom' && isset($this->memberships[(string)$uid]);
         }
 
         public function get($gid): ?object {
-            return $gid === BrMemberService::GROUP_NAME ? $this->group : null;
+            return $gid === 'BR Custom' ? $this->group : null;
         }
     };
 
@@ -124,7 +123,11 @@ namespace {
         }
     };
 
-    $service = new BrMemberService($groupManager, $session, $accountManager);
+    $groupNames = new class extends BrGroupsService {
+        public function __construct() {}
+        public function memberGroupName(): string { return 'BR Custom'; }
+    };
+    $service = new BrMemberService($groupManager, $session, $accountManager, $groupNames);
 
     assertSameValue('alice', $service->currentUserId(), 'Current user id should come from the user session.');
     assertSameValue('Teststr. 1, 12345 Berlin', $service->currentUserAddress(), 'Current user address should be trimmed.');
