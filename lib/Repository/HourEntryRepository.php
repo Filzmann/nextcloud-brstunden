@@ -46,6 +46,21 @@ class HourEntryRepository {
         return $row === false ? null : $row;
     }
 
+    /** @return list<array<string, mixed>> */
+    public function findPrivacyEntriesForSubject(string $userId, int $limit): array {
+        $qb = $this->db->getQueryBuilder();
+        $qb->select('id', 'user_id', 'entry_year', 'entry_month', 'minutes', 'fobi_minutes', 'note', 'created_at', 'updated_at', 'updated_by_uid')
+            ->from(self::TABLE)
+            ->where($qb->expr()->orX(
+                $qb->expr()->eq('user_id', $qb->createNamedParameter($userId)),
+                $qb->expr()->eq('updated_by_uid', $qb->createNamedParameter($userId)),
+            ))
+            ->orderBy('id', 'ASC')
+            ->setMaxResults($limit);
+
+        return $qb->executeQuery()->fetchAll();
+    }
+
     public function upsert(string $userId, int $year, int $month, int $minutes, int $fobiMinutes, string $note, string $updatedByUid): void {
         $existing = $this->findForUserMonth($userId, $year, $month);
         $now = new DateTimeImmutable();

@@ -73,6 +73,10 @@ Wichtige Pruefungen:
 - App-spezifische Fachlogik bleibt in BRStunden; gemeinsame Bausteine wandern
   erst bei mindestens zwei semantisch gleichen, testbaren Nutzungen nach
   LocalBase.
+- Personenbezogene Stunden- und Bearbeitungsbezüge werden ausschließlich über
+  den öffentlichen V1-Vertrag von `filzmann_data_protection` bereitgestellt.
+  Fremde Stundensätze, Notizen und UIDs bleiben aus der subjectgebundenen
+  Auskunft ausgeschlossen.
 
 ## Verbindliche Suite-Navigation
 
