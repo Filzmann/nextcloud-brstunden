@@ -18,6 +18,13 @@ Enthalten:
 - BR-Mitglieder koennen nur eigene Eintraege bearbeiten oder loeschen.
 - Gespeicherte eigene Eintraege koennen als vorausgefuellte PDF-Abrechnung heruntergeladen werden.
 
+Die App besitzt keinen fachlichen Nextcloud-Admin-Bypass: Auch native
+Administrierende erhalten ohne Mitgliedschaft keine Stundenrechte. Daher ist
+ein app-lokaler Vollzugriffsschalter derzeit nicht anwendbar. Der
+PermissionProvider beschreibt ausschließlich Mitglieder- und Eigenrechte;
+ein Negativvertrag erzwingt eine Neubewertung, sobald ein Adminpfad ergänzt
+wird.
+
 ## Lokale URL
 
 ```text

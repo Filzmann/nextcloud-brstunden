@@ -77,6 +77,12 @@ Wichtige Pruefungen:
   den öffentlichen V1-Vertrag von `filzmann_data_protection` bereitgestellt.
   Fremde Stundensätze, Notizen und UIDs bleiben aus der subjectgebundenen
   Auskunft ausgeschlossen.
+- BRStunden besitzt aktuell keinen nativen Admin-Bypass und deshalb keinen
+  wirkungslosen app-lokalen Vollzugriffsschalter. Fachrechte entstehen nur
+  aus dem BR-Mitgliedervertrag und `self`. PermissionProvider und Negativtest
+  sichern diese begründete Nichtanwendbarkeit. Sobald ein nativer Adminpfad
+  oder eine neue Fachberechtigung hinzukommt, muss die Bewertung im selben
+  Änderungssatz erneut erfolgen.
 
 ## Verbindliche Suite-Navigation
 
