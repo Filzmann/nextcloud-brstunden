@@ -4,6 +4,17 @@ Diese Datei enthält ausschließlich zukünftige Ziele und freigegebene
 Umsetzungsaufgaben. Geltende Fach-, Rechte-, Sicherheits- und
 Architekturregeln stehen in `AGENTS.md`.
 
+## Nextcloud-Kompatibilitätsgate
+
+### BRS-NC-COMPAT – deklarierten Bereich 29–35 und künftige Majors belegen
+
+`info.xml` umfasst Nextcloud 33 bereits. Vor dem nächsten Release werden alle
+deklarierten Majors lückenlos mit Fresh Install/Upgrade, DI, Migrationen,
+Reminder-Job, Abrechnung/PDF, Assets und sichtbarer Oberfläche geprüft. Eine
+weitere Obergrenze folgt ausschließlich aus dem app-lokalen
+`verify-nextcloud-future-compatibility`-Nachweis; fehlende oder rote Majors
+begrenzen den ehrlichen Bereich.
+
 ## Freigegebene Umsetzungsaufgaben
 
 ### BRS-DOCUMENT-CONFIG – Abrechnungsstammdaten und Vorlage versionieren
@@ -22,21 +33,15 @@ Status: bereit nach fachlicher Trennung fester und editierbarer Inhalte
 - Bestandsdefaults, Berechnungsgleichheit, Adress-/Textvalidierung,
   Platzhalterescaping, historische Reproduktion und Rückfall testen.
 
-## Zukunftsplanung – nicht freigegeben
+## Systemweit gegatete app-lokale Aufgabe
 
-### BRS-L10N – BRStunden vollständig lokalisieren
+### BRS-L10N – Oberfläche, Reminder, E-Mail und PDF lokalisieren
 
-Status: später, nicht freigegeben; Dokumentsprache, Pilot-App, Reihenfolge und
-Rohtext-Gate werden vor jeder Umsetzung appübergreifend separat freigegeben
-
-- Monats- und Datumsnamen locale-fähig erzeugen und Oberfläche, Reminder,
-  E-Mails sowie Fehlermeldungen auf Nextcloud-l10n umstellen.
-- ISO-Daten, Monatsnummern, Minutenwerte, API-Schlüssel und persistierte
-  Fachwerte sprachneutral lassen; Abkürzungen nicht durch Abschneiden bilden.
-- Für Abrechnungen und gemeinsame Reminder vorab persönliche oder
-  organisationsweite Ausgabelocale festlegen und reproduzierbar speichern.
-- Deutsche Ausgabe, eine weitere Locale, Fallback, Jahresgrenzen,
-  Pluralformen, Platzhalter, Escaping, E-Mail- und PDF-Ausgabe testen.
+Aktivierung ausschließlich nach Freigabe des Root-Vorhabens `ZM-06`.
+Datumsnamen werden locale-fähig; ISO-Daten, Monatsnummern, Minutenwerte,
+API-Schlüssel und Fachwerte bleiben sprachneutral. Die persönliche oder
+organisationsweite Ausgabelocale wird app-lokal entschieden und für
+Abrechnungen reproduzierbar gespeichert.
 
 ## Weitere geplante Arbeiten
 
