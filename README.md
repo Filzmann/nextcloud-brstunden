@@ -51,3 +51,11 @@ keine Produktiv- oder Rechtssicherheitsfreigabe.
 
 Geplante Erweiterungen und offene Fachentscheidungen stehen in der
 [`ROADMAP.md`](ROADMAP.md).
+
+## Dokumentation
+
+- [Architektur](docs/architecture.md)
+- [Manuelle Abnahme](docs/manual-acceptance.md)
+- [Roadmap](ROADMAP.md)
+- [Changelog](CHANGELOG.md)
+- [Arbeitsregeln](AGENTS.md)
