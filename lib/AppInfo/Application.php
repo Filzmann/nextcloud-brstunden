@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace OCA\BrStunden\AppInfo;
 
 use OCA\BrStunden\Privacy\BrStundenPrivacyProviderListener;
+use OCA\BrStunden\Privacy\BrStundenProcessingMetadataProviderListener;
 use OCA\BrStunden\Permission\BrStundenPermissionProviderListener;
 use OCA\BrStunden\Permission\BrStundenPermissionSourceInterface;
 use OCA\BrStunden\Permission\NextcloudBrStundenPermissionSource;
 use OCA\FilzmannDataProtection\PublicApi\V1\RegisterPersonalDataProvidersEvent;
+use OCA\FilzmannDataProtection\PublicApi\V1\RegisterProcessingMetadataProvidersEvent;
 use OCA\FilzmannPermissionMatrix\PublicApi\V1\RegisterPermissionProvidersEvent;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
@@ -24,6 +26,7 @@ class Application extends App implements IBootstrap {
 
     public function register(IRegistrationContext $context): void {
         $context->registerEventListener(RegisterPersonalDataProvidersEvent::class, BrStundenPrivacyProviderListener::class);
+        $context->registerEventListener(RegisterProcessingMetadataProvidersEvent::class, BrStundenProcessingMetadataProviderListener::class);
         $context->registerEventListener(RegisterPermissionProvidersEvent::class, BrStundenPermissionProviderListener::class);
         $context->registerServiceAlias(BrStundenPermissionSourceInterface::class, NextcloudBrStundenPermissionSource::class);
     }

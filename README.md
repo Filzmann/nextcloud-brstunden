@@ -25,6 +25,21 @@ PermissionProvider beschreibt ausschließlich Mitglieder- und Eigenrechte;
 ein Negativvertrag erzwingt eine Neubewertung, sobald ein Adminpfad ergänzt
 wird.
 
+## Datenschutz
+
+Der app-eigene `PersonalDataProvider` liefert eigene Monatswerte,
+Fortbildungszeiten und Notizen subjectgebunden an das Datenschutz-Center;
+fremde Bearbeitungsreferenzen werden neutralisiert. Der versionierte
+Processing-Metadata-Provider beschreibt ergänzend die drei Verarbeitungen
+Stundenverwaltung, Erinnerungskommunikation und transiente PDF-Erzeugung aus
+`resources/privacy-processing.json`, ohne personenbezogene Laufzeitdaten in
+den Katalog zu übernehmen. Offene fachliche und rechtliche Entscheidungen
+bleiben dort sichtbar als `PRIVACY-DECISION-REQUIRED`.
+
+BR-Stunden speichert erzeugte Abrechnungs-PDFs nicht app-seitig. Die
+Erinnerungsläufe speichern keine Empfängerlisten oder Nachrichtenkopien,
+sondern ausschließlich aggregierte Laufwerte.
+
 ## Lokale URL
 
 ```text

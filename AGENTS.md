@@ -77,6 +77,13 @@ Wichtige Pruefungen:
   den öffentlichen V1-Vertrag von `filzmann_data_protection` bereitgestellt.
   Fremde Stundensätze, Notizen und UIDs bleiben aus der subjectgebundenen
   Auskunft ausgeschlossen.
+- Der app-eigene Processing-Katalog unter
+  `resources/privacy-processing.json` ist die kanonische Metadatenquelle für
+  Stundenverwaltung, Erinnerungskommunikation und transiente PDF-Erzeugung.
+  Er enthält keine personenbezogenen Laufzeitdaten und markiert ungeklärte
+  Rechtsgrundlagen, Retention-, Backup-, Mail- und Empfängerentscheidungen mit
+  `PRIVACY-DECISION-REQUIRED`. Der öffentliche V1-Provider liest ausschließlich
+  diesen Katalog; eine zweite Registry oder kopierte Policyquelle ist verboten.
 - BRStunden besitzt aktuell keinen nativen Admin-Bypass und deshalb keinen
   wirkungslosen app-lokalen Vollzugriffsschalter. Fachrechte entstehen nur
   aus dem BR-Mitgliedervertrag und `self`. PermissionProvider und Negativtest
