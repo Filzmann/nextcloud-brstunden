@@ -2,13 +2,8 @@
 
 declare(strict_types=1);
 
+namespace OCP { interface IGroupManager { public function groupExists($gid); public function createGroup($gid); public function get($gid); } interface IAppConfig { public function getValueString(string $appId, string $key, string $default = ""): string; public function setValueString(string $appId, string $key, string $value): void; } }
 namespace {
-    if (!interface_exists(\OCP\IGroupManager::class)) {
-        eval('namespace OCP; interface IGroupManager { public function groupExists($gid); public function createGroup($gid); public function get($gid); }');
-    }
-    if (!interface_exists(\OCP\IAppConfig::class)) {
-        eval('namespace OCP; interface IAppConfig { public function getValueString(string $appId, string $key, string $default = ""): string; public function setValueString(string $appId, string $key, string $value): void; }');
-    }
 
     use OCA\BrStunden\Service\BrGroupsService;
     use OCA\LocalBase\Organization\BrGroupDefinition;

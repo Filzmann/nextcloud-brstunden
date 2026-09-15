@@ -2,19 +2,9 @@
 
 declare(strict_types=1);
 
+namespace OCP { interface IUser { public function getUID(); public function getDisplayName(); public function getEMailAddress(); } interface IUserSession { public function getUser(); } interface IGroupManager { public function isInGroup($uid, $gid); public function get($gid); } }
+namespace OCP\Accounts { interface IAccountManager { public const PROPERTY_ADDRESS = "address"; public function getAccount($user); } }
 namespace {
-    if (!interface_exists(\OCP\IUser::class)) {
-        eval('namespace OCP; interface IUser { public function getUID(); public function getDisplayName(); public function getEMailAddress(); }');
-    }
-    if (!interface_exists(\OCP\IUserSession::class)) {
-        eval('namespace OCP; interface IUserSession { public function getUser(); }');
-    }
-    if (!interface_exists(\OCP\IGroupManager::class)) {
-        eval('namespace OCP; interface IGroupManager { public function isInGroup($uid, $gid); public function get($gid); }');
-    }
-    if (!interface_exists(\OCP\Accounts\IAccountManager::class)) {
-        eval('namespace OCP\Accounts; interface IAccountManager { public const PROPERTY_ADDRESS = "address"; public function getAccount($user); }');
-    }
 
 
     use OCA\BrStunden\Service\BrMemberService;

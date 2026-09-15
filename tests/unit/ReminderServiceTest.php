@@ -2,13 +2,9 @@
 
 declare(strict_types=1);
 
+namespace OCP { interface IURLGenerator { public function linkToRouteAbsolute($routeName, $arguments = []): string; } }
+namespace OCP\Mail { interface IMailer { public function createMessage(): object; public function send($message): array; } }
 namespace {
-    if (!interface_exists(\OCP\IURLGenerator::class)) {
-        eval('namespace OCP; interface IURLGenerator { public function linkToRouteAbsolute($routeName, $arguments = []): string; }');
-    }
-    if (!interface_exists(\OCP\Mail\IMailer::class)) {
-        eval('namespace OCP\Mail; interface IMailer { public function createMessage(): object; public function send($message): array; }');
-    }
 
 
     use OCA\BrStunden\Service\BrMemberService;
