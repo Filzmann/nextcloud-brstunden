@@ -73,6 +73,21 @@ Begründung verpflichtend.
 | D4 | Inhalt und Dateiname | PDF-Inhalt, Metadaten und Dateinamen auf unnötige Personen- oder Systemdaten prüfen. | Nur die für die Testabrechnung vorgesehenen Angaben sind enthalten; keine technischen Pfade oder Secrets werden sichtbar. | [ ] erfolgreich [ ] nicht erfolgreich [ ] nicht geprüft | |
 | D5 | Datensparsame Abnahme | Formular, Screenshots, Testmails und PDFs vor Ablage oder Weitergabe prüfen. | Es wurden ausschließlich synthetische Daten verwendet und keine Zugangsdaten dokumentiert. | [ ] erfolgreich [ ] nicht erfolgreich [ ] nicht geprüft | |
 
+## Automatisierter lokaler Nachweis vom 11.09.2026
+
+Im Rahmen der risikoarmen Luna-Prüfung wurden aus dem Repository-Root nur die
+lokalen, nicht mutierenden Prüfungen ausgeführt:
+
+| Prüfung | Ergebnis | Aussagegrenze |
+|---|---|---|
+| `php tests/run.php` | erfolgreich | PHP-Syntax sowie Stunden-, Reminder-, Rechte-, Privacy-, Processing-Metadata- und Admin-Nichtanwendbarkeitsverträge sind grün. |
+| `node tests/run-js.mjs` | erfolgreich | JavaScript-Syntax sowie Modell-, Repository-, Workflow- und Übersichts-Smokes sind grün. |
+| `git diff --check` | erfolgreich | Keine Whitespace-Fehler im aktuellen Arbeitsbaum. |
+
+DDEV, `occ`, Installation, App-Aktivierung, Stunden- oder Maildaten wurden
+nicht verändert. Dieser Nachweis ersetzt weder die offene manuelle Abnahme
+noch die fachliche Datenschutz-, Reminder- oder PDF-Freigabe.
+
 ## Abschlussentscheidung
 
 | Feld | Eintrag |
