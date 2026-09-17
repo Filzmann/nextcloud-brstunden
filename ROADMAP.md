@@ -34,16 +34,6 @@ Status: bereit nach fachlicher Trennung fester und editierbarer Inhalte
 - Bestandsdefaults, Berechnungsgleichheit, Adress-/Textvalidierung,
   Platzhalterescaping, historische Reproduktion und Rückfall testen.
 
-## Systemweit gegatete app-lokale Aufgabe
-
-### BRS-L10N – Oberfläche, Reminder, E-Mail und PDF lokalisieren
-
-Aktivierung ausschließlich nach Freigabe des Root-Vorhabens `ZM-06`.
-Datumsnamen werden locale-fähig; ISO-Daten, Monatsnummern, Minutenwerte,
-API-Schlüssel und Fachwerte bleiben sprachneutral. Die persönliche oder
-organisationsweite Ausgabelocale wird app-lokal entschieden und für
-Abrechnungen reproduzierbar gespeichert.
-
 ## Weitere geplante Arbeiten
 
 - Die manuellen Prüfungen werden im ausfüllbaren
@@ -52,3 +42,18 @@ Abrechnungen reproduzierbar gespeichert.
   fachlich und datenschutzbezogen abnehmen.
 - Weitere Funktionen erst nach einem konkreten Fachbedarf und benanntem
   Rechtevertrag aufnehmen.
+
+## Bewusst zurückgestellt – niedrigste Priorität
+
+### BRS-L10N – Oberfläche, Reminder, E-Mail und PDF lokalisieren
+
+Status seit 17. September 2026: Die Umsetzung beginnt erst nach allen höher
+priorisierten Roadmap-Aufgaben und einer erneuten ausdrücklichen Freigabe des
+Root-Vorhabens `ZM-06`. Neue Funktionen und Codeänderungen berücksichtigen
+die spätere Lokalisierbarkeit an den jeweils berührten Stellen, lösen aber
+keine flächige Umstellung oder Übersetzungsimplementierung aus.
+
+Bei der späteren Umsetzung werden Datumsnamen locale-fähig; ISO-Daten,
+Monatsnummern, Minutenwerte, API-Schlüssel und Fachwerte bleiben
+sprachneutral. Die persönliche oder organisationsweite Ausgabelocale wird
+app-lokal entschieden und für Abrechnungen reproduzierbar gespeichert.
