@@ -11,6 +11,7 @@ runJavaScriptSuite({
         'tests/js/hour-repository-smoke.js',
         'tests/js/main-workflow-smoke.js',
         'tests/js/overview-smoke.js',
+        'tests/js/persistent-horizontal-scroll-smoke.js',
     ],
     successMessage: 'BRStunden JavaScript tests passed',
 });

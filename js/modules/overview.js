@@ -94,7 +94,7 @@
 
         return `
             <h2>Jahresuebersicht ${format.esc(overview.year)}</h2>
-            <div class="brs-table-wrap">
+            <div class="brs-table-wrap" data-persistent-horizontal-scroll>
                 <table class="brs-table">
                     <thead><tr>${header}</tr></thead>
                     <tbody>${rows}</tbody>

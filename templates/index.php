@@ -9,6 +9,7 @@ script('localbase', 'ui/ui');
 script('orgsuite', 'suite-navigation');
 script('brstunden', 'modules/format');
 script('brstunden', 'modules/overview');
+script('brstunden', 'modules/persistent-horizontal-scroll');
 script('brstunden', 'main');
 style('brstunden', 'style');
 style('orgsuite', 'suite-navigation');
@@ -62,4 +63,5 @@ style('orgsuite', 'suite-navigation');
         </div>
         <div id="brs-reminder-preview" class="brs-reminder-preview"></div>
     </section>
+    <div class="brs-persistent-scroll-track" data-persistent-horizontal-scroll-track tabindex="0" role="region" aria-label="Tabelle horizontal scrollen" hidden><div data-persistent-horizontal-scroll-spacer></div></div>
 </div>
