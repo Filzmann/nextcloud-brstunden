@@ -7,14 +7,17 @@ erledigte Änderungen in `CHANGELOG.md` und geltende Architektur in
 
 ## Nextcloud-Kompatibilitätsgate
 
-### BRS-NC-COMPAT – deklarierten Bereich 29–35 und künftige Majors belegen
+### BRS-NC-COMPAT – RC-Kompatibilität und Zukunftsobergrenze nachweisen
 
-`info.xml` umfasst Nextcloud 33 bereits. Vor dem nächsten Release werden alle
-deklarierten Majors lückenlos mit Fresh Install/Upgrade, DI, Migrationen,
-Reminder-Job, Abrechnung/PDF, Assets und sichtbarer Oberfläche geprüft. Eine
-weitere Obergrenze folgt ausschließlich aus dem app-lokalen
-`verify-nextcloud-future-compatibility`-Nachweis; fehlende oder rote Majors
-begrenzen den ehrlichen Bereich.
+Die `min-version` muss beim Release Candidate die aktuelle, autoritativ
+ermittelte openDesk-Nextcloud-Hauptversion abdecken. Erst beim Erstellen eines
+veröffentlichungsfähigen RC werden alle deklarierten Majors lückenlos geprüft:
+Fresh Install/Upgrade, DI, Migrationen, Reminder-Job, Abrechnung/PDF, Assets
+und sichtbare Oberfläche. `max-version` folgt ausschließlich der höchsten
+lückenlos nachgewiesenen Major aus offiziellen, gepinnten Nextcloud-Git-Quellen;
+eine offiziell benannte und testbare künftige Major (z. B. NC36) wird dabei
+geprüft. Der regelmäßige Check der neuesten veröffentlichten Entwicklungsruntime
+ist davon getrennt und ersetzt keinen RC-Nachweis.
 
 ## Freigegebene Umsetzungsaufgaben
 
