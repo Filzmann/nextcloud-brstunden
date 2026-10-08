@@ -7,12 +7,12 @@ use OCA\BrStunden\Service\BrMemberService;
 
 return [
     'providerRegistrations' => [
-        'filzmann_data_protection' => [
-            OCA\FilzmannDataProtection\PublicApi\V1\RegisterPersonalDataProvidersEvent::class,
-            OCA\FilzmannDataProtection\PublicApi\V1\RegisterProcessingMetadataProvidersEvent::class,
+        'flz_data_protection' => [
+            OCA\FlzDataProtection\PublicApi\V1\RegisterPersonalDataProvidersEvent::class,
+            OCA\FlzDataProtection\PublicApi\V1\RegisterProcessingMetadataProvidersEvent::class,
         ],
-        'filzmann_permission_matrix' => [
-            OCA\FilzmannPermissionMatrix\PublicApi\V1\RegisterPermissionProvidersEvent::class,
+        'flz_permission_matrix' => [
+            OCA\FlzPermissionMatrix\PublicApi\V1\RegisterPermissionProvidersEvent::class,
         ],
     ],
     'uiPath' => '/index.php/apps/brstunden/',

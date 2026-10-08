@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace OCA\BrStunden\Permission;
 
-use OCA\FilzmannPermissionMatrix\PublicApi\V1\PermissionCondition;
-use OCA\FilzmannPermissionMatrix\PublicApi\V1\PermissionProvider;
-use OCA\FilzmannPermissionMatrix\PublicApi\V1\PermissionProviderDescriptor;
-use OCA\FilzmannPermissionMatrix\PublicApi\V1\PermissionProviderResult;
-use OCA\FilzmannPermissionMatrix\PublicApi\V1\PermissionRule;
+use OCA\FlzPermissionMatrix\PublicApi\V1\PermissionCondition;
+use OCA\FlzPermissionMatrix\PublicApi\V1\PermissionProvider;
+use OCA\FlzPermissionMatrix\PublicApi\V1\PermissionProviderDescriptor;
+use OCA\FlzPermissionMatrix\PublicApi\V1\PermissionProviderResult;
+use OCA\FlzPermissionMatrix\PublicApi\V1\PermissionRule;
 
 final class BrStundenPermissionProvider implements PermissionProvider {
     public function __construct(private BrStundenPermissionSourceInterface $source) {}

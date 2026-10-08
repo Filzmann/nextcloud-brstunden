@@ -23,7 +23,7 @@ Retention-Policies und zweckgebundene Sperren.
 `resources/privacy-processing.json` ist die einzige app-eigene Policyquelle
 für `monthly_hours_management`, `monthly_reminder_communication` und
 `payroll_pdf_generation`. Der öffentliche V1-Provider von
-`filzmann_data_protection` lädt den Katalog lazy und veröffentlicht keine
+`flz_data_protection` lädt den Katalog lazy und veröffentlicht keine
 personenbezogenen Laufzeitdaten.
 
 Die Stundenverwaltung umfasst persistierte Monatswerte, freiwillige Notizen

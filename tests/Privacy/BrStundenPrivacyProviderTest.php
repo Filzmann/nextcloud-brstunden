@@ -24,9 +24,9 @@ namespace {
     use OCA\BrStunden\Privacy\BrStundenPersonalDataProvider;
     use OCA\BrStunden\Privacy\BrStundenPrivacyProviderListener;
     use OCA\BrStunden\Repository\HourEntryRepository;
-    use OCA\FilzmannDataProtection\PublicApi\V1\DataSubjectRef;
-    use OCA\FilzmannDataProtection\PublicApi\V1\PersonalDataRequest;
-    use OCA\FilzmannDataProtection\PublicApi\V1\RegisterPersonalDataProvidersEvent;
+    use OCA\FlzDataProtection\PublicApi\V1\DataSubjectRef;
+    use OCA\FlzDataProtection\PublicApi\V1\PersonalDataRequest;
+    use OCA\FlzDataProtection\PublicApi\V1\RegisterPersonalDataProvidersEvent;
 
     $entries = new HourEntryRepository();
     $entries->items = [

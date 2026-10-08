@@ -6,11 +6,11 @@ namespace OCA\BrStunden\Privacy;
 
 use InvalidArgumentException;
 use OCA\BrStunden\Repository\HourEntryRepository;
-use OCA\FilzmannDataProtection\PublicApi\V1\PersonalDataEntry;
-use OCA\FilzmannDataProtection\PublicApi\V1\PersonalDataPage;
-use OCA\FilzmannDataProtection\PublicApi\V1\PersonalDataProvider;
-use OCA\FilzmannDataProtection\PublicApi\V1\PersonalDataRequest;
-use OCA\FilzmannDataProtection\PublicApi\V1\ProviderDescriptor;
+use OCA\FlzDataProtection\PublicApi\V1\PersonalDataEntry;
+use OCA\FlzDataProtection\PublicApi\V1\PersonalDataPage;
+use OCA\FlzDataProtection\PublicApi\V1\PersonalDataProvider;
+use OCA\FlzDataProtection\PublicApi\V1\PersonalDataRequest;
+use OCA\FlzDataProtection\PublicApi\V1\ProviderDescriptor;
 
 final class BrStundenPersonalDataProvider implements PersonalDataProvider {
     private const MONTHS = [1=>'Januar', 2=>'Februar', 3=>'März', 4=>'April', 5=>'Mai', 6=>'Juni', 7=>'Juli', 8=>'August', 9=>'September', 10=>'Oktober', 11=>'November', 12=>'Dezember'];

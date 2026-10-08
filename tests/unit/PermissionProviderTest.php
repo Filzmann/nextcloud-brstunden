@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OCA\FilzmannPermissionMatrix\PublicApi\V1 {
+namespace OCA\FlzPermissionMatrix\PublicApi\V1 {
     interface PermissionProvider { public function descriptor(): PermissionProviderDescriptor; public function collect(): PermissionProviderResult; }
     final class PermissionProviderDescriptor { public function __construct(...$arguments) {} }
     final class PermissionCondition {
@@ -20,7 +20,7 @@ namespace {
     use OCA\BrStunden\Permission\BrStundenPermissionProvider;
     use OCA\BrStunden\Permission\BrStundenPermissionProviderListener;
     use OCA\BrStunden\Permission\BrStundenPermissionSourceInterface;
-    use OCA\FilzmannPermissionMatrix\PublicApi\V1\RegisterPermissionProvidersEvent;
+    use OCA\FlzPermissionMatrix\PublicApi\V1\RegisterPermissionProvidersEvent;
     use function OCA\BrStunden\Tests\assertSameValue;
 
     $source = new class implements BrStundenPermissionSourceInterface {
