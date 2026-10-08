@@ -2,21 +2,10 @@
 
 declare(strict_types=1);
 
+namespace OCP { interface IURLGenerator { public function linkToRouteAbsolute($routeName, $arguments = []): string; } }
+namespace OCP\Mail { interface IMailer { public function createMessage(): object; public function send($message): array; } }
 namespace {
-    if (!interface_exists(\OCP\IURLGenerator::class)) {
-        eval('namespace OCP; interface IURLGenerator { public function linkToRouteAbsolute($routeName, $arguments = []): string; }');
-    }
-    if (!interface_exists(\OCP\Mail\IMailer::class)) {
-        eval('namespace OCP\Mail; interface IMailer { public function createMessage(): object; public function send($message): array; }');
-    }
 
-    require_once __DIR__ . '/helpers.php';
-    require_once __DIR__ . '/../../lib/Service/CalendarService.php';
-    require_once __DIR__ . '/../../lib/Service/BrMemberService.php';
-    require_once __DIR__ . '/../../lib/Service/HoursService.php';
-    require_once __DIR__ . '/../../lib/Store/ReminderRunStore.php';
-    require_once __DIR__ . '/../../lib/Service/BrStundenLogger.php';
-    require_once __DIR__ . '/../../lib/Service/ReminderService.php';
 
     use OCA\BrStunden\Service\BrMemberService;
     use OCA\BrStunden\Service\BrStundenLogger;

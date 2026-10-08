@@ -28,6 +28,7 @@
 
     async function init() {
         try {
+            window.BRStunden.persistentHorizontalScroll.bind(byId('brstunden-app'));
             const data = await repository.state();
             state.currentUser = data.currentUser;
             state.months = data.months || [];
@@ -238,7 +239,7 @@
                 <span>${format.esc(preview.summary.missingMonths)} fehlende Monate</span>
                 <span>${preview.isLastDayOfMonth ? 'Monatsende' : 'Vorschau'}</span>
             </div>
-            <div class="brs-table-wrap">
+            <div class="brs-table-wrap" data-persistent-horizontal-scroll>
                 <table class="brs-table brs-reminder-table">
                     <thead><tr><th>BR-Mitglied</th><th>Fehlende Monate</th><th>Status</th></tr></thead>
                     <tbody>${body}</tbody>

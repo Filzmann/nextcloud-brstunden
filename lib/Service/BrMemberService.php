@@ -10,12 +10,11 @@ use OCP\IUser;
 use OCP\IUserSession;
 
 class BrMemberService {
-    public const GROUP_NAME = 'Betriebsrat';
-
     public function __construct(
         private IGroupManager $groupManager,
         private IUserSession $userSession,
-        private IAccountManager $accountManager
+        private IAccountManager $accountManager,
+        private BrGroupsService $groups,
     ) {
     }
 
@@ -43,13 +42,17 @@ class BrMemberService {
 
     public function assertCurrentUserIsMember(): void {
         $uid = $this->currentUserId();
-        if (!$this->groupManager->isInGroup($uid, self::GROUP_NAME)) {
-            throw new \DomainException('Nur Mitglieder der Gruppe Betriebsrat duerfen BR-Stunden verwalten.');
+        if (!$this->groupManager->isInGroup($uid, $this->groups->memberGroupName())) {
+            throw new \DomainException('Nur Mitglieder der konfigurierten Betriebsratsgruppe dürfen BR-Stunden verwalten.');
         }
     }
 
+    public function memberGroupName(): string {
+        return $this->groups->memberGroupName();
+    }
+
     public function members(): array {
-        $group = $this->groupManager->get(self::GROUP_NAME);
+        $group = $this->groupManager->get($this->groups->memberGroupName());
         if ($group === null) {
             return [];
         }

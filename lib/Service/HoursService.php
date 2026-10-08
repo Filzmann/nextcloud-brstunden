@@ -29,7 +29,7 @@ class HoursService {
             'defaultMonth' => $currentMonth,
             'currentYear' => $currentYear,
             'currentMonth' => $currentMonth,
-            'groupName' => BrMemberService::GROUP_NAME,
+            'groupName' => $this->members->memberGroupName(),
         ];
     }
 

@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-require_once __DIR__ . '/../../localbase/tests/Support/PhpTestRunner.php';
+require_once __DIR__ . '/bootstrap.php';
 
 use OCA\LocalBase\Tests\Support\PhpTestRunner;
 
 PhpTestRunner::run(
     root: dirname(__DIR__),
     lintDirectories: ['appinfo', 'lib', 'templates', 'tests'],
-    testDirectories: ['tests/Controller', 'tests/unit'],
+    testDirectories: ['tests/Controller', 'tests/Privacy', 'tests/Repository', 'tests/Ui', 'tests/unit'],
     testSuffixes: ['Test.php'],
     successMessage: 'BRStunden PHP tests passed',
+    prependBootstrap: true,
 );

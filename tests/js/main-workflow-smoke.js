@@ -42,6 +42,7 @@ let lastRepository = null;
 global.window = {
     BRStunden: {
         api: {},
+        persistentHorizontalScroll: { bind() {} },
         overview: {
             render(overview) {
                 return `<section data-rendered-year="${overview.year}">Rendered ${overview.year}</section>`;

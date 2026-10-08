@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0",
+  "app_id": "brstunden",
+  "processings": [
+    {
+      "processing_id": "monthly_hours_management",
+      "name": "Monatliche BR- und Fortbildungsstundenverwaltung",
+      "controller": {
+        "component": "BR-Stunden",
+        "business_owner": "Betriebsrat"
+      },
+      "data_categories": ["Nextcloud-UID der betroffenen Person und UID der zuletzt bearbeitenden Person", "Jahr, Monat, Minuten für BR-Arbeit und Fortbildung", "Freiwillige Notiz mit möglichen Angaben zu Drittpersonen", "Technische Erstellungs- und Änderungszeitpunkte"],
+      "data_subjects": ["BR-Mitglieder mit erfassten Stunden", "Bearbeitende Personen mit Änderungsreferenz", "Möglicherweise in freiwilligen Notizen genannte Drittpersonen"],
+      "purposes": ["Monatliche Erfassung eigener BR- und Fortbildungsstunden", "Jahresübersicht und Summenbildung", "Ermittlung fehlender Monatseinträge", "Berechtigte Berichtigung vorhandener Einträge"],
+      "access_roles": ["Betroffenes BR-Mitglied für die eigenen Einträge", "Berechtigte BR-Funktionsträger*innen innerhalb des serverseitigen Scopes"],
+      "recipients": [
+        {"category":"Betroffenes BR-Mitglied","allowed_disclosures":["Eigene Monatswerte, Fortbildungszeiten und Notizen"],"conditions":["Serverseitig gebundenes Nextcloud-User-Subject"]},
+        {"category":"Berechtigte BR-Funktionsträger*innen","allowed_disclosures":["Für die Stundenverwaltung erforderliche Einträge im freigegebenen Scope"],"conditions":["Serverseitig geprüfte BR-Mitgliedschaft und Fachberechtigung"]}
+      ],
+      "data_sources": ["Eingaben der betroffenen oder berechtigt bearbeitenden Person", "Serverseitig gebundene Nextcloud-Session und BR-Mitgliedschaft", "App-eigene Tabelle brs_hour_entries"],
+      "legal_basis": {"status":"PRIVACY-DECISION-REQUIRED","affected_data":"Personenbezogene Stunden-, Notiz- und Bearbeitungsdaten","planned_processing":"Erfassung und Auswertung der BR- und Fortbildungsstunden","missing_decision":"Anwendbare Rechtsgrundlage und Erforderlichkeit je Datenklasse","reason":"Die Rechtsgrundlage ist fachlich und rechtlich zu entscheiden.","technical_impact":"Der Katalog behauptet keine freigegebene Rechtsgrundlage.","privacy_preserving_alternative":"Nur erforderliche Monatswerte erfassen und freiwillige Notizen datensparsam halten.","responsible_party":"ungeklärt","blocking":false},
+      "retention": {"policy_id":"hours_and_notes_class_specific_retention","trigger":"Ende des Kalenderjahres des jeweiligen Monatswerts beziehungsweise Ende des Bezugsmonats der freiwilligen Notiz","duration_or_deadline":"Stunden- und Fortbildungswerte bis zum Ende von drei vollen Kalenderjahren nach dem Bezugsjahr; freiwillige Notizen P12M nach dem Bezugsmonat","action":"delete","conditions_or_holds":["Personenbezogene Monatswerte, Notizen und Bearbeitungsbezüge werden vollständig gelöscht; es verbleiben keine anonymisierten Einzel- oder Jahresaggregate.","Eine rechtliche oder datenschutzrechtliche Sperre gilt nur für den dokumentierten Zweck und Umfang, besitzt einen Prüftermin und darf nur durch Datenschutzbeauftragte begründet und auditiert gesetzt oder aufgehoben werden.","Keine automatische Ausführung vor dem vollständig freigegebenen und getesteten app-lokalen Retention-, Restore- und Backupvertrag."]},
+      "logging": {"audit_requirements":["Speicher- und Validierungsfehler ohne Notizinhalt und unnötige Personenkennungen diagnostizierbar halten"],"personal_data_policy":"Keine freiwilligen Notizen, vollständigen Stundenpayloads oder unnötigen UIDs in technische Logs übernehmen."},
+      "backup": {
+        "relevance": {"status":"PRIVACY-DECISION-REQUIRED","affected_data":"Persistierte Stundeneinträge in der Nextcloud-Datenbank","planned_processing":"Einbeziehung in betriebliche Sicherung und Wiederherstellung","missing_decision":"Backup-Relevanz und Aufbewahrungsdauer","reason":"Der App-Code kennt den betrieblichen Backupzyklus nicht.","technical_impact":"Die App kann keinen Entfall aus Sicherungen behaupten.","privacy_preserving_alternative":"Keine separate app-eigene Sicherungskopie anlegen.","responsible_party":"ungeklärt","blocking":false},
+        "restore_handling": {"status":"PRIVACY-DECISION-REQUIRED","affected_data":"Nach Restore erneut vorhandene vergangene Stundeneinträge","planned_processing":"Erneute Anwendung der beschlossenen datenklassenspezifischen Aufbewahrungsregel","missing_decision":"Sichere Restore-Ausführung und Wiederanlauf für bereits abgelaufene Fristen","reason":"Fristen, vollständige Löschung und der Ausschluss von Restaggregaten sind entschieden; die sichere technische Restore-Ausführung fehlt.","technical_impact":"Keine automatische Löschung nach Restore.","privacy_preserving_alternative":"Zugriffe weiterhin serverseitig begrenzen.","responsible_party":"Datenschutzbeauftragte und technische App-Verantwortung","blocking":true}
+      },
+      "exports_and_reports": {"article_15_relevance":"Eigene Monatswerte einschließlich eigener Notizen werden subjectgebunden ausgegeben; fremde Bearbeitungsreferenzen werden neutralisiert.","other_outputs":["Eigene Monats- und Jahresübersicht", "Berechtigte Verwaltungsansichten mit Summen und fehlenden Monaten"],"minimization":"Art.-15-Ausgaben bleiben auf die betroffene UID begrenzt; fremde Stunden und Notizen werden nicht ausgegeben."},
+      "data_subject_rights": {
+        "article_15":"Subjectgebundene Ausgabe eigener Monatswerte, Fortbildungszeiten und Notizen ist über den app-eigenen PersonalDataProvider implementiert.",
+        "rectification":"Eigene oder berechtigt verwaltete Monatswerte können innerhalb des Rechte- und Validierungsvertrags berichtigt werden.",
+        "restriction": {"status":"PRIVACY-DECISION-REQUIRED","affected_data":"Strittige oder zu sperrende Stundeneinträge","planned_processing":"Einschränkung von Anzeige und weiterer Auswertung","missing_decision":"Fachliche Sperrgründe und technische Wirkung","reason":"Ein Einschränkungsworkflow ist nicht definiert.","technical_impact":"Kein automatischer Einschränkungspfad wird angeboten.","privacy_preserving_alternative":"Zugriffe auf den bestehenden serverseitigen Rechtevertrag begrenzen.","responsible_party":"ungeklärt","blocking":true},
+        "erasure_or_anonymization": "Stunden- und Fortbildungswerte sowie Bearbeitungsbezüge werden nach drei vollen Kalenderjahren, freiwillige Notizen nach zwölf Monaten vollständig gelöscht; Einzel- oder Jahresaggregate verbleiben nicht. Die automatische Ausführung bleibt bis zum getesteten app-lokalen Vertrag deaktiviert."
+      },
+      "international_transfers":"BR-Stunden übermittelt gespeicherte Stundeneinträge selbst nicht an Drittländer.",
+      "automated_decisions":"Summen und fehlende Monate werden automatisch ermittelt; daraus folgt keine automatisierte Entscheidung mit rechtlicher oder vergleichbar erheblicher Wirkung.",
+      "special_safeguards": ["Serverseitige BR-Mitgliedschafts- und Fachberechtigungsprüfung", "Subjectgebundene Art.-15-Ausgabe", "Neutralisierung fremder Bearbeitungsreferenzen", "Plausibilitätsprüfung monatlicher Stundenwerte"],
+      "systems": ["Nextcloud", "BR-Stunden", "App-eigene Tabelle brs_hour_entries"]
+    },
+    {
+      "processing_id": "monthly_reminder_communication",
+      "name": "Monatliche Erinnerung an fehlende Einträge",
+      "controller": {
+        "component": "BR-Stunden",
+        "business_owner": "Betriebsrat"
+      },
+      "data_categories": ["Transient gelesene Nextcloud-UID, Anzeigename und E-Mail-Adresse", "Jahr und fehlende Monate", "Aggregierte Laufdaten mit Status sowie Sende-, Überspring- und Fehleranzahl ohne Empfängerliste"],
+      "data_subjects": ["BR-Mitglieder mit fehlenden Monatseinträgen", "BR-Mitglieder ohne zustellbare E-Mail-Adresse"],
+      "purposes": ["Ermittlung fehlender Monatseinträge", "Erinnerung betroffener Mitglieder am Monatsende", "Idempotenz und aggregierte Betriebsdiagnose eines Monatslaufs"],
+      "access_roles": ["Betroffenes BR-Mitglied als Nachrichtenempfänger*in", "Berechtigte BR-Funktionsträger*innen für die Vorschau", "Technischer Hintergrundprozess für den Monatsendlauf"],
+      "recipients": [{"category":"Betroffenes BR-Mitglied über die konfigurierte Nextcloud-Mailinfrastruktur","allowed_disclosures":["Eigenen Anzeigenamen, betroffenes Jahr und eigene fehlende Monate"],"conditions":["Vorhandene E-Mail-Adresse", "Fehlender Monatseintrag", "Ausführung am letzten Kalendertag"]}],
+      "data_sources": ["Nextcloud-Benutzerprofil und E-Mail-Adresse", "Aktuelle BR-Mitgliedschaft", "App-eigene Stundeneinträge", "App-eigene Tabelle brs_reminder_runs mit ausschließlich aggregierten Laufwerten"],
+      "legal_basis": {"status":"PRIVACY-DECISION-REQUIRED","affected_data":"E-Mail-Adresse, Anzeigename und Information über fehlende Monatseinträge","planned_processing":"Automatisierte Erinnerungsnachricht","missing_decision":"Rechtsgrundlage, Erforderlichkeit und zulässiger Nachrichteninhalt","reason":"Die rechtliche Bewertung ist nicht technisch ableitbar.","technical_impact":"Keine freigegebene Rechtsgrundlage wird behauptet.","privacy_preserving_alternative":"Automatischen Versand deaktiviert lassen und nur eine berechtigte Vorschau nutzen.","responsible_party":"ungeklärt","blocking":false},
+      "retention": {"policy_id":"reminder_run_aggregate_ninety_days","trigger":"Abschluss des aggregierten Monatslaufs","duration_or_deadline":"P90D","action":"delete","conditions_or_holds":["Die App führt keine Empfänger- oder Nachrichtenhistorie.","Betriebliche Mailproviderkopien und deren Fristen bleiben außerhalb der App gesondert zu entscheiden.","Keine automatische Ausführung vor dem getesteten app-lokalen Retention- und Restorevertrag."]},
+      "logging": {"audit_requirements":["Laufergebnis aggregiert diagnostizierbar halten", "Zustellfehler ohne Nachrichteninhalt erfassen"],"personal_data_policy":"Keine E-Mail-Adressen, Anzeigenamen, fehlenden Monate oder Nachrichteninhalte in Standardlogs übernehmen."},
+      "backup": {
+        "relevance": {"status":"PRIVACY-DECISION-REQUIRED","affected_data":"Aggregierte Laufdaten und mögliche Mailproviderkopien","planned_processing":"Betriebliche Sicherung und Wiederherstellung","missing_decision":"Backup-Relevanz und Dauer je System","reason":"Die App kennt die betrieblichen Backupzyklen nicht.","technical_impact":"Kein Entfall aus Sicherungen kann behauptet werden.","privacy_preserving_alternative":"Keine zusätzliche Empfängerhistorie speichern.","responsible_party":"ungeklärt","blocking":false},
+        "restore_handling": "Wiederhergestellte Monatslaufwerte verhindern weiterhin einen zweiten Lauf für denselben Monat; aus einem Restore werden keine Nachrichten automatisch erneut gesendet."
+      },
+      "exports_and_reports": {"article_15_relevance":"Die App persistiert keine Empfängerliste oder Nachrichtenkopie; eigene zugrunde liegende Stundenwerte werden über den PersonalDataProvider ausgegeben.","other_outputs":["E-Mail-Erinnerung an die betroffene Person", "Berechtigte Vorschau der aktuell fehlenden Monate", "Aggregiertes Ergebnis eines Monatslaufs"],"minimization":"Nachrichten enthalten nur das betroffene Jahr und die eigenen fehlenden Monate; Laufdaten bleiben aggregiert."},
+      "data_subject_rights": {
+        "article_15":"Keine app-persistierte Empfänger- oder Nachrichtenhistorie; betriebliche Mailproviderkopien liegen außerhalb des app-eigenen Providers.",
+        "rectification":"E-Mail-Adresse und Anzeigename stammen aus dem Nextcloud-Benutzerprofil; fehlende Monate ändern sich durch Berichtigung der eigenen Stundeneinträge.",
+        "restriction": {"status":"PRIVACY-DECISION-REQUIRED","affected_data":"Automatischer Erinnerungsversand an einzelne oder alle Mitglieder","planned_processing":"Einschränkung oder Widerspruch gegen weitere Nachrichten","missing_decision":"Fachlicher Sperr- und Widerspruchsprozess","reason":"Ein empfängerbezogener Einschränkungsmechanismus ist nicht definiert.","technical_impact":"Keine app-lokale individuelle Sperre wird angeboten.","privacy_preserving_alternative":"Automatischen Monatslauf deaktivieren.","responsible_party":"ungeklärt","blocking":true},
+        "erasure_or_anonymization":"Die App führt keine personenbezogene Empfängerhistorie; die Behandlung betrieblicher Mailkopien richtet sich nach der noch festzulegenden Mail- und Retention-Policy."
+      },
+      "international_transfers": {"status":"PRIVACY-DECISION-REQUIRED","affected_data":"E-Mail-Adresse, Anzeigename und Information über fehlende Monate","planned_processing":"Versand über die betrieblich konfigurierte Nextcloud-Mailinfrastruktur","missing_decision":"Mailanbieter, Verarbeitungsort und mögliche Drittlandübermittlung","reason":"Die App kennt die konkrete Betriebsinfrastruktur nicht.","technical_impact":"Keine transferfreie Zustellung wird behauptet.","privacy_preserving_alternative":"Automatischen Versand deaktiviert lassen.","responsible_party":"ungeklärt","blocking":true},
+      "automated_decisions":"Die App bestimmt regelbasiert fehlende Monate und versendet Erinnerungen; sie trifft keine Entscheidung mit rechtlicher oder vergleichbar erheblicher Wirkung.",
+      "special_safeguards": ["Versand nur am Monatsende", "Idempotenter Monatslauf", "Keine personenbezogene Empfängerhistorie in brs_reminder_runs", "Keine Nachrichteninhalte in Standardlogs"],
+      "systems": ["Nextcloud", "BR-Stunden", "Nextcloud-Mailkonfiguration", "App-eigene Tabellen brs_hour_entries und brs_reminder_runs"]
+    },
+    {
+      "processing_id": "payroll_pdf_generation",
+      "name": "Erzeugung der persönlichen Stundenabrechnung als PDF",
+      "controller": {
+        "component": "BR-Stunden",
+        "business_owner": "Betriebsrat; eine nachgelagerte Ablage oder Weitergabe benötigt einen eigenen fachlichen Vertrag"
+      },
+      "data_categories": ["Nextcloud-UID im Dateinamen, Anzeigename und Profiladresse", "Jahr, Monat, BR-Minuten, Fortbildungsminuten und Gesamtsumme", "Erzeugungsdatum der Abrechnung", "Transient erzeugter PDF-Inhalt ohne app-eigene Dateiablage"],
+      "data_subjects": ["Aktuell angemeldetes BR-Mitglied, dessen Abrechnung erzeugt wird"],
+      "purposes": ["Erzeugung einer persönlichen monatlichen Stundenabrechnung", "Bereitstellung zum unmittelbaren Download durch die betroffene Person"],
+      "access_roles": ["Ausschließlich das aktuell angemeldete BR-Mitglied für die eigene Abrechnung"],
+      "recipients": {"status":"PRIVACY-DECISION-REQUIRED","affected_data":"Name, Adresse und persönliche Stundenwerte in der heruntergeladenen PDF","planned_processing":"Nachgelagerte Weitergabe der Abrechnung","missing_decision":"Zulässige Empfängerkategorien und Übermittlungsweg nach dem Download","reason":"Die App stellt die PDF nur der betroffenen Person bereit und kontrolliert deren spätere Verwendung nicht.","technical_impact":"Keine nachgelagerte Empfängerkategorie wird behauptet.","privacy_preserving_alternative":"PDF lokal geschützt halten und nur über einen fachlich freigegebenen Weg weitergeben.","responsible_party":"ungeklärt","blocking":true},
+      "data_sources": ["Aktuelles Nextcloud-Benutzerprofil", "Aktuelle BR-Mitgliedschaft", "Eigener gespeicherter Monatseintrag", "Serverdatum für das Abrechnungsdatum"],
+      "legal_basis": {"status":"PRIVACY-DECISION-REQUIRED","affected_data":"Profil- und Stundendaten in der PDF-Abrechnung","planned_processing":"Dokumenterzeugung und fachliche Abrechnung","missing_decision":"Rechtsgrundlage und Erforderlichkeit der enthaltenen Datenfelder","reason":"Die Rechtsgrundlage ist fachlich und rechtlich zu entscheiden.","technical_impact":"Keine freigegebene Rechtsgrundlage wird behauptet.","privacy_preserving_alternative":"PDF nur auf ausdrückliche Anforderung und mit dem bestehenden minimalen Feldsatz erzeugen.","responsible_party":"ungeklärt","blocking":false},
+      "retention": {"policy_id":"payroll_pdf_transient_download","trigger":"Abschluss der unmittelbaren Downloadantwort","duration_or_deadline":"Nur für die laufende Antwort; keine app-eigene Dokumentpersistenz","action":"delete","conditions_or_holds":["Eine Ablage oder Weitergabe außerhalb der App benötigt einen eigenen Speicher-, Rechte-, Empfänger- und Retentionvertrag.","Die zugrunde liegenden Monatswerte folgen ausschließlich monthly_hours_management."]},
+      "logging": {"audit_requirements":["PDF-Fehler anhand von Jahr und Monat ohne Dokumentinhalt diagnostizierbar halten"],"personal_data_policy":"Keine Namen, Adressen, UIDs, Stundenwerte oder PDF-Inhalte in technische Logs übernehmen."},
+      "backup": {"relevance":"not_applicable","restore_handling":"BR-Stunden speichert keine erzeugte PDF; die zugrunde liegenden Monatswerte folgen der Verarbeitung monthly_hours_management."},
+      "exports_and_reports": {"article_15_relevance":"Die PDF ist ein auf Anforderung erzeugter eigener Bericht und keine zusätzliche app-persistierte Datenquelle.","other_outputs":["Direkter PDF-Download der eigenen Monatsabrechnung"],"minimization":"Die PDF wird nur für das aktuelle Mitglied und einen vorhandenen eigenen Monatseintrag erzeugt; die App speichert keine Dokumentkopie."},
+      "data_subject_rights": {
+        "article_15":"Die PDF kann von der betroffenen Person aus den eigenen Daten erzeugt werden; die zugrunde liegenden Werte sind zusätzlich über den PersonalDataProvider verfügbar.",
+        "rectification":"Profilangaben werden im Nextcloud-Benutzerprofil und Stundenwerte im eigenen Monatseintrag berichtigt; anschließend kann eine neue PDF erzeugt werden.",
+        "restriction":"Keine app-eigene PDF-Ablage; eine Einschränkung nachgelagerter Kopien liegt außerhalb der App und benötigt einen fachlichen Ablagevertrag.",
+        "erasure_or_anonymization":"Keine app-eigene PDF-Kopie ist zu löschen; die zugrunde liegenden Monatswerte folgen der beschlossenen Retention-Policy der Stundenverwaltung."
+      },
+      "international_transfers":"BR-Stunden übermittelt die PDF nicht selbst; mögliche nachgelagerte Übermittlungen nach dem Download sind nicht Teil der App.",
+      "automated_decisions":"Die PDF wird deterministisch aus eigenen Profil- und Monatsdaten erzeugt; es findet keine automatisierte Entscheidung über die Person statt.",
+      "special_safeguards": ["Erzeugung nur für das aktuell angemeldete BR-Mitglied", "Vorhandener eigener Monatseintrag ist erforderlich", "Keine app-eigene Dateiablage", "Direkte Downloadantwort statt Schattenkopie"],
+      "systems": ["Nextcloud", "BR-Stunden", "Transient erzeugte PDF-Downloadantwort"]
+    }
+  ]
+}
