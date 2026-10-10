@@ -2,6 +2,11 @@
 
 declare(strict_types=1);
 
+namespace OCP\EventDispatcher {
+    class Event {}
+    interface IEventListener { public function handle(Event $event): void; }
+}
+
 namespace OCA\FlzPermissionMatrix\PublicApi\V1 {
     interface PermissionProvider { public function descriptor(): PermissionProviderDescriptor; public function collect(): PermissionProviderResult; }
     final class PermissionProviderDescriptor { public function __construct(...$arguments) {} }
@@ -13,7 +18,7 @@ namespace OCA\FlzPermissionMatrix\PublicApi\V1 {
     }
     final class PermissionRule { public function __construct(public string $type, public string $name, public string $detail, public string $permission, public string $label, public string $effect, public string $scope, public PermissionCondition $condition, public string $source, public string $confidence) {} }
     final class PermissionProviderResult { public function __construct(public array $rules, public bool $complete = true, public array $warnings = []) {} }
-    final class RegisterPermissionProvidersEvent { public array $providers = []; public function register(PermissionProvider $provider): void { $this->providers[] = $provider; } }
+    final class RegisterPermissionProvidersEvent extends \OCP\EventDispatcher\Event { public array $providers = []; public function register(PermissionProvider $provider): void { $this->providers[] = $provider; } }
 }
 
 namespace {
@@ -40,7 +45,9 @@ namespace {
     }
 
     $event = new RegisterPermissionProvidersEvent();
-    (new BrStundenPermissionProviderListener($provider))->handle($event);
+    $listener = new BrStundenPermissionProviderListener($provider);
+    if (!$listener instanceof \OCP\EventDispatcher\IEventListener) throw new RuntimeException('Permission-Listener erfüllt den Nextcloud-Eventvertrag nicht.');
+    $listener->handle($event);
     assertSameValue($provider, $event->providers[0] ?? null, 'Der Provider muss lazy registriert werden.');
 
     echo 'BRStunden permission provider tests passed' . PHP_EOL;
