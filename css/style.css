@@ -209,6 +209,25 @@
     color: var(--color-text-lighter);
 }
 
+.brs-admin {
+    max-width: 960px;
+}
+
+.brs-permission-fieldset {
+    display: grid;
+    gap: 8px;
+    margin: 0 0 16px;
+    padding: 16px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-large);
+}
+
+.brs-permission-fieldset label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 @media (max-width: 720px) {
     #brstunden-app {
         padding: 16px;

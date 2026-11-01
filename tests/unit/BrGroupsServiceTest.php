@@ -2,79 +2,90 @@
 
 declare(strict_types=1);
 
-namespace OCP { interface IGroupManager { public function groupExists($gid); public function createGroup($gid); public function get($gid); } interface IAppConfig { public function getValueString(string $appId, string $key, string $default = ""): string; public function setValueString(string $appId, string $key, string $value): void; } }
-namespace {
+namespace OCP\App { interface IAppManager {} }
+namespace OCP {
+    final class Server {
+        public static mixed $service = null;
+        public static function get(string $name): mixed { return self::$service; }
+    }
+}
+namespace Psr\Log {
+    interface LoggerInterface {
+        public function emergency($message, array $context = []): void;
+        public function alert($message, array $context = []): void;
+        public function critical($message, array $context = []): void;
+        public function error($message, array $context = []): void;
+        public function warning($message, array $context = []): void;
+        public function notice($message, array $context = []): void;
+        public function info($message, array $context = []): void;
+        public function debug($message, array $context = []): void;
+        public function log($level, $message, array $context = []): void;
+    }
+}
 
+namespace {
     use OCA\BrStunden\Service\BrGroupsService;
-    use OCA\LocalBase\Organization\BrGroupDefinition;
-    use OCA\LocalBase\Organization\BrGroupSettingsService;
-    use OCA\LocalBase\Service\GroupProvisioningService;
-    use OCP\IAppConfig;
-    use OCP\IGroupManager;
+    use OCA\LocalBase\PublicApi\V1\BrMembershipSnapshot;
+    use OCP\App\IAppManager;
+    use Psr\Log\LoggerInterface;
     use function OCA\BrStunden\Tests\assertSameValue;
 
-    $newGroupManager = static function (array $membersByGroup): IGroupManager {
-        return new class($membersByGroup) implements IGroupManager {
-            public array $groups = [];
-            public function __construct(array $membersByGroup) {
-                foreach ($membersByGroup as $groupId => $uids) $this->groups[$groupId] = $this->group($uids);
-            }
-            public function groupExists($gid): bool { return isset($this->groups[$gid]); }
-            public function get($gid): ?object { return $this->groups[$gid] ?? null; }
-            public function createGroup($gid): object { return $this->groups[$gid] = $this->group([]); }
-            private function group(array $uids): object {
-                $users = array_map(static fn(string $uid): object => new class($uid) {
-                    public function __construct(public string $uid) {}
-                }, $uids);
-                return new class($users) {
-                    public function __construct(private array $users) {}
-                    public function getUsers(): array { return $this->users; }
-                    public function inGroup(object $user): bool {
-                        foreach ($this->users as $candidate) if ($candidate->uid === $user->uid) return true;
-                        return false;
-                    }
-                };
-            }
-        };
-    };
-    $newConfig = static function (string $initial = ''): IAppConfig {
-        return new class($initial) implements IAppConfig {
-            public array $values = [];
-            public array $writes = [];
-            public function __construct(string $initial) { if ($initial !== '') $this->values['br_group_definition'] = $initial; }
-            public function getValueString(string $appId, string $key, string $default = ''): string { return $this->values[$key] ?? $default; }
-            public function setValueString(string $appId, string $key, string $value): void { $this->values[$key] = $value; $this->writes[] = [$appId, $key, $value]; }
-        };
-    };
-
-    $groups = $newGroupManager(['Betriebsrat' => [], 'Betriebsrat-Vorsitzende' => []]);
-    $config = $newConfig();
-    $provisioning = new GroupProvisioningService($groups);
-    $contract = new BrGroupSettingsService($config, $provisioning);
-    $service = new BrGroupsService($provisioning, $contract);
-    assertSameValue(['Betriebsrat-Stellvertreter'], $service->ensureRequiredGroups(), 'Fresh install should create only missing default groups.');
-    assertSameValue(BrGroupDefinition::defaults()->groups(), $contract->validatedDefinition()->groups(), 'Fresh install should initialize the shared default contract.');
-    assertSameValue([], $service->ensureRequiredGroups(), 'A valid persisted contract should be idempotent.');
-
-    $customJson = json_encode(['version' => 1, 'revision' => 3, 'groups' => ['member' => 'BR Mitglieder', 'chair' => 'BR Vorsitz', 'deputy' => 'BR Vize']], JSON_THROW_ON_ERROR);
-    $customGroups = $newGroupManager(['BR Mitglieder' => ['chair'], 'BR Vorsitz' => ['chair'], 'BR Vize' => []]);
-    $customConfig = $newConfig($customJson);
-    $customProvisioning = new GroupProvisioningService($customGroups);
-    $customService = new BrGroupsService($customProvisioning, new BrGroupSettingsService($customConfig, $customProvisioning));
-    assertSameValue(['BR Mitglieder', 'BR Vorsitz', 'BR Vize'], $customService->requiredGroups(), 'Runtime group names must come from LocalBase.');
-    assertSameValue('BR Mitglieder', $customService->memberGroupName(), 'Member queries must use the semantic member group.');
-    assertSameValue([], $customService->ensureRequiredGroups(), 'Persisted group names must never be recreated or renamed by the consumer.');
-
-    $invalidGroups = $newGroupManager(['Betriebsrat' => ['member'], 'Betriebsrat-Vorsitzende' => ['outsider'], 'Betriebsrat-Stellvertreter' => []]);
-    $invalidConfig = $newConfig();
-    $invalidProvisioning = new GroupProvisioningService($invalidGroups);
-    $invalidService = new BrGroupsService($invalidProvisioning, new BrGroupSettingsService($invalidConfig, $invalidProvisioning));
-    try {
-        $invalidService->ensureRequiredGroups();
-        throw new \RuntimeException('Contradictory chair membership should be rejected.');
-    } catch (\DomainException) {
+    final class BrGroupsTestApps implements IAppManager {}
+    final class BrGroupsTestLogger implements LoggerInterface {
+        public array $warnings = [];
+        public function emergency($message, array $context = []): void {}
+        public function alert($message, array $context = []): void {}
+        public function critical($message, array $context = []): void {}
+        public function error($message, array $context = []): void {}
+        public function warning($message, array $context = []): void { $this->warnings[] = [$message, $context]; }
+        public function notice($message, array $context = []): void {}
+        public function info($message, array $context = []): void {}
+        public function debug($message, array $context = []): void {}
+        public function log($level, $message, array $context = []): void {}
     }
-    assertSameValue([], $invalidConfig->writes, 'Contradictory group membership must not persist a contract.');
+    final class TestBrGroupsService extends BrGroupsService {
+        public function __construct(
+            private bool $enabled,
+            private mixed $providerSnapshot,
+            BrGroupsTestLogger $logger,
+        ) {
+            parent::__construct(new BrGroupsTestApps(), $logger);
+        }
+        protected function isProviderEnabled(): bool { return $this->enabled; }
+        protected function readProviderSnapshot(): object {
+            if ($this->providerSnapshot instanceof \Throwable) throw $this->providerSnapshot;
+            if ($this->providerSnapshot === null) throw new \UnexpectedValueException('synthetic missing provider');
+            return $this->providerSnapshot;
+        }
+    }
+
+    $logger = new BrGroupsTestLogger();
+    $valid = new TestBrGroupsService(
+        true,
+        new BrMembershipSnapshot(true, 1, 5, 'BR-Mitglieder', 'BR-Vorsitz', 'BR-Stellvertretung'),
+        $logger,
+    );
+    assertSameValue('VALID', $valid->snapshot()['status'], 'A compatible LocalBase V1 snapshot must be accepted.');
+    assertSameValue('BR-Mitglieder', $valid->groupIdForRole(BrGroupsService::ROLE_MEMBER), 'Member role must use the public member identity.');
+    assertSameValue('BR-Vorsitz', $valid->groupIdForRole(BrGroupsService::ROLE_CHAIR), 'Chair role must use the public chair identity.');
+    assertSameValue('BR-Stellvertretung', $valid->groupIdForRole(BrGroupsService::ROLE_DEPUTY), 'Deputy role must use the public deputy identity.');
+
+    $missing = new TestBrGroupsService(false, null, new BrGroupsTestLogger());
+    assertSameValue('MISSING', $missing->snapshot()['status'], 'A disabled provider must fail closed.');
+    assertSameValue(null, $missing->groupIdForRole(BrGroupsService::ROLE_MEMBER), 'A missing provider must not expose fallback groups.');
+
+    $legacyMemberOnly = new TestBrGroupsService(
+        true,
+        new BrMembershipSnapshot(true, 1, 2, 'BR-Mitglieder'),
+        new BrGroupsTestLogger(),
+    );
+    assertSameValue('INCOMPATIBLE', $legacyMemberOnly->snapshot()['status'], 'The role-aware consumer must reject a member-only snapshot.');
+
+    $failedLogger = new BrGroupsTestLogger();
+    $failed = new TestBrGroupsService(true, new \RuntimeException('private detail'), $failedLogger);
+    assertSameValue('UNAVAILABLE', $failed->snapshot()['status'], 'Provider failures must produce a stable deny state.');
+    assertSameValue(1, count($failedLogger->warnings), 'Unexpected provider failures must be diagnosable.');
+    assertSameValue(false, str_contains((string)$failed->snapshot()['warning'], 'private detail'), 'Provider details must not leak to users.');
 
     echo "BrGroupsService tests passed\n";
 }

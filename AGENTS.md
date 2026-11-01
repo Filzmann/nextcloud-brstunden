@@ -84,12 +84,15 @@ Wichtige Pruefungen:
   Rechtsgrundlagen, Retention-, Backup-, Mail- und Empfängerentscheidungen mit
   `PRIVACY-DECISION-REQUIRED`. Der öffentliche V1-Provider liest ausschließlich
   diesen Katalog; eine zweite Registry oder kopierte Policyquelle ist verboten.
-- BRStunden besitzt aktuell keinen nativen Admin-Bypass und deshalb keinen
-  wirkungslosen app-lokalen Vollzugriffsschalter. Fachrechte entstehen nur
-  aus dem BR-Mitgliedervertrag und `self`. PermissionProvider und Negativtest
-  sichern diese begründete Nichtanwendbarkeit. Sobald ein nativer Adminpfad
-  oder eine neue Fachberechtigung hinzukommt, muss die Bewertung im selben
-  Änderungssatz erneut erfolgen.
+- BRStunden besitzt keinen nativen Admin-Bypass und deshalb keinen
+  app-lokalen Vollzugriffsschalter. Die Fachberechtigungen werden getrennt von
+  den kanonischen LocalBase-Rollen Mitglied, Vorsitz und Stellvertretung
+  gespeichert und serverseitig aufgelöst. Eigene Stunden und Abrechnungen
+  bleiben selbstbezogen; fremde Abrechnung, Reminder-Vorschau und die
+  standardmäßig inaktive Fremdkorrektur verwenden jeweils eigene Rechte.
+  PermissionProvider und Negativtests sichern diese begründete
+  Nichtanwendbarkeit. Sobald ein nativer Adminpfad hinzukommt, muss die
+  Bewertung im selben Änderungssatz erneut erfolgen.
 
 ## Verbindliche Suite-Navigation
 

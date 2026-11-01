@@ -6,6 +6,8 @@ namespace OCA\BrStunden\Controller;
 
 use OCA\BrStunden\AppInfo\Application;
 use OCA\BrStunden\Service\BrMemberService;
+use OCA\BrStunden\Service\AuthorizationService;
+use OCA\BrStunden\Service\CapabilitySettingsService;
 use OCA\BrStunden\Service\BrStundenLogger;
 use OCA\BrStunden\Service\HoursService;
 use OCA\BrStunden\Service\PayrollPdfService;
@@ -27,6 +29,7 @@ class ApiController extends Controller {
         private ReminderService $reminders,
         private PayrollPdfService $payrollPdf,
         private BrMemberService $members,
+        private AuthorizationService $authorization,
         private BrStundenLogger $logger,
         private ApiResponder $responder
     ) {
@@ -53,9 +56,9 @@ class ApiController extends Controller {
     }
 
     #[NoAdminRequired]
-    public function saveEntry(int $year, int $month, string $hours = '', string $fobiHours = '', string $note = ''): DataResponse {
+    public function saveEntry(int $year, int $month, string $hours = '', string $fobiHours = '', string $note = '', ?string $userId = null): DataResponse {
         return $this->responder->respond(
-            fn(): array => $this->hours->saveEntry($year, $month, $hours, $fobiHours, $note),
+            fn(): array => $this->hours->saveEntry($year, $month, $hours, $fobiHours, $note, $userId),
             [$this->logger, 'error'],
             'save_entry',
             ['year' => $year, 'month' => $month]
@@ -63,9 +66,9 @@ class ApiController extends Controller {
     }
 
     #[NoAdminRequired]
-    public function deleteEntry(int $year, int $month): DataResponse {
+    public function deleteEntry(int $year, int $month, ?string $userId = null): DataResponse {
         return $this->responder->respond(
-            fn(): array => $this->hours->deleteEntry($year, $month),
+            fn(): array => $this->hours->deleteEntry($year, $month, $userId),
             [$this->logger, 'error'],
             'delete_entry',
             ['year' => $year, 'month' => $month]
@@ -74,9 +77,9 @@ class ApiController extends Controller {
 
     #[NoAdminRequired]
     #[NoCSRFRequired]
-    public function payrollPdf(int $year, int $month): Response {
+    public function payrollPdf(int $year, int $month, ?string $userId = null): Response {
         try {
-            $pdf = $this->payrollPdf->createForCurrentUser($year, $month);
+            $pdf = $this->payrollPdf->createForUser($userId ?? $this->members->currentUserId(), $year, $month);
 
             return new DataDownloadResponse($pdf['content'], $pdf['filename'], $pdf['contentType']);
         } catch (\InvalidArgumentException $e) {
@@ -96,7 +99,7 @@ class ApiController extends Controller {
     #[NoAdminRequired]
     public function reminderPreview(): DataResponse {
         return $this->responder->respond(function(): array {
-            $this->members->assertCurrentUserIsMember();
+            $this->authorization->assertCan(CapabilitySettingsService::REMINDER_DASHBOARD);
 
             return $this->reminders->previewMonthlyReminders();
         }, [$this->logger, 'error'], 'reminder_preview');

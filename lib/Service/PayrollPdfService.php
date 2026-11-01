@@ -14,25 +14,30 @@ class PayrollPdfService {
     public function __construct(
         private BrMemberService $members,
         private HourEntryStore $entries,
-        private CalendarService $calendar
+        private CalendarService $calendar,
+        private AuthorizationService $authorization,
     ) {
     }
 
     public function createForCurrentUser(int $year, int $month): array {
-        $this->members->assertCurrentUserIsMember();
+        return $this->createForUser($this->members->currentUserId(), $year, $month);
+    }
+
+    public function createForUser(string $uid, int $year, int $month): array {
+        $uid = trim($uid);
+        $this->authorization->assertCanExportPayrollFor($uid);
         $this->calendar->assertValidYear($year);
         $this->calendar->assertValidMonth($month);
         if ($this->calendar->isFutureMonth($year, $month)) {
             throw new \InvalidArgumentException('Zukuenftige Monate koennen noch nicht abgerechnet werden.');
         }
 
-        $uid = $this->members->currentUserId();
         $entry = $this->entries->findForUserMonth($uid, $year, $month);
         if (!$entry instanceof HourEntry) {
             throw new \InvalidArgumentException('Bitte den eigenen Eintrag zuerst speichern, bevor die Abrechnung erzeugt wird.');
         }
 
-        $member = $this->currentMember($uid);
+        $member = $this->member($uid);
         $filename = sprintf('br-stunden-abrechnung-%s-%04d-%02d.pdf', $uid, $year, $month);
 
         return [
@@ -42,7 +47,7 @@ class PayrollPdfService {
         ];
     }
 
-    private function currentMember(string $uid): array {
+    private function member(string $uid): array {
         foreach ($this->members->members() as $member) {
             if (($member['uid'] ?? '') === $uid) {
                 return $member;
@@ -75,7 +80,7 @@ class PayrollPdfService {
         $commands[] = $this->text(43, 686, 'Name, Vorname:', 12, true);
         $commands[] = $this->text(155, 686, $name, 12);
         $commands[] = $this->text(43, 671, 'Adresse:', 12, true);
-        $commands[] = $this->text(155, 671, $this->members->currentUserAddress(), 11);
+        $commands[] = $this->text(155, 671, $this->members->addressForUser((string)$member['uid']), 11);
 
         $commands[] = $this->text(43, 600, 'Stunden Betriebsrat', 17, true);
         $commands[] = $this->text(270, 600, 'Summe der Stunden:', 12);

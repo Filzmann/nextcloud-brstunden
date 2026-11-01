@@ -13,6 +13,12 @@ require('../../js/modules/overview.js');
 const html = window.BRStunden.overview.render({
     year: 2026,
     currentUser: { uid: 'simon' },
+    permissions: {
+        'hours.entry.manage-own': true,
+        'hours.entry.manage-foreign': false,
+        'hours.payroll.export-own': true,
+        'hours.payroll.export-foreign': true
+    },
     editableUntilMonth: 2,
     months: [
         { number: 1, label: 'Januar' },
@@ -60,7 +66,7 @@ const html = window.BRStunden.overview.render({
     ]
 });
 
-assert(html.includes('Jahresuebersicht 2026'));
+assert(html.includes('Jahresübersicht 2026'));
 assert(html.includes('Simon &lt;Test&gt;'));
 assert(!html.includes('Simon <Test>'));
 assert(html.includes('class="brs-cell-button"'));
@@ -68,6 +74,10 @@ assert(html.includes('data-year="2026"'));
 assert(html.includes('data-month="1"'));
 assert(html.includes('data-exists="1"'));
 assert(html.includes('data-note="&lt;Notiz &amp; &quot;wichtig&quot;&gt;"'));
+assert(html.includes('data-user-id="simon"'));
+assert(html.includes('data-user-id="alex"'));
+assert(html.includes('data-can-edit="0"'));
+assert(html.includes('data-can-export="1"'));
 assert(!html.includes('<Notiz & "wichtig">'));
 assert(html.includes('BR 1,5'));
 assert(html.includes('FoBi 0,5'));

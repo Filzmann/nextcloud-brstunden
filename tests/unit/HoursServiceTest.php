@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 
 use OCA\BrStunden\Model\HourEntry;
+use OCA\BrStunden\Service\AuthorizationService;
 use OCA\BrStunden\Service\BrMemberService;
 use OCA\BrStunden\Service\CalendarService;
 use OCA\BrStunden\Service\HoursService;
@@ -73,7 +74,19 @@ $entries = new class extends HourEntryStore {
     }
 };
 
-$service = new HoursService($members, $entries, $calendar);
+$authorization = new class extends AuthorizationService {
+    public array $managedTargets = [];
+    public bool $deny = false;
+    public function __construct() {}
+    public function assertCan(string $capability): void {}
+    public function currentPermissions(): array { return ['hours.entry.manage-foreign' => true]; }
+    public function assertCanManageEntryFor(string $targetUid): void {
+        $this->managedTargets[] = $targetUid;
+        if ($this->deny) throw new \DomainException('denied');
+    }
+};
+
+$service = new HoursService($members, $entries, $calendar, $authorization);
 
 assertSameValue('BR Custom', $service->state()['groupName'], 'The state must expose the canonical configured BR member group.');
 
@@ -112,5 +125,18 @@ assertThrows(
 
 $service->deleteEntry(2026, 7);
 assertSameValue(['userId' => 'simon', 'year' => 2026, 'month' => 7], $entries->deleted[0], 'Deletes should use the current user.');
+
+$service->saveEntry(2026, 6, '2', '0', 'Korrektur', 'alex');
+assertSameValue('alex', $entries->saved[1]['userId'], 'An authorized foreign correction must target the selected member.');
+assertSameValue('simon', $entries->saved[1]['updatedByUid'], 'A foreign correction must retain the acting user.');
+assertSameValue(['simon', 'simon', 'simon', 'alex'], $authorization->managedTargets, 'Every own or foreign write must pass the target through authorization.');
+
+$authorization->deny = true;
+$savedBefore = $entries->saved;
+try {
+    $service->saveEntry(2026, 6, '3', '0', 'Manipuliert', 'outsider');
+} catch (\DomainException) {
+}
+assertSameValue($savedBefore, $entries->saved, 'A rejected foreign target must not change persisted entries.');
 
 echo 'HoursService tests passed' . PHP_EOL;

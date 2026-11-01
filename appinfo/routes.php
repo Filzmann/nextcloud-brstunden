@@ -9,5 +9,6 @@ return [
         ['name' => 'api#deleteEntry', 'url' => '/api/entries/{year}/{month}', 'verb' => 'DELETE'],
         ['name' => 'api#payrollPdf', 'url' => '/api/entries/{year}/{month}/payroll.pdf', 'verb' => 'GET'],
         ['name' => 'api#reminderPreview', 'url' => '/api/reminders/preview', 'verb' => 'GET'],
+        ['name' => 'capabilitySettings#update', 'url' => '/api/capability-settings', 'verb' => 'PUT'],
     ],
 ];

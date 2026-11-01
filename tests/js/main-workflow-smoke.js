@@ -30,6 +30,7 @@ const elements = createElementMap([
     'brs-overview',
     'brs-load-reminders',
     'brs-reminder-preview',
+    'brs-reminders',
 ]);
 for (const element of elements.values()) {
     element.hidden = true;
@@ -90,7 +91,14 @@ class FakeHourRepository {
             defaultYear: 2026,
             defaultMonth: 2,
             currentYear: 2026,
-            currentMonth: 2
+            currentMonth: 2,
+            permissions: {
+                'hours.entry.manage-own': true,
+                'hours.entry.manage-foreign': false,
+                'hours.payroll.export-own': true,
+                'hours.payroll.export-foreign': true,
+                'hours.reminders.read': true
+            }
         };
     }
 
@@ -106,8 +114,8 @@ class FakeHourRepository {
         return { year: payload.year, rows: [] };
     }
 
-    async deleteEntry(year, month) {
-        repositoryCalls.push(['deleteEntry', year, month]);
+    async deleteEntry(year, month, userId) {
+        repositoryCalls.push(['deleteEntry', year, month, userId]);
 
         return { year, rows: [] };
     }
@@ -137,8 +145,8 @@ class FakeHourRepository {
         };
     }
 
-    payrollPdfUrl(year, month) {
-        repositoryCalls.push(['payrollPdfUrl', year, month]);
+    payrollPdfUrl(year, month, userId) {
+        repositoryCalls.push(['payrollPdfUrl', year, month, userId]);
 
         return `/pdf/${year}/${month}`;
     }
@@ -170,7 +178,10 @@ require('../../js/main.js');
         exists: '1',
         brHours: '2',
         fobiHours: '0.5',
-        note: 'Mit Notiz'
+        note: 'Mit Notiz',
+        userId: 'alex',
+        canEdit: '0',
+        canExport: '1'
     });
     elements.get('brs-overview').listeners.click({ target: entryButton });
 
@@ -178,12 +189,21 @@ require('../../js/main.js');
     assert.strictEqual(elements.get('brs-entry-hours').value, '2');
     assert.strictEqual(elements.get('brs-entry-fobi-hours').value, '0.5');
     assert.strictEqual(elements.get('brs-entry-note').value, 'Mit Notiz');
-    assert.strictEqual(elements.get('brs-entry-hours').focused, true);
-    assert.strictEqual(elements.get('brs-delete-entry').disabled, false);
+    assert.strictEqual(elements.get('brs-entry-hours').disabled, true);
+    assert.strictEqual(elements.get('brs-delete-entry').disabled, true);
     assert.strictEqual(elements.get('brs-download-payroll').disabled, false);
 
     elements.get('brs-download-payroll').listeners.click();
     assert.strictEqual(window.location.href, '/pdf/2026/1');
+    assert.deepStrictEqual(repositoryCalls.at(-1), ['payrollPdfUrl', 2026, 1, 'alex']);
+
+    const ownEntryButton = new FakeCellButton({
+        year: '2026', month: '1', exists: '1', brHours: '2', fobiHours: '0.5', note: 'Mit Notiz',
+        userId: 'simon', canEdit: '1', canExport: '1'
+    });
+    elements.get('brs-overview').listeners.click({ target: ownEntryButton });
+    assert.strictEqual(elements.get('brs-entry-hours').disabled, false);
+    assert.strictEqual(elements.get('brs-delete-entry').disabled, false);
 
     elements.get('brs-entry-hours').value = '3';
     elements.get('brs-entry-fobi-hours').value = '1';
@@ -197,13 +217,13 @@ require('../../js/main.js');
     assert.strictEqual(prevented, true);
     assert.deepStrictEqual(repositoryCalls.at(-1), [
         'saveEntry',
-        { year: 2026, month: 1, hours: '3', fobiHours: '1', note: 'Neu' }
+        { year: 2026, month: 1, hours: '3', fobiHours: '1', note: 'Neu', userId: 'simon' }
     ]);
     assert.strictEqual(elements.get('brs-notice').textContent, 'BR-Stunden gespeichert.');
     assert.strictEqual(elements.get('brs-notice').className, 'brs-notice brs-notice-success');
 
     await elements.get('brs-delete-entry').listeners.click();
-    assert.deepStrictEqual(repositoryCalls.at(-1), ['deleteEntry', 2026, 1]);
+    assert.deepStrictEqual(repositoryCalls.at(-1), ['deleteEntry', 2026, 1, 'simon']);
     assert.strictEqual(elements.get('brs-entry-hours').value, '');
     assert.strictEqual(elements.get('brs-entry-fobi-hours').value, '0');
     assert.strictEqual(elements.get('brs-entry-note').value, '');

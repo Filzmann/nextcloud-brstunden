@@ -20,6 +20,7 @@ namespace OCA\BrStunden\AppInfo {
 namespace {
 
     use OCA\BrStunden\Controller\ApiController;
+    use OCA\BrStunden\Controller\CapabilitySettingsController;
     use OCP\AppFramework\Http\Attribute\NoAdminRequired;
     use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 
@@ -31,6 +32,19 @@ namespace {
 
     if ($payrollPdf->getAttributes(NoCSRFRequired::class) === []) {
         throw new \RuntimeException('payrollPdf is a direct browser download and must not require a CSRF header.');
+    }
+
+    $payrollParameters = array_map(static fn(\ReflectionParameter $parameter): string => $parameter->getName(), $payrollPdf->getParameters());
+    if (!in_array('userId', $payrollParameters, true)) {
+        throw new \RuntimeException('payrollPdf must accept an explicitly authorized target user.');
+    }
+
+    $settingsUpdate = new \ReflectionMethod(CapabilitySettingsController::class, 'update');
+    if ($settingsUpdate->getAttributes(NoAdminRequired::class) !== []) {
+        throw new \RuntimeException('Capability assignments must remain in the native Nextcloud admin boundary.');
+    }
+    if ($settingsUpdate->getAttributes(NoCSRFRequired::class) !== []) {
+        throw new \RuntimeException('Capability assignment writes must remain CSRF protected.');
     }
 
     echo 'ApiController attribute smoke tests passed' . PHP_EOL;

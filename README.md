@@ -8,22 +8,28 @@ Development-Prototyp. Nicht produktiv und nicht rechtssicher.
 
 Enthalten:
 
-- BR-Mitglieder aus der im gemeinsamen LocalBase-Vertrag konfigurierten
-  Nextcloud-Gruppe; der Default lautet `Betriebsrat`.
+- BR-Mitglieder sowie Vorsitz und Stellvertretung aus dem gemeinsamen,
+  versionierten LocalBase-BR-Rollenvertrag.
 - Monatliche Stundeneintraege pro BR-Mitglied, getrennt nach BR-Stunden und FoBi-Stunden.
 - Jahresuebersicht mit Monaten als Spalten und BR-Mitgliedern als Zeilen.
 - Fehlende Monate je Mitglied.
 - Background-Job, der am letzten Tag des Monats Erinnerungs-E-Mails an Mitglieder mit fehlenden Monaten vorbereitet und versendet.
 - Reminder-Laeufe werden pro Jahr/Monat markiert, damit Monatsend-Mails nicht mehrfach versendet werden.
-- BR-Mitglieder koennen nur eigene Eintraege bearbeiten oder loeschen.
-- Gespeicherte eigene Eintraege koennen als vorausgefuellte PDF-Abrechnung heruntergeladen werden.
+- BR-Mitglieder verwalten standardmäßig nur eigene Einträge; das getrennte
+  Recht zur Fremdkorrektur ist vorhanden und standardmäßig deaktiviert.
+- BR-Mitglieder exportieren die eigene PDF-Abrechnung; Vorsitz und
+  Stellvertretung dürfen standardmäßig zusätzlich Abrechnungen anderer
+  BR-Mitglieder erzeugen und die Reminder-Vorschau lesen.
+- Die sechs Fachberechtigungen werden im nativen Nextcloud-Adminbereich über
+  Auswahlfelder den semantischen BR-Rollen zugeordnet. Technische Gruppen-IDs
+  werden nicht als Berechtigung gespeichert.
 
 Die App besitzt keinen fachlichen Nextcloud-Admin-Bypass: Auch native
-Administrierende erhalten ohne Mitgliedschaft keine Stundenrechte. Daher ist
-ein app-lokaler Vollzugriffsschalter derzeit nicht anwendbar. Der
-PermissionProvider beschreibt ausschließlich Mitglieder- und Eigenrechte;
-ein Negativvertrag erzwingt eine Neubewertung, sobald ein Adminpfad ergänzt
-wird.
+Administrierende erhalten ohne fachliche Rolle keine Stundenrechte. Daher ist
+ein app-lokaler Vollzugriffsschalter weiterhin nicht anwendbar. Der
+PermissionProvider veröffentlicht die sechs getrennten Rechte mit ihrem
+Eigen- oder Fremdscope; ein Negativvertrag erzwingt eine Neubewertung, sobald
+ein Admin-Vollzugriffspfad ergänzt wird.
 
 ## Datenschutz
 

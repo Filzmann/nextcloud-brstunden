@@ -40,6 +40,7 @@ Begründung verpflichtend.
 | A6 | Tastatur, Fokus und Scrollen | Jahr, Formular, Übersicht, Erinnerungsbereich und PDF-Aktion nur mit Tastatur bedienen; kleines Fenster verwenden. | Alle Aktionen sind erreichbar, Fokus ist sichtbar und breite Tabellen bleiben innerhalb der App scrollbar. | [x] erfolgreich [ ] nicht erfolgreich [ ] nicht geprüft | |
 | A7 | BR-Rollenhierarchie | Je ein synthetisches Konto ausschließlich der Vorsitz- beziehungsweise Stellvertretungsgruppe zuordnen und danach zusätzlich in die konfigurierte BR-Mitgliedergruppe aufnehmen. | Der widersprüchliche Stand wird serverseitig abgewiesen; erst mit zusätzlicher BR-Mitgliedschaft ist der gemeinsame Vertrag gültig. | [x] erfolgreich [ ] nicht erfolgreich [ ] nicht geprüft | |
 | A8 | Abweichende Mitgliedergruppe | Einen gültigen, vom Default abweichenden LocalBase-BR-Gruppenvertrag verwenden und Übersicht sowie Reminderempfänger prüfen. | Zugriff, Mitgliederliste, Zustandsausgabe und Reminder verwenden ausschließlich die konfigurierte Mitgliedergruppe. | [x] erfolgreich [ ] nicht erfolgreich [ ] nicht geprüft | |
+| A9 | Berechtigungsverwaltung | Als native*r Admin die BR-Stunden-Einstellungen öffnen, Rollen je Fachrecht per Checkbox ändern und die Seite neu laden. | Ausschließlich Mitglied, Vorsitz und Stellvertretung sind auswählbar; Gruppen-Freitext fehlt und die Auswahl bleibt gespeichert. | [ ] erfolgreich [ ] nicht erfolgreich [x] nicht geprüft | Manuelle Stagingprüfung ausstehend. |
 
 ## B. Eigene Monatserfassung
 
@@ -51,6 +52,7 @@ Begründung verpflichtend.
 | B4 | Löschung | Einen entbehrlichen eigenen Testeintrag löschen und die Übersicht aktualisieren. | Der Eintrag verschwindet und der Monat gilt wieder als fehlend; andere Einträge bleiben erhalten. | [x] erfolgreich [ ] nicht erfolgreich [ ] nicht geprüft | |
 | B5 | Fremdeintrag | Als normales BR-Mitglied den Eintrag eines anderen Mitglieds über Oberfläche und direkten API-Aufruf zu ändern versuchen. | Beide Wege werden abgewiesen; der fremde Datensatz bleibt unverändert. | [x] erfolgreich [ ] nicht erfolgreich [ ] nicht geprüft | |
 | B6 | Eingabegrenzen | Leere, negative, nicht numerische und übermäßig große Werte sowie einen unzulässigen Monat versuchen. | Ungültige Eingaben werden verständlich abgewiesen und überschreiben keinen gültigen Stand. | [x] erfolgreich [ ] nicht erfolgreich [ ] nicht geprüft | |
+| B7 | Berechtigte Fremdkorrektur | Das standardmäßig inaktive Fremdkorrekturrecht einer Testrolle zuweisen, einen fremden Eintrag ändern und das Recht wieder entfernen. | Nur mit aktivem Recht wird der Eintrag geändert und die handelnde UID als Bearbeitungsbezug gespeichert; nach Entzug bleibt der Datensatz unverändert. | [ ] erfolgreich [ ] nicht erfolgreich [x] nicht geprüft | Manuelle Stagingprüfung ausstehend. |
 
 ## C. Fehlende Monate und Erinnerungen
 
@@ -69,9 +71,10 @@ Begründung verpflichtend.
 |---|---|---|---|---|---|
 | D1 | PDF für vorhandenen Eintrag | Einen gespeicherten eigenen Testmonat wählen und PDF herunterladen. | Eine lesbare, vorausgefüllte Abrechnung mit genau den gespeicherten synthetischen Werten wird erzeugt. | [x] erfolgreich [ ] nicht erfolgreich [ ] nicht geprüft | |
 | D2 | Kein PDF ohne Eintrag | Einen Monat ohne eigenen Datensatz wählen und PDF-Aktion prüfen. | Die Aktion bleibt deaktiviert oder wird serverseitig verständlich abgewiesen. | [x] erfolgreich [ ] nicht erfolgreich [ ] nicht geprüft | |
-| D3 | Fremdes PDF | Direkten Download für den Datensatz eines anderen Mitglieds versuchen. | Der Zugriff wird serverseitig verweigert; es werden keine fremden Stunden offengelegt. | [x] erfolgreich [ ] nicht erfolgreich [ ] nicht geprüft | |
+| D3 | Fremdes PDF ohne Recht | Als gewöhnliches BR-Mitglied den direkten Download für den Datensatz eines anderen Mitglieds versuchen. | Der Zugriff wird serverseitig verweigert; es werden keine fremden Stunden offengelegt. | [x] erfolgreich [ ] nicht erfolgreich [ ] nicht geprüft | |
 | D4 | Inhalt und Dateiname | PDF-Inhalt, Metadaten und Dateinamen auf unnötige Personen- oder Systemdaten prüfen. | Nur die für die Testabrechnung vorgesehenen Angaben sind enthalten; keine technischen Pfade oder Secrets werden sichtbar. | [x] erfolgreich [ ] nicht erfolgreich [ ] nicht geprüft | |
 | D5 | Datensparsame Abnahme | Formular, Screenshots, Testmails und PDFs vor Ablage oder Weitergabe prüfen. | Es wurden ausschließlich synthetische Daten verwendet und keine Zugangsdaten dokumentiert. | [x] erfolgreich [ ] nicht erfolgreich [ ] nicht geprüft | |
+| D6 | Berechtigter Fremdexport | Als Vorsitz beziehungsweise Stellvertretung eine vorhandene Abrechnung eines anderen Testmitglieds öffnen. | Nur das ausgewählte aktuelle BR-Mitglied wird exportiert; nach Entzug des Fremdexportrechts wird derselbe Zugriff serverseitig verweigert. | [ ] erfolgreich [ ] nicht erfolgreich [x] nicht geprüft | Manuelle Stagingprüfung ausstehend. |
 
 
 ## Abschlussentscheidung
@@ -80,10 +83,10 @@ Begründung verpflichtend.
 |---|---|
 | Anzahl erfolgreich | 25 |
 | Anzahl nicht erfolgreich | 0 |
-| Anzahl nicht geprüft | 0 |
+| Anzahl nicht geprüft | 3 |
 | Kritische Abweichungen / Ticketreferenzen | |
 | Erneute Prüfung erforderlich bis | |
-| Entscheidung zum aktuellen Entwicklungsstand | [x] abgenommen [ ] mit Auflagen abgenommen [ ] nicht abgenommen |
+| Entscheidung zum aktuellen Entwicklungsstand | [ ] abgenommen [ ] mit Auflagen abgenommen [ ] nicht abgenommen |
 | Produktiv- oder Rechtssicherheitsfreigabe | nicht Bestandteil dieses Formulars |
-| Begründung der Gesamtentscheidung | Alle Prüffälle erfolgreich; keine Abweichungen festgestellt. |
+| Begründung der Gesamtentscheidung | Der frühere Scope wurde abgenommen; die drei neuen Berechtigungsfälle benötigen noch die manuelle Stagingprüfung. |
 | Name / Datum | |

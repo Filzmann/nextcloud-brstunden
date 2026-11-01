@@ -12,12 +12,13 @@ class HoursService {
     public function __construct(
         private BrMemberService $members,
         private HourEntryStore $entries,
-        private CalendarService $calendar
+        private CalendarService $calendar,
+        private AuthorizationService $authorization,
     ) {
     }
 
     public function state(): array {
-        $this->members->assertCurrentUserIsMember();
+        $this->authorization->assertCan(CapabilitySettingsService::OVERVIEW_READ);
         $currentYear = $this->calendar->currentYear();
         $currentMonth = $this->calendar->currentMonth();
 
@@ -30,38 +31,41 @@ class HoursService {
             'currentYear' => $currentYear,
             'currentMonth' => $currentMonth,
             'groupName' => $this->members->memberGroupName(),
+            'permissions' => $this->authorization->currentPermissions(),
         ];
     }
 
     public function yearOverview(int $year): array {
-        $this->members->assertCurrentUserIsMember();
+        $this->authorization->assertCan(CapabilitySettingsService::OVERVIEW_READ);
         $this->calendar->assertValidYear($year);
 
         return $this->buildYearOverview($year);
     }
 
-    public function saveEntry(int $year, int $month, string|int|float $hours, string|int|float|null $fobiHours, string $note): array {
-        $this->members->assertCurrentUserIsMember();
+    public function saveEntry(int $year, int $month, string|int|float $hours, string|int|float|null $fobiHours, string $note, ?string $userId = null): array {
         $this->calendar->assertValidYear($year);
         $this->calendar->assertValidMonth($month);
         $this->assertNotFutureMonth($year, $month);
 
-        $uid = $this->members->currentUserId();
+        $actorUid = $this->members->currentUserId();
+        $uid = trim((string)($userId ?? $actorUid));
+        $this->authorization->assertCanManageEntryFor($uid);
         $minutes = HourAmount::fromInput($hours)->minutes();
         $fobiMinutes = HourAmount::fromOptionalInput($fobiHours)->minutes();
         $this->assertPlausibleMonthlyTotal($minutes, $fobiMinutes);
-        $this->entries->save($uid, $year, $month, $minutes, $fobiMinutes, trim($note), $uid);
+        $this->entries->save($uid, $year, $month, $minutes, $fobiMinutes, trim($note), $actorUid);
 
         return $this->buildYearOverview($year);
     }
 
-    public function deleteEntry(int $year, int $month): array {
-        $this->members->assertCurrentUserIsMember();
+    public function deleteEntry(int $year, int $month, ?string $userId = null): array {
         $this->calendar->assertValidYear($year);
         $this->calendar->assertValidMonth($month);
         $this->assertNotFutureMonth($year, $month);
 
-        $this->entries->delete($this->members->currentUserId(), $year, $month);
+        $uid = trim((string)($userId ?? $this->members->currentUserId()));
+        $this->authorization->assertCanManageEntryFor($uid);
+        $this->entries->delete($uid, $year, $month);
 
         return $this->buildYearOverview($year);
     }
@@ -132,6 +136,7 @@ class HoursService {
             'currentYear' => $this->calendar->currentYear(),
             'currentMonth' => $this->calendar->currentMonth(),
             'editableUntilMonth' => $this->calendar->editableUntilMonth($year),
+            'permissions' => $this->authorization->currentPermissions(),
             'rows' => $rows,
         ];
     }
