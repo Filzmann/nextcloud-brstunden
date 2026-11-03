@@ -21,8 +21,6 @@ ist davon getrennt und ersetzt keinen RC-Nachweis.
 
 ## Weitere geplante Arbeiten
 
-- Die manuellen Prüfungen werden im ausfüllbaren
-  [`docs/manual-acceptance.md`](docs/manual-acceptance.md) dokumentiert.
 - Reminder, Jahresübersicht und Abrechnung auf einem realitätsnahen Staging
   fachlich und datenschutzbezogen abnehmen.
 - Weitere Funktionen erst nach einem konkreten Fachbedarf und benanntem
