@@ -46,6 +46,14 @@ BR-Stunden speichert erzeugte Abrechnungs-PDFs nicht app-seitig. Die
 Erinnerungsläufe speichern keine Empfängerlisten oder Nachrichtenkopien,
 sondern ausschließlich aggregierte Laufwerte.
 
+Organisationsname, Organisationsanschrift, Ausstellungsort sowie optionale
+Einleitungs- und Fußtexte der PDF werden versioniert im nativen
+Nextcloud-Adminbereich gepflegt. Entwürfe verändern laufende Exporte nicht;
+erst eine ausdrückliche Freigabe aktiviert eine neue unveränderliche Version.
+Die PDF hält ihre Vorlagenversion und die derzeit feste Ausgabelocale `de-DE`
+selbst fest. Berechnungen, Mitglieds-/Monatsbezug, Stundenfelder, Gesamtsumme
+und Unterschriftssemantik bleiben nicht editierbar.
+
 ## Lokale URL
 
 ```text

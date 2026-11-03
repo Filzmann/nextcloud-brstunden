@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Abrechnungsstammdaten und optionale Texte liegen nun versioniert in der
+  nativen App-Administration. Validierte Entwürfe wirken erst nach Freigabe;
+  die letzte gültige freigegebene Version bleibt der sichere Rückfall.
+  Platzhalter sind auf eine nicht ausführbare Whitelist begrenzt.
+- PDFs halten Vorlagenversion und die feste Ausgabelocale `de-DE` selbst fest.
+  Berechnungen und notwendige Formularsemantik bleiben unveränderlich; eine
+  zusätzliche personenbezogene Dokumentablage entsteht nicht.
 - Organisationsrollen und Fachberechtigungen getrennt: sechs app-lokale
   Rechte verwenden die kanonischen LocalBase-Rollen Mitglied, Vorsitz und
   Stellvertretung. Vorsitz und Stellvertretung dürfen standardmäßig fremde

@@ -19,24 +19,6 @@ eine offiziell benannte und testbare künftige Major (z. B. NC36) wird dabei
 geprüft. Der regelmäßige Check der neuesten veröffentlichten Entwicklungsruntime
 ist davon getrennt und ersetzt keinen RC-Nachweis.
 
-## Freigegebene Umsetzungsaufgaben
-
-### BRS-DOCUMENT-CONFIG – Abrechnungsstammdaten und Vorlage versionieren
-
-Status: bereit nach fachlicher Trennung fester und editierbarer Inhalte
-
-- Organisationsname, Anschrift, Ausstellungsort und organisationsspezifische
-  Texte der Abrechnung in validierte App-Administration überführen.
-- Fachlich feste Berechnungen und notwendige Formularsemantik getrennt und
-  nicht frei entfernbar halten.
-- Die PDF-Vorlage versionieren, nur validierte nicht ausführbare Platzhalter
-  zulassen und Vorschau, Freigabestatus sowie Rückfall auf die letzte
-  freigegebene Version anbieten.
-- Jede erzeugte Abrechnung hält Vorlagenversion und Ausgabelocale fest;
-  spätere Änderungen deuten bestehende Dokumente nicht um.
-- Bestandsdefaults, Berechnungsgleichheit, Adress-/Textvalidierung,
-  Platzhalterescaping, historische Reproduktion und Rückfall testen.
-
 ## Weitere geplante Arbeiten
 
 - Die manuellen Prüfungen werden im ausfüllbaren

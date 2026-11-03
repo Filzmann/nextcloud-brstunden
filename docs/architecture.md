@@ -40,6 +40,31 @@ persönliche Downloads ohne App-Kopie. Rechtsgrundlagen, betriebliche Backup-
 und Mailproviderentscheidungen sowie der getestete app-lokale
 Ausführungs-/Restorevertrag bleiben ausdrücklich offen.
 
+## Abrechnungsdokumente
+
+Die versionierte Dokumentkonfiguration liegt als ein validierter JSON-Zustand
+in der Nextcloud-AppConfig von BRStunden. Sie ist die einzige Quelle für
+Organisationsname, Organisationsanschrift, Ausstellungsort sowie optionale
+Einleitungs- und Fußtexte. Freigegebene Versionen sind unveränderlich; ein
+Entwurf reserviert die nächste Version, beeinflusst aber keine Abrechnung.
+Die Freigabe schreibt Version und Freigabezeiger gemeinsam. Ist der Zeiger
+beschädigt, wird die höchste weiterhin vollständig validierbare freigegebene
+Version verwendet; ist der Gesamtzustand beschädigt, greift die gebündelte
+Bestandsversion 1.
+
+Die Platzhaltersprache besteht ausschließlich aus einer festen Whitelist im
+Format `{{name}}`. Sie besitzt weder Ausdrücke noch Bedingungen, Includes oder
+ausführbaren Code. Eingesetzte Werte durchlaufen weiterhin das PDF-Escaping.
+Mitgliedsidentität und -anschrift, Monat, BR-/Fortbildungsstunden,
+Gesamtsumme, Unterschriftssemantik und alle Berechnungen bleiben fest im
+Renderer und sind administrativ nicht entfernbar. Die aktuelle Ausgabelocale
+ist bis zur gesondert freizugebenden Lokalisierungsaufgabe fest `de-DE`.
+
+Erzeugte PDFs bleiben transiente Downloadantworten. Sie enthalten
+Vorlagenversion und Ausgabelocale im Dokument; es entsteht kein
+personenbezogenes Ausstellungsregister. Frühere freigegebene
+Konfigurationsversionen bleiben für deterministische Reproduktion erhalten.
+
 Ein Processing `temporary_admin_full_access` wäre im heutigen Scope falsch:
 BR-Stunden besitzt keinen nativen Admin-Bypass und keine app-lokale
 Vollzugriffsfreigabe. Diese Nichtanwendbarkeit wird bei jeder Änderung der
