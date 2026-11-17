@@ -14,35 +14,63 @@ class PayrollPdfService {
     public function __construct(
         private BrMemberService $members,
         private HourEntryStore $entries,
-        private CalendarService $calendar
+        private CalendarService $calendar,
+        private AuthorizationService $authorization,
+        private ?DocumentTemplateSettingsService $templateSettings = null,
     ) {
     }
 
     public function createForCurrentUser(int $year, int $month): array {
-        $this->members->assertCurrentUserIsMember();
+        return $this->createForUser($this->members->currentUserId(), $year, $month);
+    }
+
+    public function createForUser(string $uid, int $year, int $month): array {
+        $template = $this->templateSettings?->approved() ?? DocumentTemplateSettingsService::bundledApproved();
+
+        return $this->createForUserWithTemplate($uid, $year, $month, $template);
+    }
+
+    public function createForUserUsingVersion(string $uid, int $year, int $month, int $templateVersion): array {
+        if ($this->templateSettings === null) {
+            if ($templateVersion !== 1) {
+                throw new \DomainException('Die angeforderte freigegebene Vorlagenversion ist nicht verfügbar.');
+            }
+            $template = DocumentTemplateSettingsService::bundledApproved();
+        } else {
+            $template = $this->templateSettings->version($templateVersion);
+        }
+
+        return $this->createForUserWithTemplate($uid, $year, $month, $template);
+    }
+
+    /** @param array<string,mixed> $template */
+    private function createForUserWithTemplate(string $uid, int $year, int $month, array $template): array {
+        $uid = trim($uid);
+        $this->authorization->assertCanExportPayrollFor($uid);
         $this->calendar->assertValidYear($year);
         $this->calendar->assertValidMonth($month);
         if ($this->calendar->isFutureMonth($year, $month)) {
             throw new \InvalidArgumentException('Zukuenftige Monate koennen noch nicht abgerechnet werden.');
         }
 
-        $uid = $this->members->currentUserId();
         $entry = $this->entries->findForUserMonth($uid, $year, $month);
         if (!$entry instanceof HourEntry) {
             throw new \InvalidArgumentException('Bitte den eigenen Eintrag zuerst speichern, bevor die Abrechnung erzeugt wird.');
         }
 
-        $member = $this->currentMember($uid);
+        $member = $this->member($uid);
         $filename = sprintf('br-stunden-abrechnung-%s-%04d-%02d.pdf', $uid, $year, $month);
 
         return [
             'filename' => $filename,
-            'content' => $this->renderPdf($member, $entry),
+            'content' => $this->renderPdf($member, $entry, $template),
             'contentType' => 'application/pdf',
+            'templateVersion' => $template['version'],
+            'outputLocale' => $template['outputLocale'],
         ];
     }
 
-    private function currentMember(string $uid): array {
+    private function member(string $uid): array {
         foreach ($this->members->members() as $member) {
             if (($member['uid'] ?? '') === $uid) {
                 return $member;
@@ -52,30 +80,59 @@ class PayrollPdfService {
         return ['uid' => $uid, 'displayName' => $uid, 'email' => ''];
     }
 
-    private function renderPdf(array $member, HourEntry $entry): string {
+    /** @param array<string,mixed> $template */
+    private function renderPdf(array $member, HourEntry $entry, array $template): string {
         $commands = [];
-        $headerPath = __DIR__ . '/../../img/abrechnung-header.jpg';
-        $hasHeader = is_file($headerPath);
-
-        if ($hasHeader) {
-            $commands[] = $this->image('Im1', 72, 790, 452, 35);
+        $headerPath = null;
+        if (($template['headerMode'] ?? 'text') === 'legacy-image') {
+            $candidate = __DIR__ . '/../../img/abrechnung-header.jpg';
+            if (is_file($candidate)) {
+                $headerPath = $candidate;
+                $commands[] = $this->image('Im1', 72, 790, 452, 35);
+            }
         }
 
         $monthLabel = $this->calendar->monthLabel($entry->month) . ' ' . $entry->year;
         $name = (string)($member['displayName'] ?: $member['uid']);
+        $memberAddress = $this->members->addressForUser((string)$member['uid']);
         $brHours = $this->formatHours($entry->minutes);
         $fobiHours = $this->formatHours($entry->fobiMinutes);
         $totalHours = $this->formatHours($entry->minutes + $entry->fobiMinutes);
         $today = $this->calendar->today()->format('d.m.Y');
+        $values = [
+            'organization_name' => (string)$template['organizationName'],
+            'organization_address' => str_replace("\n", ', ', (string)$template['organizationAddress']),
+            'issue_place' => (string)$template['issuePlace'],
+            'issue_date' => $today,
+            'month_label' => $monthLabel,
+            'member_name' => $name,
+            'member_address' => $memberAddress,
+            'template_version' => (string)$template['version'],
+            'output_locale' => (string)$template['outputLocale'],
+        ];
+
+        if ($headerPath === null) {
+            $commands[] = $this->text(43, 810, (string)$template['organizationName'], 12, true);
+            foreach (explode("\n", (string)$template['organizationAddress']) as $offset => $line) {
+                $commands[] = $this->text(43, 794 - ($offset * 12), $line, 9);
+            }
+        }
 
         $commands[] = $this->textCentered(297.64, 754, 'Abrechnung - Betriebsrat', 20, true);
-        $commands[] = $this->textCentered(285, 724, 'fuer den Monat:', 13, true);
+        $commands[] = $this->textCentered(285, 724, 'für den Monat:', 13, true);
         $commands[] = $this->text(386, 724, $monthLabel, 12);
 
         $commands[] = $this->text(43, 686, 'Name, Vorname:', 12, true);
         $commands[] = $this->text(155, 686, $name, 12);
         $commands[] = $this->text(43, 671, 'Adresse:', 12, true);
-        $commands[] = $this->text(155, 671, $this->members->currentUserAddress(), 11);
+        $commands[] = $this->text(155, 671, $memberAddress, 11);
+
+        $introText = $this->resolveConfiguredText((string)$template['introText'], $values);
+        if ($introText !== '') {
+            foreach ($this->textLines($introText) as $offset => $line) {
+                $commands[] = $this->text(43, 642 - ($offset * 12), $line, 9);
+            }
+        }
 
         $commands[] = $this->text(43, 600, 'Stunden Betriebsrat', 17, true);
         $commands[] = $this->text(270, 600, 'Summe der Stunden:', 12);
@@ -121,10 +178,31 @@ class PayrollPdfService {
         $commands[] = $this->rect(463, 220, 80, 20);
         $commands[] = $this->textRight(538, 226, $totalHours, 12);
 
-        $commands[] = $this->text(64, 159, 'Berlin, ' . $today, 12);
+        $commands[] = $this->text(64, 159, (string)$template['issuePlace'] . ', ' . $today, 12);
+        $footerText = $this->resolveConfiguredText((string)$template['footerText'], $values);
+        if ($footerText !== '') {
+            foreach ($this->textLines($footerText) as $offset => $line) {
+                $commands[] = $this->text(64, 132 - ($offset * 11), $line, 8);
+            }
+        }
         $commands[] = $this->text(64, 74, 'Unterschrift', 12);
+        $commands[] = $this->text(43, 30, sprintf('Vorlage v%d / %s', $template['version'], $template['outputLocale']), 7);
 
-        return $this->pdf(implode("\n", $commands) . "\n", $hasHeader ? $headerPath : null);
+        return $this->pdf(implode("\n", $commands) . "\n", $headerPath);
+    }
+
+    /** @param array<string,string> $values */
+    private function resolveConfiguredText(string $text, array $values): string {
+        if ($text === '') {
+            return '';
+        }
+
+        return $this->templateSettings?->resolveText($text, $values) ?? $text;
+    }
+
+    /** @return list<string> */
+    private function textLines(string $text): array {
+        return explode("\n", $text);
     }
 
     private function formatHours(int $minutes): string {

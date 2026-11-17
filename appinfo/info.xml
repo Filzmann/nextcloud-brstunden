@@ -16,6 +16,10 @@
         <app>localbase</app>
         <app>orgsuite</app>
     </dependencies>
+    <settings>
+        <admin>OCA\BrStunden\Settings\Admin</admin>
+        <admin-section>OCA\BrStunden\Settings\AdminSection</admin-section>
+    </settings>
     <background-jobs>
         <job>OCA\BrStunden\BackgroundJob\MonthlyReminderJob</job>
     </background-jobs>

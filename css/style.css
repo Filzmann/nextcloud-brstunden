@@ -209,6 +209,55 @@
     color: var(--color-text-lighter);
 }
 
+.brs-admin {
+    max-width: 960px;
+}
+
+.brs-permission-fieldset {
+    display: grid;
+    gap: 8px;
+    margin: 0 0 16px;
+    padding: 16px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-large);
+}
+
+.brs-permission-fieldset label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.brs-document-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.brs-document-grid label {
+    display: grid;
+    gap: 6px;
+}
+
+.brs-document-wide {
+    grid-column: 1 / -1;
+}
+
+.brs-document-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.brs-document-preview {
+    margin-top: 20px;
+    padding: 16px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-large);
+    background: var(--color-background-hover);
+}
+
 @media (max-width: 720px) {
     #brstunden-app {
         padding: 16px;
@@ -217,5 +266,9 @@
     .brs-head {
         align-items: stretch;
         flex-direction: column;
+    }
+
+    .brs-document-grid {
+        grid-template-columns: 1fr;
     }
 }

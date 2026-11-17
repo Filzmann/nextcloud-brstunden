@@ -29,10 +29,20 @@ class BrMemberService {
 
     public function currentUserAddress(): string {
         $user = $this->userSession->getUser();
-        if (!$user instanceof IUser) {
-            return '';
-        }
+        return $user instanceof IUser ? $this->addressForUser($user->getUID()) : '';
+    }
 
+    public function addressForUser(string $uid): string {
+        $group = $this->groupManager->get($this->groups->memberGroupName());
+        if ($group === null) return '';
+        $user = null;
+        foreach ($group->getUsers() as $candidate) {
+            if ($candidate instanceof IUser && $candidate->getUID() === $uid) {
+                $user = $candidate;
+                break;
+            }
+        }
+        if (!$user instanceof IUser) return '';
         try {
             return trim($this->accountManager->getAccount($user)->getProperty(IAccountManager::PROPERTY_ADDRESS)->getValue());
         } catch (\Throwable) {
@@ -44,6 +54,12 @@ class BrMemberService {
         $uid = $this->currentUserId();
         if (!$this->groupManager->isInGroup($uid, $this->groups->memberGroupName())) {
             throw new \DomainException('Nur Mitglieder der konfigurierten Betriebsratsgruppe dürfen BR-Stunden verwalten.');
+        }
+    }
+
+    public function assertUserIsMember(string $uid): void {
+        if (!$this->groupManager->isInGroup($uid, $this->groups->memberGroupName())) {
+            throw new \DomainException('Die ausgewählte Person ist kein aktuelles BR-Mitglied.');
         }
     }
 

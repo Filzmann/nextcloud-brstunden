@@ -25,7 +25,14 @@
     function renderEntryCell(overview, row, month) {
         const entry = entryFor(row, month.number);
         const isCurrentUser = row.member.uid === overview.currentUser.uid;
-        const editable = isCurrentUser && month.number <= Number(overview.editableUntilMonth || 0);
+        const permissions = overview.permissions || {};
+        const editable = Boolean(isCurrentUser
+            ? permissions['hours.entry.manage-own']
+            : permissions['hours.entry.manage-foreign']) && month.number <= Number(overview.editableUntilMonth || 0);
+        const exportable = Boolean(entry && (isCurrentUser
+            ? permissions['hours.payroll.export-own']
+            : permissions['hours.payroll.export-foreign']));
+        const actionable = editable || exportable;
         const missing = isMissing(overview, month.number, entry);
         const classes = ['brs-month-cell'];
         if (missing) {
@@ -34,11 +41,11 @@
         if (missing && isCurrentUser) {
             classes.push('is-own-missing');
         }
-        if (editable) {
+        if (actionable) {
             classes.push('has-action');
         }
 
-        if (editable) {
+        if (actionable) {
             const label = entry ? hoursContent(entry) : 'Fehlt';
             const note = entry ? entry.note : '';
             const noteMark = note ? '<span class="brs-note-mark" aria-label="Notiz vorhanden">*</span>' : '';
@@ -50,7 +57,10 @@
                         class="brs-cell-button"
                         data-year="${format.esc(overview.year)}"
                         data-month="${format.esc(month.number)}"
+                        data-user-id="${format.esc(row.member.uid)}"
                         data-exists="${entry ? '1' : '0'}"
+                        data-can-edit="${editable ? '1' : '0'}"
+                        data-can-export="${exportable ? '1' : '0'}"
                         data-br-hours="${entry ? format.esc(entry.brHours ?? entry.hours) : ''}"
                         data-fobi-hours="${entry ? format.esc(entry.fobiHours ?? 0) : '0'}"
                         data-note="${format.esc(note)}"
@@ -93,7 +103,7 @@
         }).join('');
 
         return `
-            <h2>Jahresuebersicht ${format.esc(overview.year)}</h2>
+            <h2>Jahresübersicht ${format.esc(overview.year)}</h2>
             <div class="brs-table-wrap" data-persistent-horizontal-scroll>
                 <table class="brs-table">
                     <thead><tr>${header}</tr></thead>

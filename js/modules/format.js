@@ -1,5 +1,5 @@
 (function() {
-    const { esc } = window.LocalBase.ui;
+    const { esc } = window.OCA.BrStunden.Shared.ui;
 
     function hours(value) {
         const number = Number(value || 0);
