@@ -1,11 +1,11 @@
 <?php
-script('localbase', 'api/api-client');
+script('brstunden', 'shared/api-client');
 script('brstunden', 'modules/api');
-script('localbase', 'models/model');
+script('brstunden', 'shared/model');
 script('brstunden', 'models/hour-entry');
-script('localbase', 'repositories/repository');
+script('brstunden', 'shared/repository');
 script('brstunden', 'repositories/hour-repository');
-script('localbase', 'ui/ui');
+script('brstunden', 'shared/ui');
 script('orgsuite', 'suite-navigation');
 script('brstunden', 'modules/format');
 script('brstunden', 'modules/overview');

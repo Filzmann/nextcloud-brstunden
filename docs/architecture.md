@@ -18,6 +18,23 @@ Retention-Policies und zweckgebundene Sperren.
 - Personenbezogene Stunden- und Bearbeitungsbezüge werden ausschließlich über
   den öffentlichen Datenschutzprovider projiziert.
 
+## App-lokales Browserbundle
+
+Die zustandslosen Browserbausteine `ApiClient`, `Model`, `Repository` und
+`Notice` aus `flz_shared` 0.1.0 liegen reproduzierbar unter `js/shared` und
+werden ausschließlich im app-eigenen Namespace
+`window.OCA.BrStunden.Shared` bereitgestellt. Paketversion und Quellhash stehen
+in `js/shared/flz-shared.lock.json`. Zur Laufzeit lädt BRStunden weder Dateien
+aus einem benachbarten Repository noch LocalBase-Browserassets; bestehende
+Kategorie-B-Verträge bleiben getrennt.
+
+Das Bundle hat keinen eigenen Nextcloud-Lebenszyklus und keinen persistenten
+Zustand. Installation, Aktualisierung und Deinstallation erfolgen mit der
+jeweiligen BRStunden-Version. Ein Update von `flz_shared` erfordert ein neu
+gebautes und geprüftes BRStunden-Artefakt; der Rückbau auf die vorherige
+BRStunden-Version stellt zugleich deren festgeschriebene Bundleversion wieder
+her.
+
 ## Processing-Metadaten
 
 `resources/privacy-processing.json` ist die einzige app-eigene Policyquelle

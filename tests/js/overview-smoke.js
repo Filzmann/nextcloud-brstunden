@@ -4,8 +4,8 @@ global.window = {
     BRStunden: {}
 };
 
-require('../../../localbase/js/ui/ui.js');
-require('../../../localbase/js/models/model.js');
+require('../../js/shared/ui.js');
+require('../../js/shared/model.js');
 require('../../js/models/hour-entry.js');
 require('../../js/modules/format.js');
 require('../../js/modules/overview.js');

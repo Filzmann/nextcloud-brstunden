@@ -20,7 +20,7 @@ global.OC = {
     }
 };
 
-require('../../../localbase/js/repositories/repository.js');
+require('../../js/shared/repository.js');
 require('../../js/repositories/hour-repository.js');
 
 (async () => {

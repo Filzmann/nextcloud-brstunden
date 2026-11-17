@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Zustandslose Browserbausteine aus `flz_shared` 0.1.0 werden als geprüftes,
+  app-lokales Bundle unter `window.OCA.BrStunden.Shared` ausgeliefert.
+  LocalBase-Browserassets sind keine Laufzeitabhängigkeit.
+- Der isolierte Browser-Consumer-Smoke verwendet absolute Quelldateipfade in
+  der VM, damit die Coverage-Messung ausgeführte Kategorie-A- und App-Dateien
+  eindeutig zuordnet.
 - Abrechnungsstammdaten und optionale Texte liegen nun versioniert in der
   nativen App-Administration. Validierte Entwürfe wirken erst nach Freigabe;
   die letzte gültige freigegebene Version bleibt der sichere Rückfall.

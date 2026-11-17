@@ -1,5 +1,5 @@
 (function() {
-    const { Model } = window.LocalBase.models;
+    const { Model } = window.OCA.BrStunden.Shared.models;
 
     class HourEntry extends Model {
         constructor(data = {}) {

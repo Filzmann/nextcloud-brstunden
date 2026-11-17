@@ -31,6 +31,13 @@ PermissionProvider veröffentlicht die sechs getrennten Rechte mit ihrem
 Eigen- oder Fremdscope; ein Negativvertrag erzwingt eine Neubewertung, sobald
 ein Admin-Vollzugriffspfad ergänzt wird.
 
+Die zustandslosen Browserbausteine aus `flz_shared` 0.1.0 werden reproduzierbar
+im app-lokalen `js/shared`-Bundle unter `window.OCA.BrStunden.Shared`
+ausgeliefert. BRStunden benötigt dafür weder eine installierte `flz_shared`-
+Laufzeit-App noch LocalBase-Browserassets. Änderungen am gemeinsamen Paket
+werden mit einer neuen BRStunden-Appversion ausgeliefert; ein Rückbau auf die
+vorherige Appversion stellt deren festgeschriebene Bundleversion wieder her.
+
 ## Datenschutz
 
 Der app-eigene `PersonalDataProvider` liefert eigene Monatswerte,

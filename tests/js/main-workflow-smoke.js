@@ -70,7 +70,7 @@ global.OC = {
     }
 };
 
-require('../../../localbase/js/ui/ui.js');
+require('../../js/shared/ui.js');
 require('../../js/modules/format.js');
 
 class FakeHourRepository {

@@ -1,5 +1,5 @@
 (function() {
-    const { Repository } = window.LocalBase.repositories;
+    const { Repository } = window.OCA.BrStunden.Shared.repositories;
 
     class HourRepository extends Repository {
         state() {

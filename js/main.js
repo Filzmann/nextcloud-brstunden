@@ -2,7 +2,7 @@
     const format = window.BRStunden.format;
     const overviewRenderer = window.BRStunden.overview;
     const { HourRepository } = window.BRStunden.repositories;
-    const { Notice, byId } = window.LocalBase.ui;
+    const { Notice, byId } = window.OCA.BrStunden.Shared.ui;
     const repository = new HourRepository(window.BRStunden.api);
     const noticeBox = new Notice('brs-notice', {
         baseClass: 'brs-notice',

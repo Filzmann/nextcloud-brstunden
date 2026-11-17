@@ -1,5 +1,5 @@
 (function() {
-    const client = new window.LocalBase.api.ApiClient({ appId: 'brstunden' });
+    const client = new window.OCA.BrStunden.Shared.api.ApiClient({ appId: 'brstunden' });
 
     window.BRStunden = window.BRStunden || {};
     window.BRStunden.api = {
