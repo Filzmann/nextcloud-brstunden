@@ -2,6 +2,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
+import assert from 'node:assert/strict';
 
 const appRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const bundleRoot = resolve(appRoot, 'js/shared');
@@ -85,13 +86,18 @@ for (const relativeRoot of ['js', 'templates']) {
 
 const requests = [];
 const noticeElement = { className: '', hidden: true, textContent: '' };
+let response = {
+    ok: true,
+    status: 200,
+    body: JSON.stringify({ year: 2026, rows: [] }),
+};
 const window = {
     fetch: async (url, options) => {
         requests.push({ url, options });
         return {
-            ok: true,
-            status: 200,
-            text: async () => JSON.stringify({ year: 2026, rows: [] }),
+            ok: response.ok,
+            status: response.status,
+            text: async () => response.body,
         };
     },
 };
@@ -176,6 +182,31 @@ if (noticeElement.textContent !== 'Bereit'
     || noticeElement.className !== 'brs-notice brs-notice-success') {
     throw new Error('Die gebündelte Notice bewahrt ihren sichtbaren Erfolgszustand nicht.');
 }
+
+response = { ok: false, status: 403, body: '{"message":" Fremde Stunden sind gesperrt. "}' };
+await assert.rejects(repository.saveEntry({ year: 2026, month: 11, hours: '2' }), error => {
+    assert.equal(error.status, 403);
+    assert.equal(error.data.message, ' Fremde Stunden sind gesperrt. ');
+    notice.error(error);
+    assert.equal(noticeElement.textContent, 'Fremde Stunden sind gesperrt.');
+    assert.equal(noticeElement.hidden, false);
+    assert.equal(noticeElement.className, 'brs-notice brs-notice-error');
+    return true;
+});
+
+// A non-JSON server error must remain diagnosable without rendering its HTML.
+response = { ok: false, status: 502, body: '<strong>Gateway unavailable</strong>' };
+await assert.rejects(repository.yearOverview(2026), error => {
+    assert.equal(error.message, 'HTTP 502');
+    assert.equal(error.data.raw, response.body);
+    notice.error(error);
+    assert.equal(noticeElement.textContent, 'HTTP 502');
+    return true;
+});
+notice.clear();
+assert.equal(noticeElement.textContent, '');
+assert.equal(noticeElement.hidden, true);
+assert.equal(noticeElement.className, 'brs-notice');
 
 console.log('BRStunden isolated Category-A browser consumer smoke passed.');
 
