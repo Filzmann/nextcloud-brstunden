@@ -1,6 +1,10 @@
 OC.L10N.register(
     "brstunden",
     {
+    "Berechtigungsmatrix" : "Permission matrix",
+    "Berechtigung" : "Permission",
+    "%1$s: %2$s" : "%1$s: %2$s",
+    "Ordne die sechs Fachberechtigungen ausschließlich den kanonischen BR-Rollen zu. Die Berechtigungsmatrix zeigt Berechtigungen als Zeilen und BR-Rollen als Spalten. Die aktuellen Gruppen-IDs stammen zur Laufzeit aus LocalBase und werden hier nicht als Freitext gespeichert." : "Assign the six domain permissions exclusively to the canonical BR roles. The permission matrix shows permissions as rows and BR roles as columns. The current group IDs are taken from LocalBase at runtime and are not stored here as free text.",
     " BR-Arbeit und " : " works council work and ",
     " Fortbildung" : " further training",
     " Stunden" : " hours",

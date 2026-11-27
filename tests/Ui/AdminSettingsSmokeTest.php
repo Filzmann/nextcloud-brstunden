@@ -27,8 +27,10 @@ foreach (['member', 'chair', 'deputy'] as $role) {
 if (!str_contains($template, 'type="checkbox"') || !str_contains($template, 'data-capability')) {
     throw new RuntimeException('Capability assignments must use selection controls and never free-text groups.');
 }
-if (!str_contains($template, '<fieldset') || !str_contains($template, '<legend')) {
-    throw new RuntimeException('Capability assignments need semantic fieldsets and legends.');
+foreach (['<table', '<caption', 'scope="col"', 'scope="row"', 'Berechtigungsmatrix', "'Berechtigung'"] as $contract) {
+    if (!str_contains($template, $contract)) {
+        throw new RuntimeException('Capability assignments need the shared matrix contract (Berechtigungen als Zeilen, Gruppen als Spalten): ' . $contract);
+    }
 }
 if (!str_contains($script, 'requesttoken') || !str_contains($script, 'PUT')) {
     throw new RuntimeException('Admin settings writes must use the CSRF-protected update endpoint.');

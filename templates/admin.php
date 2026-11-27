@@ -29,24 +29,36 @@ $allowedPlaceholders = is_array($documentState['allowedPlaceholders'] ?? null) ?
 ?>
 <section id="brstunden-admin" class="section brs-admin" aria-labelledby="brstunden-admin-heading">
     <h2 id="brstunden-admin-heading"><?php p($l->t('BR-Stunden: Berechtigungen')); ?></h2>
-    <p><?php p($l->t('Ordne die sechs Fachberechtigungen ausschließlich den kanonischen BR-Rollen zu. Die aktuellen Gruppen-IDs stammen zur Laufzeit aus LocalBase und werden hier nicht als Freitext gespeichert.')); ?></p>
+    <p><?php p($l->t('Ordne die sechs Fachberechtigungen ausschließlich den kanonischen BR-Rollen zu. Die Berechtigungsmatrix zeigt Berechtigungen als Zeilen und BR-Rollen als Spalten. Die aktuellen Gruppen-IDs stammen zur Laufzeit aus LocalBase und werden hier nicht als Freitext gespeichert.')); ?></p>
     <?php if (($source['status'] ?? '') !== 'VALID'): ?>
         <p role="alert"><?php p((string)($source['warning'] ?? 'Der BR-Rollenvertrag ist nicht verfügbar.')); ?> <?php p($l->t('Bis zur Behebung bleiben Fachzugriffe gesperrt.')); ?></p>
     <?php endif; ?>
     <form id="brstunden-capability-settings">
-        <?php foreach ($capabilities as $capability => [$label, $description]): ?>
-            <?php $selected = is_array($assignments[$capability] ?? null) ? $assignments[$capability] : []; ?>
-            <fieldset class="brs-permission-fieldset" data-capability="<?php p($capability); ?>">
-                <legend><?php p($label); ?></legend>
-                <p><?php p($description); ?></p>
-                <?php foreach ($roles as $role => $roleLabel): ?>
-                    <label>
-                        <input type="checkbox" name="<?php p($capability); ?>" value="<?php p($role); ?>" <?php if (in_array($role, $selected, true)): ?>checked<?php endif; ?>>
-                        <?php p($roleLabel); ?>
-                    </label>
+        <div class="brs-table-wrap">
+            <table class="brs-matrix">
+                <caption><?php p($l->t('Berechtigungsmatrix')); ?></caption>
+                <thead><tr>
+                    <th scope="col"><?php p($l->t('Berechtigung')); ?></th>
+                    <?php foreach ($roles as $role => $roleLabel): ?>
+                        <th scope="col"><?php p($roleLabel); ?></th>
+                    <?php endforeach; ?>
+                </tr></thead>
+                <tbody>
+                <?php foreach ($capabilities as $capability => [$label, $description]): ?>
+                    <?php $selected = is_array($assignments[$capability] ?? null) ? $assignments[$capability] : []; ?>
+                    <tr data-capability="<?php p($capability); ?>">
+                        <th scope="row"><?php p($label); ?> <small><?php p($description); ?></small></th>
+                        <?php foreach ($roles as $role => $roleLabel): ?>
+                            <td><label>
+                                <input type="checkbox" name="<?php p($capability); ?>[]" value="<?php p($role); ?>" <?php if (in_array($role, $selected, true)): ?>checked<?php endif; ?> aria-label="<?php p($l->t('%1$s: %2$s', [$label, $roleLabel])); ?>">
+                                <?php p($roleLabel); ?>
+                            </label></td>
+                        <?php endforeach; ?>
+                    </tr>
                 <?php endforeach; ?>
-            </fieldset>
-        <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
         <button type="submit" class="primary"><?php p($l->t('Berechtigungen speichern')); ?></button>
         <p id="brstunden-capability-status" role="status" aria-live="polite"></p>
     </form>
