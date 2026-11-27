@@ -1,4 +1,5 @@
 (function() {
+    const translate = typeof t === 'function' ? t : (_app, text, params) => Object.entries(params || {}).reduce((s, [k, v]) => s.split('{' + k + '}').join(String(v)), text)
     const format = window.BRStunden.format;
     const { HourEntry } = window.BRStunden.models;
 
@@ -46,7 +47,7 @@
         }
 
         if (actionable) {
-            const label = entry ? hoursContent(entry) : 'Fehlt';
+            const label = entry ? hoursContent(entry) : translate('brstunden', 'Fehlt');
             const note = entry ? entry.note : '';
             const noteMark = note ? '<span class="brs-note-mark" aria-label="Notiz vorhanden">*</span>' : '';
 
@@ -103,7 +104,7 @@
         }).join('');
 
         return `
-            <h2>Jahresübersicht ${format.esc(overview.year)}</h2>
+            <h2>${translate('brstunden', 'Jahresübersicht')} ${format.esc(overview.year)}</h2>
             <div class="brs-table-wrap" data-persistent-horizontal-scroll>
                 <table class="brs-table">
                     <thead><tr>${header}</tr></thead>

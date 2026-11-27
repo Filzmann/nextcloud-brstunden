@@ -6,19 +6,25 @@ namespace OCA\BrStunden\Service;
 
 use DateTimeImmutable;
 use OCA\BrStunden\Store\ReminderRunStore;
+use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\Mail\IMailer;
 
 class ReminderService {
-    public function __construct(
-        private BrMemberService $members,
+    public function __construct(private BrMemberService $members,
         private HoursService $hours,
         private CalendarService $calendar,
         private ReminderRunStore $runs,
         private IMailer $mailer,
         private IURLGenerator $urlGenerator,
-        private BrStundenLogger $logger
-    ) {
+        private BrStundenLogger $logger,
+        private ?IL10N $l10n = null) {
+    }
+
+    /** Lokalisierung fachlicher Texte; im Test ohne IL10N identity. */
+    private function t(string $text): string
+    {
+        return $this->l10n?->t($text) ?? $text;
     }
 
     public function sendMonthlyReminders(?DateTimeImmutable $today = null): array {
@@ -128,7 +134,7 @@ class ReminderService {
 
         $message = $this->mailer->createMessage();
         $message->setTo([(string)$member['email'] => $displayName]);
-        $message->setSubject('BR-Stunden: fehlende Monate eintragen');
+        $message->setSubject($this->t('BR-Stunden: fehlende Monate eintragen'));
         $message->setPlainBody($body);
         $this->mailer->send($message);
     }

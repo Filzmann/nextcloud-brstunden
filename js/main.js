@@ -1,4 +1,5 @@
 (function() {
+    const translate = typeof t === 'function' ? t : (_app, text, params) => Object.entries(params || {}).reduce((s, [k, v]) => s.split('{' + k + '}').join(String(v)), text)
     const format = window.BRStunden.format;
     const overviewRenderer = window.BRStunden.overview;
     const { HourRepository } = window.BRStunden.repositories;
@@ -44,7 +45,7 @@
             bindEvents();
             await loadYear();
         } catch (e) {
-            errorNotice(e, 'BR-Stunden konnten nicht geladen werden.');
+            errorNotice(e, translate('brstunden', 'BR-Stunden konnten nicht geladen werden.'));
         }
     }
 
@@ -91,7 +92,7 @@
             const disabled = !canEditMonth(year, month.number);
             const selected = month.number === selectedMonth;
 
-            return `<option value="${format.esc(month.number)}"${selected ? ' selected' : ''}${disabled ? ' disabled' : ''}>${format.esc(month.label)}</option>`;
+            return `<${'option value'}="${format.esc(month.number)}"${selected ? ' selected' : ''}${disabled ? ' disabled' : ''}>${format.esc(month.label)}</option>`;
         }).join('');
         select.disabled = selectedMonth === null;
         byId('brs-save-entry').disabled = selectedMonth === null;
@@ -110,7 +111,7 @@
             state.overview = await repository.yearOverview(year);
             renderOverview();
         } catch (e) {
-            errorNotice(e, 'Jahresübersicht konnte nicht geladen werden.');
+            errorNotice(e, translate('brstunden', 'Jahresübersicht konnte nicht geladen werden.'));
         }
     }
 
@@ -118,7 +119,7 @@
         event.preventDefault();
         const month = Number(byId('brs-entry-month').value);
         if (!month) {
-            notice('Für dieses Jahr ist noch kein Monat speicherbar.', 'error');
+            notice(translate('brstunden', 'Für dieses Jahr ist noch kein Monat speicherbar.'), 'error');
             return;
         }
 
@@ -133,7 +134,7 @@
 
         try {
             state.overview = await repository.saveEntry(payload);
-            notice('BR-Stunden gespeichert.', 'success');
+            notice(translate('brstunden', 'BR-Stunden gespeichert.'), 'success');
             setSelectedEntry({
                 year: payload.year,
                 month: payload.month,
@@ -146,7 +147,7 @@
             });
             renderOverview();
         } catch (e) {
-            errorNotice(e, 'Eintrag konnte nicht gespeichert werden.');
+            errorNotice(e, translate('brstunden', 'Eintrag konnte nicht gespeichert werden.'));
         }
     }
 
@@ -160,20 +161,20 @@
 
         try {
             state.overview = await repository.deleteEntry(year, month, state.selectedEntry.userId);
-            notice('Eintrag gelöscht.', 'success');
+            notice(translate('brstunden', 'Eintrag gelöscht.'), 'success');
             byId('brs-entry-hours').value = '';
             byId('brs-entry-fobi-hours').value = '0';
             byId('brs-entry-note').value = '';
             setSelectedEntry({year, month, userId: state.selectedEntry.userId, exists: false, canEdit: true, canExport: false});
             renderOverview();
         } catch (e) {
-            errorNotice(e, 'Eintrag konnte nicht geloescht werden.');
+            errorNotice(e, translate('brstunden', 'Eintrag konnte nicht geloescht werden.'));
         }
     }
 
     function downloadPayrollPdf() {
         if (!state.selectedEntry || !state.selectedEntry.exists) {
-            notice('Bitte zuerst einen gespeicherten Eintrag auswählen.', 'error');
+            notice(translate('brstunden', 'Bitte zuerst einen gespeicherten Eintrag auswählen.'), 'error');
             return;
         }
 
@@ -233,7 +234,7 @@
             const preview = await repository.reminderPreview();
             renderReminderPreview(preview);
         } catch (e) {
-            errorNotice(e, 'Reminder-Vorschau konnte nicht geladen werden.');
+            errorNotice(e, translate('brstunden', 'Reminder-Vorschau konnte nicht geladen werden.'));
         }
     }
 
@@ -242,13 +243,13 @@
         const rows = (preview.members || []).filter((member) => member.missing.length || !member.hasEmail);
 
         if (rows.length === 0) {
-            target.innerHTML = `<p class="brs-empty">Alle Einträge bis ${format.esc(monthName(preview.untilMonth))} ${format.esc(preview.year)} sind vollständig.</p>`;
+            target.innerHTML = `<p class="brs-empty">${translate('brstunden', 'Alle Einträge bis')} ${format.esc(monthName(preview.untilMonth))} ${format.esc(preview.year)} ${translate('brstunden', 'sind vollständig.')}</p>`;
             return;
         }
 
         const body = rows.map((member) => {
             const missing = member.missing.map((month) => month.label).join(', ');
-            const status = member.willSend ? 'E-Mail' : 'Keine E-Mail';
+            const status = member.willSend ? 'E-Mail' : translate('brstunden', 'Keine E-Mail');
 
             return `
                 <tr>
@@ -263,7 +264,7 @@
             <div class="brs-reminder-summary">
                 <span>${format.esc(preview.summary.willSend)} E-Mail</span>
                 <span>${format.esc(preview.summary.missingMonths)} fehlende Monate</span>
-                <span>${preview.isLastDayOfMonth ? 'Monatsende' : 'Vorschau'}</span>
+                <span>${preview.isLastDayOfMonth ? 'Monatsende' : translate('brstunden', 'Vorschau')}</span>
             </div>
             <div class="brs-table-wrap" data-persistent-horizontal-scroll>
                 <table class="brs-table brs-reminder-table">

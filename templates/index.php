@@ -18,10 +18,10 @@ style('orgsuite', 'suite-navigation');
 <div id="brstunden-app">
     <div class="orgsuite-host" data-orgsuite data-suite="br" data-current-app="brstunden"></div>
     <header class="brs-head">
-        <h1>BR-Stunden</h1>
+        <h1><?php p($l->t('BR-Stunden')); ?></h1>
         <div class="brs-controls">
             <label>
-                Jahr
+                <?php p($l->t('Jahr')); ?>
                 <input id="brs-year" type="number" min="2000" max="2100" step="1">
             </label>
             <button type="button" id="brs-load-year">Aktualisieren</button>
@@ -29,26 +29,26 @@ style('orgsuite', 'suite-navigation');
     </header>
 
     <section class="brs-entry">
-        <h2>Stunden eintragen oder korrigieren</h2>
+        <h2><?php p($l->t('Stunden eintragen oder korrigieren')); ?></h2>
         <form id="brs-entry-form">
             <label>
-                Monat
+                <?php p($l->t('Monat')); ?>
                 <select id="brs-entry-month"></select>
             </label>
             <label>
-                BR-Stunden
+                <?php p($l->t('BR-Stunden')); ?>
                 <input id="brs-entry-hours" type="number" min="0" max="744" step="0.25" inputmode="decimal">
             </label>
             <label>
-                FoBi-Stunden
+                <?php p($l->t('FoBi-Stunden')); ?>
                 <input id="brs-entry-fobi-hours" type="number" min="0" max="744" step="0.25" inputmode="decimal" value="0">
             </label>
             <label>
                 Notiz
                 <input id="brs-entry-note" type="text" maxlength="1000">
             </label>
-            <button type="submit" id="brs-save-entry">Speichern</button>
-            <button type="button" id="brs-delete-entry" disabled>Löschen</button>
+            <button type="submit" id="brs-save-entry"><?php p($l->t('Speichern')); ?></button>
+            <button type="button" id="brs-delete-entry" disabled><?php p($l->t('Löschen')); ?></button>
             <button type="button" id="brs-download-payroll" disabled>PDF</button>
         </form>
     </section>
@@ -59,7 +59,7 @@ style('orgsuite', 'suite-navigation');
     <section id="brs-reminders" class="brs-reminders" hidden>
         <div class="brs-section-head">
             <h2>Erinnerungen</h2>
-            <button type="button" id="brs-load-reminders">Prüfen</button>
+            <button type="button" id="brs-load-reminders"><?php p($l->t('Prüfen')); ?></button>
         </div>
         <div id="brs-reminder-preview" class="brs-reminder-preview"></div>
     </section>

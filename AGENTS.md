@@ -32,6 +32,9 @@ Kernprozess:
 
 ## Repository und gemeinsamer Arbeitsablauf
 
+- Lokalisierung (ZM-06): Sichtbare Texte ausschließlich über Nextcloud-l10n — deutsche Quelltexte via `IL10N::t()`/`window.t('brstunden', …)`, Kataloge `l10n/en.*` und `l10n/en_GB.*` (Englisch); technische IDs bleiben unübersetzt. `tests/Ui/L10nCatalogContractTest.php` erzwingt das Rohtext-Gate (siehe `docs/l10n-inventory.md`).
+
+
 - Dieses Verzeichnis ist ein eigenstaendiges Git-Repository fuer die BR-App `brstunden`.
 - Andere eigene Nextcloud-Apps, zum Beispiel `brtop` oder `adplaner`, leben in eigenen Repositories.
 - Diese Datei und lokal referenzierte Skills bilden bei einem direkten Start in diesem Repository die vollständige Repository-Steuerung.

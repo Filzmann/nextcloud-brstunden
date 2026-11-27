@@ -20,20 +20,26 @@ use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\DataDownloadResponse;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\Response;
+use OCP\IL10N;
 use OCP\IRequest;
 
 class ApiController extends Controller {
-    public function __construct(
-        IRequest $request,
+    public function __construct(IRequest $request,
         private HoursService $hours,
         private ReminderService $reminders,
         private PayrollPdfService $payrollPdf,
         private BrMemberService $members,
         private AuthorizationService $authorization,
         private BrStundenLogger $logger,
-        private ApiResponder $responder
-    ) {
+        private ApiResponder $responder,
+        private ?IL10N $l10n = null) {
         parent::__construct(Application::APP_ID, $request);
+    }
+
+    /** Lokalisierung fachlicher Texte; im Test ohne IL10N identity. */
+    private function t(string $text): string
+    {
+        return $this->l10n?->t($text) ?? $text;
     }
 
     #[NoAdminRequired]
@@ -83,15 +89,15 @@ class ApiController extends Controller {
 
             return new DataDownloadResponse($pdf['content'], $pdf['filename'], $pdf['contentType']);
         } catch (\InvalidArgumentException $e) {
-            return new DataResponse(['ok' => false, 'message' => $e->getMessage()], Http::STATUS_BAD_REQUEST);
+            return new DataResponse(['ok' => false, 'message' => $this->t($e->getMessage())], Http::STATUS_BAD_REQUEST);
         } catch (\DomainException $e) {
-            return new DataResponse(['ok' => false, 'message' => $e->getMessage()], Http::STATUS_FORBIDDEN);
+            return new DataResponse(['ok' => false, 'message' => $this->t($e->getMessage())], Http::STATUS_FORBIDDEN);
         } catch (\Throwable $e) {
             $this->logger->error('payroll_pdf', $e, ['year' => $year, 'month' => $month]);
 
             return new DataResponse([
                 'ok' => false,
-                'message' => 'Die Abrechnung konnte nicht erzeugt werden. Details stehen im Nextcloud-Log.',
+                'message' => $this->t('Die Abrechnung konnte nicht erzeugt werden. Details stehen im Nextcloud-Log.'),
             ], Http::STATUS_INTERNAL_SERVER_ERROR);
         }
     }

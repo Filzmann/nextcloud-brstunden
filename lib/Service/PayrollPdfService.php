@@ -6,18 +6,24 @@ namespace OCA\BrStunden\Service;
 
 use OCA\BrStunden\Model\HourEntry;
 use OCA\BrStunden\Store\HourEntryStore;
+use OCP\IL10N;
 
 class PayrollPdfService {
     private const PAGE_WIDTH = 595.28;
     private const PAGE_HEIGHT = 841.89;
 
-    public function __construct(
-        private BrMemberService $members,
+    public function __construct(private BrMemberService $members,
         private HourEntryStore $entries,
         private CalendarService $calendar,
         private AuthorizationService $authorization,
         private ?DocumentTemplateSettingsService $templateSettings = null,
-    ) {
+        private ?IL10N $l10n = null) {
+    }
+
+    /** Lokalisierung fachlicher Texte; im Test ohne IL10N identity. */
+    private function t(string $text): string
+    {
+        return $this->l10n?->t($text) ?? $text;
     }
 
     public function createForCurrentUser(int $year, int $month): array {
@@ -118,13 +124,13 @@ class PayrollPdfService {
             }
         }
 
-        $commands[] = $this->textCentered(297.64, 754, 'Abrechnung - Betriebsrat', 20, true);
-        $commands[] = $this->textCentered(285, 724, 'für den Monat:', 13, true);
+        $commands[] = $this->textCentered(297.64, 754, $this->t('Abrechnung - Betriebsrat'), 20, true);
+        $commands[] = $this->textCentered(285, 724, $this->t('für den Monat:'), 13, true);
         $commands[] = $this->text(386, 724, $monthLabel, 12);
 
-        $commands[] = $this->text(43, 686, 'Name, Vorname:', 12, true);
+        $commands[] = $this->text(43, 686, $this->t('Name, Vorname:'), 12, true);
         $commands[] = $this->text(155, 686, $name, 12);
-        $commands[] = $this->text(43, 671, 'Adresse:', 12, true);
+        $commands[] = $this->text(43, 671, $this->t('Adresse:'), 12, true);
         $commands[] = $this->text(155, 671, $memberAddress, 11);
 
         $introText = $this->resolveConfiguredText((string)$template['introText'], $values);
@@ -134,8 +140,8 @@ class PayrollPdfService {
             }
         }
 
-        $commands[] = $this->text(43, 600, 'Stunden Betriebsrat', 17, true);
-        $commands[] = $this->text(270, 600, 'Summe der Stunden:', 12);
+        $commands[] = $this->text(43, 600, $this->t('Stunden Betriebsrat'), 17, true);
+        $commands[] = $this->text(270, 600, $this->t('Summe der Stunden:'), 12);
         $commands[] = $this->line(395, 597, 459, 597);
         $commands[] = $this->line(395, 595, 459, 595);
         $commands[] = $this->textRight(455, 603, $brHours, 12);
@@ -163,7 +169,7 @@ class PayrollPdfService {
         $commands[] = $this->line(477, 395, 542, 395);
         $commands[] = $this->line(477, 393, 542, 393);
 
-        $commands[] = $this->text(250, 366, 'Summe der Stunden', 13, true);
+        $commands[] = $this->text(250, 366, $this->t('Summe der Stunden'), 13, true);
         $commands[] = $this->line(250, 363, 368, 363);
         $commands[] = $this->line(395, 364, 462, 364);
         $commands[] = $this->textRight(458, 370, $fobiHours, 12);
@@ -174,7 +180,7 @@ class PayrollPdfService {
         $commands[] = $this->text(331, 276, 'Stunden', 12);
         $commands[] = $this->line(477, 272, 542, 272);
 
-        $commands[] = $this->text(43, 211, 'Stunden insgesamt', 17, true);
+        $commands[] = $this->text(43, 211, $this->t('Stunden insgesamt'), 17, true);
         $commands[] = $this->rect(463, 220, 80, 20);
         $commands[] = $this->textRight(538, 226, $totalHours, 12);
 
