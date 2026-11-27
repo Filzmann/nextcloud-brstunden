@@ -75,7 +75,7 @@ ausführbaren Code. Eingesetzte Werte durchlaufen weiterhin das PDF-Escaping.
 Mitgliedsidentität und -anschrift, Monat, BR-/Fortbildungsstunden,
 Gesamtsumme, Unterschriftssemantik und alle Berechnungen bleiben fest im
 Renderer und sind administrativ nicht entfernbar. Die aktuelle Ausgabelocale
-ist bis zur gesondert freizugebenden Lokalisierungsaufgabe fest `de-DE`.
+folgt der Instanz-Locale aus den Nextcloud-Systemeinstellungen (`config.php` `locale`); nur bei nicht konfigurierter Instanz-Locale fachlicher Fallback `de-DE`.
 
 Erzeugte PDFs bleiben transiente Downloadantworten. Sie enthalten
 Vorlagenversion und Ausgabelocale im Dokument; es entsteht kein

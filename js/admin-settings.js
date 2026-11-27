@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
             member_name: 'Beispielmitglied',
             member_address: 'Musterweg 2, 12345 Beispielstadt',
             template_version: 'Entwurf',
-            output_locale: 'de-DE',
+            output_locale: (typeof OC !== 'undefined' && OC.getLocale ? OC.getLocale() : 'de_DE').replace('_', '-'),
         };
         return text.replace(/\{\{([a-z_]+)\}\}/g, (placeholder, name) => examples[name] ?? placeholder);
     };

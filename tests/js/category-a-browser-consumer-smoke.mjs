@@ -9,6 +9,7 @@ const bundleRoot = resolve(appRoot, 'js/shared');
 const requiredAssets = [
     'api-client.js',
     'model.js',
+    'overlay.js',
     'repository.js',
     'ui.js',
     'LICENSE',
@@ -122,6 +123,7 @@ const context = vm.createContext({
 for (const relative of [
     'js/shared/api-client.js',
     'js/shared/model.js',
+    'js/shared/overlay.js',
     'js/shared/repository.js',
     'js/shared/ui.js',
     'js/modules/api.js',
@@ -137,7 +139,9 @@ const shared = window.OCA?.BrStunden?.Shared;
 if (!shared?.api?.ApiClient
     || !shared?.models?.Model
     || !shared?.repositories?.Repository
-    || !shared?.ui?.Notice) {
+    || !shared?.ui?.Notice
+    || !shared?.ui?.Overlay
+    || !shared?.ui?.AdminAccessOverlay) {
     throw new Error('Das app-lokale Browser-Bundle stellt seine Primitives nicht vollständig isoliert bereit.');
 }
 if ('LocalBase' in window) {

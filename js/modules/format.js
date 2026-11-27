@@ -4,7 +4,7 @@
     function hours(value) {
         const number = Number(value || 0);
 
-        return number.toLocaleString('de-DE', {
+        return number.toLocaleString((typeof OC !== 'undefined' && OC.getLocale ? OC.getLocale() : 'de_DE').replace('_', '-'), {
             minimumFractionDigits: number % 1 === 0 ? 0 : 1,
             maximumFractionDigits: 2
         });

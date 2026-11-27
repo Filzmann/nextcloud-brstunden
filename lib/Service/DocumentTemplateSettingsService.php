@@ -8,10 +8,12 @@ use DomainException;
 use JsonException;
 use OCA\BrStunden\AppInfo\Application;
 use OCP\IAppConfig;
+use OCP\IConfig;
 
 final class DocumentTemplateSettingsService {
     public const CONFIG_KEY = 'payroll_document_templates';
-    public const OUTPUT_LOCALE = 'de-DE';
+    // Fachlicher Fallback, wenn die Instanz keine Locale konfiguriert hat (deutsche Lohnunterlagen)
+    public const FALLBACK_LOCALE = 'de-DE';
 
     /** @var list<string> */
     private const FIELDS = [
@@ -35,11 +37,17 @@ final class DocumentTemplateSettingsService {
         'output_locale',
     ];
 
-    public function __construct(private IAppConfig $config) {}
+    public function __construct(private IAppConfig $config, private IConfig $systemConfig) {}
+
+    /** Ausgabelocale aus den Nextcloud-Systemeinstellungen (config.php 'locale'), Fallback de-DE. */
+    public function outputLocale(): string {
+        $locale = trim($this->systemConfig->getSystemValueString('locale', ''));
+        return $locale !== '' ? $locale : self::FALLBACK_LOCALE;
+    }
 
     /** @return array<string,mixed> */
     public static function bundledApproved(): array {
-        return self::bundledDocument();
+        return self::bundledDocument(self::FALLBACK_LOCALE);
     }
 
     /** @return array{approved:array<string,mixed>,draft:?array<string,mixed>,versions:list<array<string,mixed>>,allowedPlaceholders:list<string>} */
@@ -186,7 +194,7 @@ final class DocumentTemplateSettingsService {
             throw new DomainException('Die Dokumentkonfiguration enthält unbekannte Felder.');
         }
 
-        $document = ['version' => $version, 'outputLocale' => self::OUTPUT_LOCALE, 'headerMode' => 'text'];
+        $document = ['version' => $version, 'outputLocale' => $this->outputLocale(), 'headerMode' => 'text'];
         foreach (self::FIELDS as $field) {
             $document[$field] = $this->normalizeText($field, $input[$field]);
         }
@@ -203,7 +211,8 @@ final class DocumentTemplateSettingsService {
             return null;
         }
         $version = filter_var($stored['version'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
-        if ($version === false || ($stored['outputLocale'] ?? null) !== self::OUTPUT_LOCALE) {
+        // Die gespeicherte outputLocale bleibt historisch gültig; nur die Version wird geprüft.
+        if ($version === false || !is_string($stored['outputLocale'] ?? null) || $stored['outputLocale'] === '') {
             return null;
         }
         $input = [];
@@ -295,14 +304,14 @@ final class DocumentTemplateSettingsService {
 
     /** @return array<string,mixed> */
     private function defaultDocument(): array {
-        return self::bundledDocument();
+        return self::bundledDocument($this->outputLocale());
     }
 
     /** @return array<string,mixed> */
-    private static function bundledDocument(): array {
+    private static function bundledDocument(string $locale): array {
         return [
             'version' => 1,
-            'outputLocale' => self::OUTPUT_LOCALE,
+            'outputLocale' => $locale,
             'headerMode' => 'legacy-image',
             'organizationName' => 'ambulante dienste e.V.',
             'organizationAddress' => "Wilhelm-Kabus-Str. 21-35\n10829 Berlin-Schöneberg",

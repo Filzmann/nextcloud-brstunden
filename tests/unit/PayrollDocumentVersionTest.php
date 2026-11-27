@@ -8,6 +8,9 @@ namespace OCP {
         public function getValueString(string $appId, string $key, string $default = ''): string;
         public function setValueString(string $appId, string $key, string $value): void;
     }
+    interface IConfig {
+        public function getSystemValueString(string $key, string $default = ''): string;
+    }
 }
 
 namespace {
@@ -45,7 +48,9 @@ namespace {
         public function getValueString(string $appId, string $key, string $default = ''): string { return $this->values[$appId][$key] ?? $default; }
         public function setValueString(string $appId, string $key, string $value): void { $this->values[$appId][$key] = $value; }
     };
-    $templates = new DocumentTemplateSettingsService($config);
+    $templates = new DocumentTemplateSettingsService($config, new class implements \OCP\IConfig {
+        public function getSystemValueString(string $key, string $default = ''): string { return $key === 'locale' ? 'de-DE' : $default; }
+    });
     $service = new PayrollPdfService($members, $entries, $calendar, $authorization, $templates);
 
     $first = $service->createForCurrentUser(2026, 7);

@@ -8,6 +8,9 @@ namespace OCP {
         public function getValueString(string $appId, string $key, string $default = ''): string;
         public function setValueString(string $appId, string $key, string $value): void;
     }
+    interface IConfig {
+        public function getSystemValueString(string $key, string $default = ''): string;
+    }
 }
 
 namespace {
@@ -21,7 +24,9 @@ namespace {
         public function setValueString(string $appId, string $key, string $value): void { $this->values[$appId][$key] = $value; }
     };
 
-    $settings = new DocumentTemplateSettingsService($config);
+    $settings = new DocumentTemplateSettingsService($config, new class implements \OCP\IConfig {
+        public function getSystemValueString(string $key, string $default = ''): string { return $key === 'locale' ? 'de-DE' : $default; }
+    });
     $initial = $settings->state();
     assertSameValue(1, $initial['approved']['version'], 'The existing payroll layout must be represented by approved version 1.');
     assertSameValue('de-DE', $initial['approved']['outputLocale'], 'The current German document output must stay reproducible.');
