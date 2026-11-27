@@ -1,5 +1,5 @@
 (function() {
-    const { Repository } = window.LocalBase.repositories;
+    const { Repository } = window.OCA.BrStunden.Shared.repositories;
 
     class HourRepository extends Repository {
         state() {
@@ -14,8 +14,9 @@
             return this.post('/api/entries', payload);
         }
 
-        deleteEntry(year, month) {
-            return this.request('/api/entries/' + this.encode(year) + '/' + this.encode(month), {
+        deleteEntry(year, month, userId) {
+            const query = userId ? '?userId=' + this.encode(userId) : '';
+            return this.request('/api/entries/' + this.encode(year) + '/' + this.encode(month) + query, {
                 method: 'DELETE'
             });
         }
@@ -24,8 +25,9 @@
             return this.request('/api/reminders/preview');
         }
 
-        payrollPdfUrl(year, month) {
-            return OC.generateUrl('/apps/brstunden/api/entries/' + this.encode(year) + '/' + this.encode(month) + '/payroll.pdf');
+        payrollPdfUrl(year, month, userId) {
+            const query = userId ? '?userId=' + this.encode(userId) : '';
+            return OC.generateUrl('/apps/brstunden/api/entries/' + this.encode(year) + '/' + this.encode(month) + '/payroll.pdf') + query;
         }
 
     }

@@ -6,6 +6,7 @@ require_once __DIR__ . '/../bootstrap.php';
 
 use OCA\BrStunden\Model\HourAmount;
 use OCA\BrStunden\Model\HourEntry;
+use OCA\BrStunden\Service\AuthorizationService;
 use OCA\BrStunden\Service\BrMemberService;
 use OCA\BrStunden\Service\CalendarService;
 use OCA\BrStunden\Service\PayrollPdfService;
@@ -73,6 +74,10 @@ $members = new class extends BrMemberService {
         return 'Teststr. 1, 12345 Berlin';
     }
 
+    public function addressForUser(string $uid): string {
+        return $uid === 'simon' ? 'Teststr. 1, 12345 Berlin' : '';
+    }
+
     public function members(): array {
         return [
             ['uid' => 'simon', 'displayName' => 'Simon Test', 'email' => 'simon@example.invalid'],
@@ -89,7 +94,18 @@ $entries = new class extends HourEntryStore {
     }
 };
 
-$payrollPdf = new PayrollPdfService($members, $entries, $calendar);
+$authorization = new class extends AuthorizationService {
+    public function __construct() {
+    }
+
+    public function assertCanExportPayrollFor(string $targetUid): void {
+        if ($targetUid !== 'simon') {
+            throw new \DomainException('denied');
+        }
+    }
+};
+
+$payrollPdf = new PayrollPdfService($members, $entries, $calendar, $authorization);
 $pdf = $payrollPdf->createForCurrentUser(2026, 7);
 assertSameValue('br-stunden-abrechnung-simon-2026-07.pdf', $pdf['filename'], 'Payroll PDF filename should include user and month.');
 assertSameValue('application/pdf', $pdf['contentType'], 'Payroll PDF should use PDF content type.');

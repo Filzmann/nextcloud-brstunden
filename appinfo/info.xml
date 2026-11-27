@@ -12,10 +12,14 @@
     <category>organization</category>
     <bugs>https://example.invalid</bugs>
     <dependencies>
-        <nextcloud min-version="29" max-version="35"/>
+        <nextcloud min-version="33" max-version="35"/>
         <app>localbase</app>
         <app>orgsuite</app>
     </dependencies>
+    <settings>
+        <admin>OCA\BrStunden\Settings\Admin</admin>
+        <admin-section>OCA\BrStunden\Settings\AdminSection</admin-section>
+    </settings>
     <background-jobs>
         <job>OCA\BrStunden\BackgroundJob\MonthlyReminderJob</job>
     </background-jobs>

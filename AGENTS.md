@@ -32,6 +32,9 @@ Kernprozess:
 
 ## Repository und gemeinsamer Arbeitsablauf
 
+- Lokalisierung (ZM-06): Sichtbare Texte ausschließlich über Nextcloud-l10n — deutsche Quelltexte via `IL10N::t()`/`window.t('brstunden', …)`, Kataloge `l10n/en.*` und `l10n/en_GB.*` (Englisch); technische IDs bleiben unübersetzt. `tests/Ui/L10nCatalogContractTest.php` erzwingt das Rohtext-Gate (siehe `docs/l10n-inventory.md`).
+
+
 - Dieses Verzeichnis ist ein eigenstaendiges Git-Repository fuer die BR-App `brstunden`.
 - Andere eigene Nextcloud-Apps, zum Beispiel `brtop` oder `adplaner`, leben in eigenen Repositories.
 - Diese Datei und lokal referenzierte Skills bilden bei einem direkten Start in diesem Repository die vollständige Repository-Steuerung.
@@ -84,12 +87,15 @@ Wichtige Pruefungen:
   Rechtsgrundlagen, Retention-, Backup-, Mail- und Empfängerentscheidungen mit
   `PRIVACY-DECISION-REQUIRED`. Der öffentliche V1-Provider liest ausschließlich
   diesen Katalog; eine zweite Registry oder kopierte Policyquelle ist verboten.
-- BRStunden besitzt aktuell keinen nativen Admin-Bypass und deshalb keinen
-  wirkungslosen app-lokalen Vollzugriffsschalter. Fachrechte entstehen nur
-  aus dem BR-Mitgliedervertrag und `self`. PermissionProvider und Negativtest
-  sichern diese begründete Nichtanwendbarkeit. Sobald ein nativer Adminpfad
-  oder eine neue Fachberechtigung hinzukommt, muss die Bewertung im selben
-  Änderungssatz erneut erfolgen.
+- BRStunden besitzt keinen nativen Admin-Bypass und deshalb keinen
+  app-lokalen Vollzugriffsschalter. Die Fachberechtigungen werden getrennt von
+  den kanonischen LocalBase-Rollen Mitglied, Vorsitz und Stellvertretung
+  gespeichert und serverseitig aufgelöst. Eigene Stunden und Abrechnungen
+  bleiben selbstbezogen; fremde Abrechnung, Reminder-Vorschau und die
+  standardmäßig inaktive Fremdkorrektur verwenden jeweils eigene Rechte.
+  PermissionProvider und Negativtests sichern diese begründete
+  Nichtanwendbarkeit. Sobald ein nativer Adminpfad hinzukommt, muss die
+  Bewertung im selben Änderungssatz erneut erfolgen.
 
 ## Verbindliche Suite-Navigation
 
