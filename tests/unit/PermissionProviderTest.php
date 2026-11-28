@@ -63,7 +63,7 @@ namespace {
     }
 
     $incompleteSource = new class implements BrStundenPermissionSourceInterface {
-        public function status(): array { return ['complete' => false, 'warning' => 'LocalBase unavailable']; }
+        public function status(): array { return ['complete' => false, 'warning' => 'flz_permission_matrix unavailable']; }
         public function groupIds(): array { return []; }
         public function assignments(): array { return CapabilitySettingsService::DEFAULTS; }
     };

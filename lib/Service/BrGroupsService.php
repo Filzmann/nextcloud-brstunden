@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace OCA\BrStunden\Service;
 
 use InvalidArgumentException;
-use OCA\LocalBase\PublicApi\V1\BrMembershipSnapshotService;
+use OCA\FlzPermissionMatrix\PublicApi\V1\BrRoleSnapshotService;
 use OCP\App\IAppManager;
 use OCP\IL10N;
 use OCP\Server;
@@ -18,7 +18,7 @@ class BrGroupsService {
     public const ROLE_CHAIR = 'chair';
     public const ROLE_DEPUTY = 'deputy';
     public const ROLES = [self::ROLE_MEMBER, self::ROLE_CHAIR, self::ROLE_DEPUTY];
-    private const PROVIDER_APP_ID = 'localbase';
+    private const PROVIDER_APP_ID = 'flz_permission_matrix';
     private const SUPPORTED_CONTRACT_VERSION = '1.0';
     private const SUPPORTED_DEFINITION_VERSION = 1;
     /** @var array<string,mixed>|null */
@@ -36,19 +36,19 @@ class BrGroupsService {
     public function snapshot(): array {
         if ($this->resolved !== null) return $this->resolved;
         if (!$this->isProviderEnabled()) {
-            return $this->resolved = $this->unavailable('MISSING', $this->t('Der LocalBase-BR-Rollenvertrag ist nicht verfügbar.'));
+            return $this->resolved = $this->unavailable('MISSING', $this->t('Der BR-Rollenvertrag (flz_permission_matrix V1) ist nicht verfügbar.'));
         }
         try {
             $payload = $this->readProviderSnapshot();
         } catch (InvalidArgumentException|UnexpectedValueException) {
-            return $this->resolved = $this->unavailable('INCOMPATIBLE', $this->t('Der öffentliche LocalBase-BR-Rollenvertrag ist inkompatibel.'));
+            return $this->resolved = $this->unavailable('INCOMPATIBLE', $this->t('Der öffentliche BR-Rollenvertrag (flz_permission_matrix V1) ist inkompatibel.'));
         } catch (Throwable $error) {
             $this->logger->warning('BR-Stunden-Rollen-Snapshot ist nicht verfügbar.', [
                 'app' => 'brstunden',
                 'provider' => self::PROVIDER_APP_ID,
                 'exceptionClass' => $error::class,
             ]);
-            return $this->resolved = $this->unavailable('UNAVAILABLE', $this->t('Der LocalBase-BR-Rollenvertrag ist vorübergehend nicht verfügbar.'));
+            return $this->resolved = $this->unavailable('UNAVAILABLE', $this->t('Der BR-Rollenvertrag (flz_permission_matrix V1) ist vorübergehend nicht verfügbar.'));
         }
         try {
             foreach (['contractVersion', 'definitionVersion', 'definitionRevision', 'checksum', 'isValid', 'memberGroupId', 'chairGroupId', 'deputyGroupId'] as $method) {
@@ -65,21 +65,21 @@ class BrGroupsService {
                 self::ROLE_DEPUTY => $payload->deputyGroupId(),
             ];
         } catch (Throwable) {
-            return $this->resolved = $this->unavailable('INCOMPATIBLE', $this->t('Der öffentliche LocalBase-BR-Rollenvertrag ist inkompatibel.'));
+            return $this->resolved = $this->unavailable('INCOMPATIBLE', $this->t('Der öffentliche BR-Rollenvertrag (flz_permission_matrix V1) ist inkompatibel.'));
         }
         if ($contractVersion !== self::SUPPORTED_CONTRACT_VERSION || $definitionVersion !== self::SUPPORTED_DEFINITION_VERSION) {
-            return $this->resolved = $this->unavailable('INCOMPATIBLE', $this->t('Der LocalBase-BR-Rollenvertrag besitzt eine nicht unterstützte Version.'));
+            return $this->resolved = $this->unavailable('INCOMPATIBLE', $this->t('Der BR-Rollenvertrag (flz_permission_matrix V1) besitzt eine nicht unterstützte Version.'));
         }
         if ($valid !== true || !is_int($definitionRevision) || $definitionRevision < 1 || !is_string($checksum) || strlen($checksum) !== 64) {
-            return $this->resolved = $this->unavailable('INVALID', $this->t('Der LocalBase-BR-Rollenvertrag ist ungültig.'));
+            return $this->resolved = $this->unavailable('INVALID', $this->t('Der BR-Rollenvertrag (flz_permission_matrix V1) ist ungültig.'));
         }
         foreach ($groups as $groupId) {
             if (!$this->isValidGroupId($groupId)) {
-                return $this->resolved = $this->unavailable('INCOMPATIBLE', $this->t('Der LocalBase-BR-Rollenvertrag enthält keine vollständigen Rollenidentitäten.'));
+                return $this->resolved = $this->unavailable('INCOMPATIBLE', $this->t('Der BR-Rollenvertrag (flz_permission_matrix V1) enthält keine vollständigen Rollenidentitäten.'));
             }
         }
         if (count(array_unique($groups)) !== count($groups)) {
-            return $this->resolved = $this->unavailable('INVALID', $this->t('Der LocalBase-BR-Rollenvertrag enthält widersprüchliche Rollenidentitäten.'));
+            return $this->resolved = $this->unavailable('INVALID', $this->t('Der BR-Rollenvertrag (flz_permission_matrix V1) enthält widersprüchliche Rollenidentitäten.'));
         }
         return $this->resolved = [
             'status' => 'VALID',
@@ -110,9 +110,9 @@ class BrGroupsService {
     }
     protected function isProviderEnabled(): bool { return in_array(self::PROVIDER_APP_ID, $this->apps->getEnabledApps(), true); }
     protected function readProviderSnapshot(): object {
-        if (!class_exists(BrMembershipSnapshotService::class)) throw new UnexpectedValueException('Der LocalBase-BR-Rollendienst fehlt.');
-        $provider = Server::get(BrMembershipSnapshotService::class);
-        if (!$provider instanceof BrMembershipSnapshotService) throw new UnexpectedValueException('Der LocalBase-BR-Rollendienst ist nicht auflösbar.');
+        if (!class_exists(BrRoleSnapshotService::class)) throw new UnexpectedValueException('Der BR-Rollendienst (flz_permission_matrix V1) fehlt.');
+        $provider = Server::get(BrRoleSnapshotService::class);
+        if (!$provider instanceof BrRoleSnapshotService) throw new UnexpectedValueException('Der BR-Rollendienst (flz_permission_matrix V1) ist nicht auflösbar.');
         return $provider->snapshot();
     }
     private function isValidGroupId(mixed $groupId): bool {

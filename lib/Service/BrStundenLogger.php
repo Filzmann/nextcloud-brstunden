@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace OCA\BrStunden\Service;
 
 use OCA\BrStunden\AppInfo\Application;
-use OCA\LocalBase\Service\AppLogger;
+use OCA\BrStunden\Vendor\Filzmann\Shared\Service\AppLogger;
 
 class BrStundenLogger {
     public function __construct(

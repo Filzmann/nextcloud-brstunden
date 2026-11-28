@@ -13,7 +13,9 @@ Thumbs.db
 
 # Dependencies / build
 node_modules/
-vendor/
+/vendor/*
+!/vendor/flz-shared/
+!/vendor/flz-shared/**
 
 # Environment
 .env

@@ -12,7 +12,7 @@ use OCA\BrStunden\Service\BrStundenLogger;
 use OCA\BrStunden\Service\HoursService;
 use OCA\BrStunden\Service\PayrollPdfService;
 use OCA\BrStunden\Service\ReminderService;
-use OCA\LocalBase\Controller\ApiResponder;
+use OCA\BrStunden\Vendor\Filzmann\Shared\Controller\ApiResponder;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
