@@ -1,6 +1,17 @@
 OC.L10N.register(
     "brstunden",
     {
+  "Ordne die sechs Fachberechtigungen ausschließlich den kanonischen BR-Rollen zu. Die Berechtigungsmatrix zeigt Berechtigungen als Zeilen und BR-Rollen als Spalten. Die aktuellen Gruppen-IDs stammen zur Laufzeit aus dem BR-Rollenvertrag der Berechtigungsmatrix (flz_permission_matrix V1) und werden hier nicht als Freitext gespeichert.":"Assign the six business permissions exclusively to the canonical BR roles. The permission matrix shows permissions as rows and BR roles as columns. The current group IDs are read at runtime from the BR role contract of the permission matrix (flz_permission_matrix V1) and are not stored here as free text.",
+  "Die aktuellen Gruppen-IDs stammen zur Laufzeit aus dem BR-Rollenvertrag der Berechtigungsmatrix (flz_permission_matrix V1) und werden hier nicht als Freitext gespeichert.":"The current group IDs are read at runtime from the BR role contract of the permission matrix (flz_permission_matrix V1) and are not stored here as free text.",
+  "Der BR-Rollendienst (flz_permission_matrix V1) ist nicht auflösbar.":"The BR role service (flz_permission_matrix V1) is not resolvable.",
+  "Der BR-Rollendienst (flz_permission_matrix V1) fehlt.":"The BR role service (flz_permission_matrix V1) is missing.",
+  "Der BR-Rollenvertrag (flz_permission_matrix V1) enthält widersprüchliche Rollenidentitäten.":"The BR role contract (flz_permission_matrix V1) contains contradictory role identities.",
+  "Der BR-Rollenvertrag (flz_permission_matrix V1) enthält keine vollständigen Rollenidentitäten.":"The BR role contract (flz_permission_matrix V1) does not contain complete role identities.",
+  "Der BR-Rollenvertrag (flz_permission_matrix V1) ist ungültig.":"The BR role contract (flz_permission_matrix V1) is invalid.",
+  "Der BR-Rollenvertrag (flz_permission_matrix V1) besitzt eine nicht unterstützte Version.":"The BR role contract (flz_permission_matrix V1) has an unsupported version.",
+  "Der BR-Rollenvertrag (flz_permission_matrix V1) ist vorübergehend nicht verfügbar.":"The BR role contract (flz_permission_matrix V1) is temporarily unavailable.",
+  "Der öffentliche BR-Rollenvertrag (flz_permission_matrix V1) ist inkompatibel.":"The public BR role contract (flz_permission_matrix V1) is incompatible.",
+  "Der BR-Rollenvertrag (flz_permission_matrix V1) ist nicht verfügbar.":"The BR role contract (flz_permission_matrix V1) is not available.",
     "Berechtigungsmatrix" : "Permission matrix",
     "Berechtigung" : "Permission",
     "%1$s: %2$s" : "%1$s: %2$s",

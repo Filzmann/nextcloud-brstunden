@@ -25,7 +25,7 @@ namespace Psr\Log {
 
 namespace {
     use OCA\BrStunden\Service\BrGroupsService;
-    use OCA\LocalBase\PublicApi\V1\BrMembershipSnapshot;
+    use OCA\FlzPermissionMatrix\PublicApi\V1\BrRoleSnapshot;
     use OCP\App\IAppManager;
     use Psr\Log\LoggerInterface;
     use function OCA\BrStunden\Tests\assertSameValue;
@@ -62,10 +62,10 @@ namespace {
     $logger = new BrGroupsTestLogger();
     $valid = new TestBrGroupsService(
         true,
-        new BrMembershipSnapshot(true, 1, 5, 'BR-Mitglieder', 'BR-Vorsitz', 'BR-Stellvertretung'),
+        new BrRoleSnapshot(true, 1, 5, 'BR-Mitglieder', 'BR-Vorsitz', 'BR-Stellvertretung'),
         $logger,
     );
-    assertSameValue('VALID', $valid->snapshot()['status'], 'A compatible LocalBase V1 snapshot must be accepted.');
+    assertSameValue('VALID', $valid->snapshot()['status'], 'A compatible flz_permission_matrix V1 snapshot must be accepted.');
     assertSameValue('BR-Mitglieder', $valid->groupIdForRole(BrGroupsService::ROLE_MEMBER), 'Member role must use the public member identity.');
     assertSameValue('BR-Vorsitz', $valid->groupIdForRole(BrGroupsService::ROLE_CHAIR), 'Chair role must use the public chair identity.');
     assertSameValue('BR-Stellvertretung', $valid->groupIdForRole(BrGroupsService::ROLE_DEPUTY), 'Deputy role must use the public deputy identity.');
@@ -76,7 +76,7 @@ namespace {
 
     $legacyMemberOnly = new TestBrGroupsService(
         true,
-        new BrMembershipSnapshot(true, 1, 2, 'BR-Mitglieder'),
+        new BrRoleSnapshot(true, 1, 2, 'BR-Mitglieder'),
         new BrGroupsTestLogger(),
     );
     assertSameValue('INCOMPATIBLE', $legacyMemberOnly->snapshot()['status'], 'The role-aware consumer must reject a member-only snapshot.');

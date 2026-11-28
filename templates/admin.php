@@ -29,7 +29,7 @@ $allowedPlaceholders = is_array($documentState['allowedPlaceholders'] ?? null) ?
 ?>
 <section id="brstunden-admin" class="section brs-admin" aria-labelledby="brstunden-admin-heading">
     <h2 id="brstunden-admin-heading"><?php p($l->t('BR-Stunden: Berechtigungen')); ?></h2>
-    <p><?php p($l->t('Ordne die sechs Fachberechtigungen ausschließlich den kanonischen BR-Rollen zu. Die Berechtigungsmatrix zeigt Berechtigungen als Zeilen und BR-Rollen als Spalten. Die aktuellen Gruppen-IDs stammen zur Laufzeit aus LocalBase und werden hier nicht als Freitext gespeichert.')); ?></p>
+    <p><?php p($l->t('Ordne die sechs Fachberechtigungen ausschließlich den kanonischen BR-Rollen zu. Die Berechtigungsmatrix zeigt Berechtigungen als Zeilen und BR-Rollen als Spalten. Die aktuellen Gruppen-IDs stammen zur Laufzeit aus dem BR-Rollenvertrag der Berechtigungsmatrix (flz_permission_matrix V1) und werden hier nicht als Freitext gespeichert.')); ?></p>
     <?php if (($source['status'] ?? '') !== 'VALID'): ?>
         <p role="alert"><?php p((string)($source['warning'] ?? 'Der BR-Rollenvertrag ist nicht verfügbar.')); ?> <?php p($l->t('Bis zur Behebung bleiben Fachzugriffe gesperrt.')); ?></p>
     <?php endif; ?>

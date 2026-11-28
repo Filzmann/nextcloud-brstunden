@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace OCA\BrStunden\Model;
 
-use OCA\LocalBase\Model\ModelApiTrait;
+use OCA\BrStunden\Vendor\Filzmann\Shared\Model\ModelApiTrait;
 
 class HourEntry {
     use ModelApiTrait;
